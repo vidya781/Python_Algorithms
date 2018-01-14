@@ -1,0 +1,24 @@
+# How can we use a deque to store a palindrome 
+
+# The trick is to store the characters in the deque like an ordinary queue one by one
+# If the reach character is equal to the first character we can say that yes, we may proceed to the next charcater and compare from rear and front
+# If not, they are not equal, keep doing this till the middle of the string is reached
+
+from pythonds.basic.deque import deque
+
+def palchecker(String):
+    chardeque = Deque()
+    
+    for ch in String:
+        chardeque.addrear(ch)
+    stillequal = True
+    
+    while chardeque.size() > 1 and stillequal:
+        first = chardeque.removeFront()
+        last = chardeque.removerear()
+        if first != rear:
+           stillequal = False
+    return stillequal
+print palchecker("radar")
+print palchecker("abcdef")
+print palchecker("malayalam")
