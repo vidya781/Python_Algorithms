@@ -1,0 +1,11 @@
+def getPrimesM(integer, start=4):
+  primes = [2,3]
+  for num in range(start, integer):
+    if integer % num == 0:
+      for i, prime in enumerate(primes):
+        if num % prime == 0:
+          break
+        if i >= len(primes) - 1:
+          primes.append(num)
+
+  return primes
