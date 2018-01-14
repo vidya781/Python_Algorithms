@@ -1,0 +1,27 @@
+xs = [7,8,9,6,44,4,9,78]
+
+def evens_product(xs):
+    product = 1
+    for i in xs:
+        if i%2 == 0:
+            product *= i  
+    return product
+
+def sum_odds(xs):
+    sum = 0
+    for i in xs:
+        if i%2 != 0:
+            sum += i
+    return sum
+
+def even_odd_numbers(xs):
+    even_numbers = []
+    odd_numbers = []
+
+    for number in range(0,len(xs)):
+        if xs[number] % 2 == 0:
+            even_numbers.append(number)
+        else:
+            odd_numbers.append(number)
+            
+    return even_numbers
