@@ -16,3 +16,14 @@ def findksmallest(A,k = 3):
     
   # So in general if we want to get the kth smallest element, we need to have a prequisite: k < len(A)
   # the final return statement could be len(A) - k
+
+# Another way to do it is to do it in linear time by using the numpy array
+import numpy
+def findksmallestLinear(A,k = 3):
+    import numpy
+
+    # assuming you have a python list, you need to convert to a numpy array first
+    array = numpy.array(A)
+    # partition, slice back to the k smallest elements, convert back to a Python list
+     k_smallest = numpy.partition(array, k)[:k].tolist()
+     return k_smallest[k]
