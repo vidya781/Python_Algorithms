@@ -12,7 +12,7 @@ def findksmallest(A,k = 3):
     A = A.sort()
     # to remove the duplicates if they are there
     A = list(set(A))
-    return A[len(A)-3]
+    return A[len(A)-3]   # we could also write return A[-k]  --general form
     
   # So in general if we want to get the kth smallest element, we need to have a prequisite: k < len(A)
   # the final return statement could be len(A) - k
