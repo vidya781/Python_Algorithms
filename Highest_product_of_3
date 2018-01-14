@@ -1,0 +1,88 @@
+Given a list of integers, find the highest product one can get from three of the integers
+
+# The input list_of_ints will always have at least three integers
+
+Gotchas: It is crucial thta the program/algorithm works with negative numbers and the possibility of duplicates
+
+list_of_ints = [-10,-10,1,3,2] and the answer that we want is (-10)(-10)(1)(3)(2) = 300300
+
+Approach: ( 25 lines of code)
+
+We could multiply out all the numbers and iterate through the list of ints and multiply each integer by every other and that involves nesting 3 loops.
+That involves O(n^3)O(n3) runtime. We can certainly improve on this.
+
+As any integer in the list could potentially be part of the greatest product of 3 integers, we need to take  alook at each integer and atleast O(n)O(n) time.
+
+Sorting the list would allow us to grab the numbers quickly and sorting taks O(nlogn) time. Use a greedy approach. We need to keep track of the highest_product_of_3 "so far" as we done one walk through the list
+
+For each new current number during the iteration, how do we know if it gives us a new highest_product_of_3?
+
+We have a new highest_product_of_3 if the current number times two other numbers gives a product that is higher that our current highest_product_of_3.
+
+Solution:
+
+At each iteration keep track of
+1) highest_product_of_3
+2) highest_product_of_2
+3) highest
+4) lowest_product_of_2
+5) lowest
+
+When we reach the end,the highest_product_of_3 is the answer. We maintain the others because they are necessary for keeping the highest_product_of_3 up to date as we walk through the list.
+
+At each iteration, the highest_product_of_3 is the highest of:
+
+1) the current highest_product_of_3
+2) current*highest_product_of_2
+3) current * lowest_product_of_2
+
+from itertools import islice
+
+def highest_product_of_3(list_of_ints):
+    if len(list_of_ints) < 3:
+        raise Exception('Less than 3 items!')
+        
+   # we start at the 3rd item ( at index 2)
+   # prepoulate highests and lowests based on first 2 items
+   # could start these at None and check below if they are set
+   
+    highest = max(list_of_ints[0],list_of_ints[1])
+    lowest =  min(list_of_ints[0],list_of_ints[1])
+    
+    highest_product_of_2 = list_of_ints[0]*list_of_ints[1]
+    lowest_product_of_2 =  list_of_ints[0]*list_of_ints[1]
+    
+    highest_product_of_3 = list_of_ints[0]*list_of_ints[1]*list_of_ints[2]
+    
+    # walk through items, starting at index 2
+    
+    for current in islice(list_of_ints, 2, None):
+    
+        # do we have a new highest product of 3?
+        # its either the current highest,
+        # or the current times the highest product of two
+        # or the current times the lowest product of two
+        
+        highest_product_of_3 = max(highest_product_of_3,current*highest_product_of_2,current*lowest_product_of_2)
+        
+        # do we have a new highest product of two?
+        
+        highest_product_of_2 = max(highest_product_of_2,current*highest,current*lowest)
+        
+        # do we have a new lowest product of two?
+        
+        lowest_product_of_2 = min(lowest_product_of_2, current*highest, current*lowest)
+        
+        # do we have a new highest?
+        
+        highest = max(highest,current)
+        
+        # do we have a new lowest?
+        
+        lowest = min(lowest,current)
+        
+   return highest_product_of_3
+   
+   
+   # O(n)O(n) time and O(1)O(1) additional space
+
