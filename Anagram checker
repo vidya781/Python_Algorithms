@@ -1,9 +1,9 @@
-Take 2 strings and check if one is an anagram of the other. For example python and typhon, heart and earth are anagrams.
+"""Take 2 strings and check if one is an anagram of the other. For example python and typhon, heart and earth are anagrams.
 
 Outline the approach : firstly convert the strings to lists and check for their lengths
 If the lengths are equal then proceed for further operations , if not break
 Start with first character (item) in list 1 and if this is present in list 2 proceed to the next item and compare from the first item in list 2 as well.
-It is obvious that since 2 loops are involved, it's complexity is O(n^2) 
+It is obvious that since 2 loops are involved, it's complexity is O(n^2) """
 
 def isAnagram(s1,s2):
     s1 = list(s1)   # Convert the string to lists
