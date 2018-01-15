@@ -30,7 +30,7 @@ def duplindex(string):
      
      # With two for loops, we get O(n^2) complexity
      
-  Now lets begin with the recursive algorithm
+  Now lets begin with the recursive algorithm with O(n) complexity
   
   def removeAdjacentRepeats(string):
       L = list(string)
