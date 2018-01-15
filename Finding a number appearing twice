@@ -14,9 +14,9 @@ def finddupl(N):
     j = 1
     for i in range(0,len(N)):            # Have two loops as discussed above
         for j in range(1,len(N+1)):
-            if A[i] == A[j]:
-               return A[i]         # return the element which is duplicated
-    print("The duplicate element is ", A[i])
+            if N[i] == N[j]:
+               return N[i]                # return the element which is duplicated
+    print("The duplicate element is ", N[i])
     
  # It is also possible to approach this problem in a different way in that if we sum the numbers we get n(n+1)/2 if we use the summation formula\
  for n numbers, then apply the sum BIF to the list and obtain the sum. The difference gives us the repeated number.
