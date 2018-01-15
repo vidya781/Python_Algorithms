@@ -1,0 +1,22 @@
+# Find a number that appears twice
+# More specifically, I have a list of numbers from 1 to n+1. Every number in the range [1....n] appears once except for one number that appears twice.
+
+If we sort the array then the numbers will be arranged in ordered fashion.Then simply walk through the array , the 2 repeated numbers will
+occur side by side, simply return the index or the number. So the BF approach will be have 2 loops, one from the start till the last but one
+and the other starting at index 1 to the last element. During the looping, if the condition holds good then return the index or the element. Since there is only 1
+element which is duplicated, the moment it is found, stop.
+
+N is the array of integers provided
+
+def finddupl(N):
+    N = N.sort()   # sort the array
+    i = 0
+    j = 1
+    for i in range(0,len(N)):            # Have two loops as discussed above
+        for j in range(1,len(N+1)):
+            if A[i] == A[j]:
+               return A[i]         # return the element which is duplicated
+    print("The duplicate element is ", A[i])
+    
+    
+        
