@@ -1,0 +1,45 @@
+# Given a string, remove the adjacent duplicates of a string or return the string unchanged if there are no duplicates
+
+There are 2 possible approaches to this problem, one using recursion , one a BF method
+
+Let's take a look
+
+Let's first take a look at returning the index at which the duplicate could be present.
+
+def duplindex(string):
+    L = list(string)  # converting to list
+    i = 0
+    j = 1
+    for i in range(0,len(L)):
+        for j in range(1,len(L)+1):
+            if L[i] == L[j]:
+               return i
+    return L
+    
+    Now the complete algorithm is:
+    
+ def modstring(string):
+     L = list(string)
+     i = 0
+     j = 0
+     for i in range(0,len(L)):
+         for j in range(1,len(L)+1):
+             if L[i] == L[j]:
+                return i
+     returnL[0:i] + L[i+2:len(L)+1]
+     
+     # With two for loops, we get O(n^2) complexity
+     
+  Now lets begin with the recursive algorithm
+  
+  def removeAdjacentRepeats(string):
+      L = list(string)
+      i = 1
+      while i < len(L):
+         if L[i] == L[i-1]:
+            L.pop(i)
+            i -= 1
+         i += 1
+         return L
+   L = """ABCCCCBA"""
+   print removeAdjacent(string)
