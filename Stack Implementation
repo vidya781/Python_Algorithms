@@ -16,7 +16,7 @@ class Stack:
      def peek(self):
          return self.items[len(self.items)-1]
 
-     def size(self):items)
+     def size(self,items)
          return len(self.items)
          
 from pythonds.basic.stack import Stack
