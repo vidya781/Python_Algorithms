@@ -18,5 +18,14 @@ def finddupl(N):
                return A[i]         # return the element which is duplicated
     print("The duplicate element is ", A[i])
     
-    
+ # It is also possible to approach this problem in a different way in that if we sum the numbers we get n(n+1)/2 if we use the summation formula\
+ for n numbers, then apply the sum BIF to the list and obtain the sum. The difference gives us the repeated number.
+ 
+ def finddupbysummation(N):   # assume a sorted array
+     sum1 = sum(N)  # get the sum of the given list of integers
+     sum2 = n*(n+1)/2   # Summation of the first N numbers
+     repeated_element = sum1 - sum2    # The difference gives us the duplicate element
+     return repeated_element
+     
+  Notes: If we take above approach, we need O(n) time and O(1) additional space
         
