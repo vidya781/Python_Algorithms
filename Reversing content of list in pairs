@@ -1,0 +1,19 @@
+""" Develop an algorithm in order to reverse a list in pairs """
+For example [4,5,6,7,8,9] -----> [5,4,7,6,9,8]
+     [4,5,6,7,8]------>[5,4,7,6,8]
+     
+ Approach:
+ 
+ If we are to an in place reversal, we need to loop through the elements one by one and swap it
+ 
+ Pseudo code :
+ 1) for item in list:
+ 2) do a swapping of item, next item
+     
+     So in the first iteration, the original list becomes [5,4,6,7,8], However there is the danger of the list becoming [5,6,4,7,8] which is not what we want
+     so we must specify the step in place
+     
+     def swappairs(L) :
+         for i in range(0,len(L)+1,2):
+               L[i],L[i+1] = L[i+1],L[i]   # swap in place
+         return L
