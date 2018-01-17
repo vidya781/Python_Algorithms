@@ -2,19 +2,19 @@
 
 Assume that the size of the lists are m and n , now our task is to merge them
 
-def mergeTwoLists(self, list1, list2):
+def mergeTwoLists(self, list1, list2):                     # Take 2 arguments amd create a temp variable of Node type
     temp = Node()
-    pointer = tem()
-    while list!=None and list2!=None:
-        if list1.getData()<list2.getData():
-            pointer.setNext(list1)
-            list1 = list1.getNext()
+    pointer = temp
+    while list1!=None and list2!=None:            # list1 is not None and list2 is not None
+        if list1.getData()<list2.getData():       # if the first element of list 1 is less than first element of list2, set 
+            pointer.setNext(list1)                # the pointer to the next elemt of list 1 and get it via the set and get 
+            list1 = list1.getNext()               # methods.
         else:
-            pointer.setNext(list2)
-            list2 = list2.getNext()
-        pointer = pointer.getNext()
+            pointer.setNext(list2)                # pointer points to the item in list 2 if the above condition does not hold
+            list2 = list2.getNext()           # and gets it
+        pointer = pointer.getNext()           # pointer points to the next item of the list
     if list1 == None:
-        pointer.setNext(list2)
+        pointer.setNext(list2)                # list1 if it is None, pointer is set to list 2
     else:
         pointer.setNext(list1)
     return temp.getNext()
