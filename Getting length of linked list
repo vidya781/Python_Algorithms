@@ -1,0 +1,14 @@
+
+
+# take a linked list as input and obtain the number of nodes in the list
+
+def listLength(self):
+    current = self.head   # points to the head of the LL
+    count = 0
+    while current != None:
+        count += 1
+        current = current.getNext()
+    return count
+    
+# Time complexity : O(n), for scanning the list of size n
+Space complexity : O(1) for creating the temporary variable
