@@ -1,0 +1,13 @@
+# The problem statement:
+
+To find an item in a list, an unsorted list
+
+A = [2,3,67, 67, 89,25,89,9089]
+
+def linearsearch(A,k = 25):
+    for i in range(0,len(A)):
+           if A[i] == k:
+              return 1
+    return -1
+    
+    
