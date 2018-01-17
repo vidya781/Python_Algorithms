@@ -1,0 +1,50 @@
+The problem statement:
+
+Given two number l and r. 
+Count the total numbers between l and r which when subtracted from their respective reverse, the difference is a product of k.
+
+
+Approach:
+
+Since we are given two numbers at the extremities of a range, we must loop / iterate through every number in this range,and find the reverse of every number in the range
+and have a separate list to store these numbers.
+
+So essentially have 2 lists: one containing the numbers in range ( l,r) both numbers inclusive, the second list should store the reverse of every number in the list
+Basically we must have a one-to-one mapping
+
+generate the difference by doing abs(original_list-reverse_list) and store it
+
+Finally check if every element of this newly created list is % k
+
+def absdiffmultiple(left,right,k):
+    orig_list = list(range(left,right+1))  # generating the original list
+    
+# Write a function to reverse the digits 
+   revers_list = []       # Initialize the empty list for storing the numbers
+  for n in orig_list:
+      if n == 0:
+         break
+      else:
+          return int(str(n)[::-1])     # reverse the digits
+  return revers_list.append(n)        # generate the revers_list
+  
+  # Now return the absolute difference between number and reverse looping over the lists 
+  
+  [i - j for i, j in zip(a, b)]
+  
+  new_list = [i - j for i,j in zip(orig_list,revers_list)]
+  # this generates the new list containing the differences
+  
+  # Now finally we want to know if each item in new_list is a multiple of k
+  # generate this list of numbers 
+  
+  matching = [s for s in some_list if "abc" in s]
+  
+  Correct_list = [item for item in new_list if item%k == 0]   # getting the final list
+  
+  # Since we want only the count of such numbers in that range, we must have
+  len(Correct_list)                        # and obviously this should be < the range specified
+  
+  
+  
+          
