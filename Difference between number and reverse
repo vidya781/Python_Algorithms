@@ -30,17 +30,13 @@ def absdiffmultiple(left,right,k):
   
   # Now return the absolute difference between number and reverse looping over the lists 
   
-  [i - j for i, j in zip(a, b)]
-  
   new_list = [i - j for i,j in zip(orig_list,revers_list)]
   # this generates the new list containing the differences
   
   # Now finally we want to know if each item in new_list is a multiple of k
   # generate this list of numbers 
   
-  matching = [s for s in some_list if "abc" in s]
-  
-  Correct_list = [item for item in new_list if item%k == 0]   # getting the final list
+    Correct_list = [item for item in new_list if item%k == 0]   # getting the final list
   
   # Since we want only the count of such numbers in that range, we must have
   len(Correct_list)                        # and obviously this should be < the range specified
