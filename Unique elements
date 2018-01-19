@@ -14,6 +14,8 @@ But suppose we want to go in for a more traditional approach, we have the follow
 1) Have an empty list and append the unique ( non duplicate) elements to this list
 2) Sort the list first
 
+# Need to see if we get an error because of reducing the length of list, try LC if the error crops up
+
 So [9,9,8,7,7,6,6,1]---> [1,6,6,7,7,8,9,9]----> [1,8]
 
 def getunique(L):
