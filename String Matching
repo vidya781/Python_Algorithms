@@ -1,0 +1,13 @@
+" An algorithm for string matching in a particular piece of text"
+
+
+def findmatch(pattern,text):
+    m = len(pattern)
+    n = len(text)     # defining 2 variables to get the lengths, assuming that text length is greater than the pattern
+    
+    for i in range((n-m)+1):   # let i run from 0 to that particular index
+        j = 0
+        while((j<m) and text[i+j]==p[j]):   # 0 less than pattern length and text[0] == pattern[0], increment, return index, else return -1
+             j += 1
+        if (j == m): return(i)
+    return -1
