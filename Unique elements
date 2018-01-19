@@ -19,9 +19,90 @@ But suppose we want to go in for a more traditional approach, we have the follow
 So [9,9,8,7,7,6,6,1]---> [1,6,6,7,7,8,9,9]----> [1,8]
 
 def getunique(L):
+    L.sort()   # sort the list using BIF
     A = []
     for i in range(len(L)):
         for j in range(i+1,len(L)+1)):
             if L[i] != L[j]:
                A.append(L[i]))
     return A                       # If all are duplicates, an empty list will be returned
+    
+    Consider alternative points of  view:
+    
+    a = [1, 2, 2, 3]
+b = []
+for i in a:
+    if i not in b:
+        b.append(i)
+print (b)
+[1, 2, 3]
+
+list = [100, 3232, 3232, 3232, 57, 57, 90]
+new_list = []                               # In this case, do not sort
+
+[new_list.append(x) for x in list if x not in new_list]
+
+print(new_list)
+
+Consider the case when one cannot sort the list:
+
+def unique_elements (list):
+    new_list = []
+    length = len(list)
+    i = 0
+    while (length != 0):
+        if (list[i] != list [i + 1]):
+            new_list.append(list[i])
+        i = i + 1
+        length = length - 1
+    '''new_list = set(list)'''
+    return (new_list)
+
+#Main program
+n = int(input("Enter length of the list: "))
+list = []
+for i in range (0, n):
+    item = int(input("Enter only integer values: "))
+    list.append(item)
+print ("This is your list: ", list)
+result = unique_elements (list)
+print (result)
+
+One gets the following error:
+
+IndexError: list index out of range
+
+Your list index range error is due to the fact that i is being iterated over all element indices, so when it's on the last element, i+1 will be out of bounds. 
+But a bigger problem is that you're only checking adjacent elements for duplicates. What if your list is [1, 2, 1]? Your algorithm will return all three elements, which I don't believe you
+want
+
+he problematic line is > if (list[i] != list [i + 1]): < (6th line in your code).
+
+Reason: Imagine your list has got 4 elements.
+
+Eg: mylist = [ 1, 2,2,3].
+
+mylist[i] != mylist [i + 1]
+
+In the last iteration 'i' will be 4 , so i + 1 will be 5.
+
+There is no such 5th index in that list, because list indexes are counted from zero.
+
+mylist[0] = 1
+
+mylist[1] = 2
+
+mylist[2] = 2
+
+mylist[3] = 3
+
+mylist[4] = No Index
+
+mylist[5] = No Index
+
+Use a list comprehension
+
+l = [1, 2, 2, 3,4,5,6,5,7,8]
+myList = []
+[ myList.append(item) for item in l if item not in myList]
+print(myList)
