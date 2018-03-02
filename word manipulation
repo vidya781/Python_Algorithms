@@ -1,0 +1,13 @@
+'''This program takes a string and modifies the characters in the even positions'''
+
+word = 'anthropomorphism'
+
+def myfunc(word):
+    wordlist = list(word)
+
+    for i,v in enumerate(wordlist):
+        if i % 2 != 0:
+            wordlist[i]= v.upper()
+
+    word2 = "".join(wordlist)
+    return word2
