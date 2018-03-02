@@ -1,0 +1,22 @@
+# Python program to find the weighted digit sum of a number
+
+def weighteddigitsum(X,W,n):
+    sum = 0
+    numWeight = 0
+    i = 0
+    while i < n :
+        numWeight = numWeight + X[i]*W[i]
+        
+        i = i + 1
+    return (float)(numWeight)
+
+X = [1,7,7,6]     # convert the number to a list by [int(d) for d in str(N)
+W = [1,2,3,4]     # W = list(range(1,len(L)+1)) 
+
+n = len(X)
+m = len(W)
+
+if (n == m):
+    print weighteddigitsum(X,W,n)
+else:
+    print "-1"
