@@ -1,0 +1,8 @@
+'''defining a function to take in a variable numbe rof arguments and do some operations on them'''
+
+def myfunc(*args):
+	finlist = []
+	for arg in args:
+		if arg%2 == 0:
+			finlist.append(arg)
+	return finlist
