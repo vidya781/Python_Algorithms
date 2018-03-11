@@ -1,0 +1,24 @@
+""" Producing web based visualizations using Bokeh """
+
+from bokeh.plotting import figure
+from bokeh.io import output_file, show
+import pandas
+
+url = "some path where data is kept"
+output_file("bokeh_plot.html")
+data = pandas.read_csv(url)
+f = figure()
+f.circle(x = data["x"],y = data["y"])
+show(f)
+
+""" If just visualisation of data is needed, one need not use bokeh"""
+
+import pandas as pd
+import csv
+import matplotlib.pyplot as plt
+url = "some path where data is kept"
+c = pd.read_csv(url)
+
+# Now on to the plotting
+plt.scatter(c['x'],c['y'])
+plt.show()
