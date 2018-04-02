@@ -1,0 +1,33 @@
+''' We are given a list L and we are required to find the largest of the numbers when concatentaed
+Thats is given a list [1,2,3] the possibilities are 123,231,132,213,312,321. The largest amongst these is 321.
+The program should output that.'''
+
+Approach/Idea:
+
+1] Get the permutations of all elements of teh list using itertools module
+2] Have an empty list called LOL which holds all the lists ( use the append method for achieving this)
+3] Define a function which takes as input a list or a tuple and returns the concatenated number by joining the elements of the list
+4] loop through every individual list from LOL and apply this function to yield the concatenated string
+5] store all these concatenated numbers in a list and select the max from that list.
+
+L = [50,2,1,9]
+from itertools import permutations    # Knowing to use permutations from itertools is the key to generating the different arrangements
+perm = permutations(L)
+
+LOL = []
+for tup in list(perm):
+    newlist = list(tup)
+    LOL.append(newlist)
+#print(LOL)                  
+
+def concatlist(list):
+	a = str(list[0])
+	for i in range(1,len(list)):
+		a += str(list[i])
+	return int(a)
+
+P = [concatlist(LOL[i]) for i in range(0,len(LOL))]  # List comprehension was the key idea here
+
+def getmax(P):
+    return max(P)
+print(getmax(P))
