@@ -1,0 +1,55 @@
+""" The objective of this program is to calculate the area of a polygon(non self intersecting) via the Gauss Green method.Given to you are coordinates of points in the cartesian plane in the form of sequentially tuples"""
+
+f = open("coordinates.txt",'r+')
+L = f.readlines()
+f.close()
+L = map(str.strip,L)
+
+Coordinates = []
+for i in range(len(L)):
+    Coordinates.append(eval(L[i]))  # eval is a method used to convert a string of tuples    
+
+# Now we need to store the x and y coordinates separately
+
+xcoords = []
+ycoords = []
+
+for i in range(len(Coordinates)):
+    xcoords.append(Coordinates[i][0])
+
+for i in range(len(Coordinates)):
+    ycoords.append(Coordinates[i][1])
+
+print(xcoords)
+print(ycoords)
+
+#Multiplications that one has are Reds = [3X1, 5X2,-1X4,0.5X4]=[3,10,-4,2]=11
+
+#Blues = [5X4,-1X1,0.5X2,3X4]= [20,-1,1,12]=32
+
+# For ease of calculations, extract out the first 4 elements by slicing of xcoord
+
+xcoord_Reds = xcoords[0:len(xcoords)-1]
+ycoord_Reds = ycoords[1:]
+
+#print(xcoord_Reds)
+#print(ycoord_Reds)
+
+Reds = [x*y for x,y in zip(xcoord_Reds,ycoord_Reds)]
+
+xcoord_Blues = xcoords[1:]
+ycoord_Blues = ycoords[0:len(ycoords)-1]
+
+#print(xcoord_Blues)
+#print(ycoord_Blues)
+
+Blues = [x*y for x,y in zip(xcoord_Blues,ycoord_Blues)]
+
+# Now a small helper function to get the area of the polygon
+
+def getarea(Reds,Blues):
+    return(0.5*abs(sum(Reds)-sum(Blues)))
+
+print(getarea(Reds,Blues))
+
+
