@@ -1,0 +1,68 @@
+''' We are given a list L and we are required to find the smallest of the numbers when concatentaed
+
+Thats is given a list [1,2,3] the possibilities are 123,231,132,213,312,321. The smallest amongst these is 123.
+
+The program should output that.'''
+
+'''
+Approach/Idea:
+
+
+1] Get the permutations of all elements of teh list using itertools module
+
+2] Have an empty list called LOL which holds all the lists ( use the append method for achieving this)
+
+3] Define a function which takes as input a list or a tuple and returns the concatenated number by joining the elements of the list
+
+4] loop through every individual list from LOL and apply this function to yield the concatenated string
+
+5] store all these concatenated numbers in a list and select the min from that list.'''
+
+""" However there is a condition in the problem that leading zeros should be ignored. In such a case,065 and 056 should be ignored"""
+
+L = [0,6,5]
+
+from itertools import permutations    # Knowing to use permutations from itertools is the key to generating the different arrangements
+
+perm = permutations(L)
+
+
+LOL = []
+
+for tup in list(perm):
+
+    newlist = list(tup)
+
+    LOL.append(newlist)
+
+#print(LOL)
+
+LOLmod = []   # we need the ones which do not have 0 as the first element
+
+def givecorrectlists(LOL):
+    for i in range(len(LOL)):
+        if LOL[i][0] != 0:
+            LOLmod.append(LOL[i])
+    return LOLmod
+        
+print(givecorrectlists(LOL))     # This is the set of lists which achieve this objective
+
+def concatlist(list):
+
+	a = str(list[0])
+
+	for i in range(1,len(list)):
+
+		a += str(list[i])
+
+	return int(a)
+
+
+P = [concatlist(LOLmod[i]) for i in range(0,len(LOLmod))]  # List comprehension was the key idea here
+
+
+def getmin(P):
+
+    return min(P)
+
+print(getmin(P))
