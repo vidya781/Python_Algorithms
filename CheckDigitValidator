@@ -1,0 +1,65 @@
+"""The objective of this program is to validate teh check digit by means of an algorithm
+A popular bar code system is called code 39, numbers relating to the different kinds of individual bars. The encoder to be encoded is an alphanumeric string of any fixed lengths of upto
+35 characters,using characters selected from the 10 digits and 26 upper case letters.
+
+Sample bar code 3 of 9:
+ABCD4560
+
+Approach/Idea:
+-------------
+lets just spend a moment as to how we want the validation to be done.
+
+The input to the algorithm is the full identifier even with the already existing 'check'digit . Applying the algorithm one can confirm if the existing check digit is the correct one.
+
+We would first want to create a mapping between alphabets and numbers A = 10,B = 11, ...,Z = 35 """
+
+BarCode = ['A','B','C','D',4,5,6,'O']   # If barcode is given as a string, convert to list in this form ( Hardcoded here just as an example)
+
+import string
+
+d = dict(zip(string.ascii_uppercase,range(10,36)))
+
+keylist = BarCode[:4]
+klValues = []
+
+# A small helper function to return the key values
+
+def givekeyvalues(d,keylist):
+    for item in keylist:
+        if item in d:
+            klValues.append(d[item])
+    return klValues
+    
+print(givekeyvalues(d,keylist))
+
+Weights = list(range(len(BarCode)-1,0,-1))
+Weightsforvalidation = Weights[:4]
+Remweights = Weights[-3:]
+Remsymbols = BarCode[4:len(BarCode)-1]
+
+Products = [k*l for k,l in zip(klValues,Weightsforvalidation)]
+Remprod =  [x*y for x,y in zip(Remweights,Remsymbols)]
+
+Totalsum = sum(Remprod) + sum(Products)
+
+checkValue = Totalsum % 36
+
+print(checkValue)
+
+# now we only need to find the corresponding Alphabet for 24 in d
+
+def getkey(checkValue):
+	for k,v in d.items():
+		if checkValue == v:
+			return k
+print(getkey(checkValue))
+  
+l = getkey(checkValue)
+
+def confirmation(l):
+    if l == BarCode[-1]:
+        print('Validation success')
+    else:
+        print('Validation failed')
+
+print(confirmation(l))
