@@ -1,0 +1,44 @@
+'''This one is from Stanford Programming Contest(2011).It is called Abnormal Addition.
+
+Add two base-10 numbers without carrying
+
+Normal base-10 addition involves a carrying step whenever two digits sum to 10 or greater. 
+For example, in 23 + 49 = 72, the 3 + 9 involves carrying a 1 to the tens unit. In false addition, any numbers that would be carried are simply dropped.
+So 23 + 49 = 62 since 3 + 9 = 12 ( giving the 2 in the units place) and 2 + 4 = 6 ( ignoring the carried 1)
+
+Input : Two integers a, b and on ein each line
+Output: resultant integer, that is an integer c, teh result of abnormal addition performed on a and b
+
+Assumption: a and b will have the same number of digits in base 10
+
+1 < a < 1,000,000
+1 < b < 1,000,000
+1 < c < 2,000,000
+
+No leading zeros will appear in a and b and hence should not be printed'''
+
+'''Sample Input :
+499
+861
+Sample Output:
+250  '''
+
+a = 499
+b = 861
+
+s1 = [int(d) for d in str(a)]
+s2 = [int(f) for f in str(b)]
+
+Sum_list_ab = [x + y for x,y in zip(s1,s2)]
+
+
+def abnaddition(Sum_list_ab):
+	lastdigits = []
+	for num in Sum_list_ab:
+		lastdigits.append(int(repr(num)[-1]))
+	return lastdigits
+print(abnaddition(Sum_list_ab))
+
+y = abnaddition(Sum_list_ab)
+
+print(''.join(map(str, y)))
