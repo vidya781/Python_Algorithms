@@ -1,0 +1,53 @@
+"""The analysis of code of SumFree
+
+A set of integers, X, is said to be sum free if the sum of any two integers
+in X is not in X.
+
+More formally,a,b in X (a+b) not in X
+
+Given a set of integers as input determine if it is sum free or not
+
+The first line contains an integer N, 2 <=N<=1000, the number of integers in the set. The second line contains N space separated positive integers
+
+Output: Output should be 1 if the set is sum free, 0 otherwise.
+
+Lets consider a list L = [4,5,1,5,2,8]
+
+We need to get all possible sums:
+
+4+5 5+1 1+5 5+2 2+8
+4+1 5+5 1+2 5+8 
+4+5 5+2 1+8
+4+2 5+8      
+4+8   """
+
+L = [4,5,1,5,2,8]
+
+def generatepairs(L):
+    result = []
+    for i in range(len(L)):
+        for j in range(i+1,len(L)):
+               result.append([L[i],L[j]])
+    return result
+
+pairings = generatepairs(L)
+print("%d pairings"%len(pairings))
+for pair in pairings:
+       print(pair)
+
+
+LOL = [sum(pair) for pair in pairings]
+print(LOL)
+
+count = 0
+for i in range(0,len(LOL)):
+    if LOL[i] in L:
+        count += 1
+    else:
+        pass
+print(count)
+
+if count > 0:
+    print("Not Sum Free-0")
+else:
+    print("Sum Free-1")
