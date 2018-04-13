@@ -1,4 +1,4 @@
-"""The analysis of code of SumFree
+"""The objective of this program is to generate all possible sums of a given list and check if any of the elemenst of the generated list are present in the original list
 
 A set of integers, X, is said to be sum free if the sum of any two integers
 in X is not in X.
