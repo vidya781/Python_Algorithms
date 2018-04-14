@@ -1,0 +1,31 @@
+"""Given a number, we need to transform it into a different number.
+If the number is p = 30214 then p(0) = 3, p(1) = 0, etc. Goal is to rotate the elements in the permutation
+so that each index i is replaed by the element p(i). After rotation, the number at index 0 will be 1, the element at index 1 will be 3 and so on.
+
+Input:
+The second line of the string will be a permutation p, where each character will be an integer between 0 and n-1, inclusive
+
+Output: The output should contain the permutation after the rotation operation has been applied.
+
+Assumptions: 1<=n<=10.All input is valid.
+
+Sample Input 1:
+30214
+Sample Output 1
+13204
+
+Sample Input 2:
+1230
+Sample Output 2:
+3201    """
+
+n = 30214
+L = [int(d) for d in str(n)]
+
+def generateP(L):
+    P = []
+    for i in range(len(L)):
+        P.append(L[L[i]])
+    return int(''.join(str(i) for i in P))
+
+print(generateP(L))
