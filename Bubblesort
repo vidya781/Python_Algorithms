@@ -1,0 +1,14 @@
+""" This program is to demonstrate the bubblesort algorithm where neighboring elements
+are swapped and 'bubbles' all the way to the end in order to get a completely sorted list"""
+
+A = [42,1,23,4,34]
+
+def bubblesort(A):
+    for i in range(0,len(A)):
+        for j in range(0,len(A)-i-1):
+            if A[j] > A[j+1]:
+                A[j],A[j+1] = A[j+1],A[j]
+            
+    return A
+
+print(bubblesort(A))
