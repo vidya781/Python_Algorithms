@@ -1,0 +1,23 @@
+""" An efficient algorithm that takes a sorted array and a key, finds the index of the first occurence of an element
+greater than that key"""
+
+A = [-14,-10,2,108,108,243,285,285,285,401]
+# sorted array with repeat element
+
+k = 108
+
+def Searchfirstlargerofk(A,k):
+    left = 0
+    right = len(A)-1
+    result = -1
+    #[left:right] is the candidate set
+    while left < right:
+        m = int(left + (right-left)/2)
+        if A[m]> k:
+            result = m
+            right = m - 1 #nothing to the right of mid can be a solution
+        else:
+            left = m + 1
+    return result
+
+print(Searchfirstlargerofk(A,k))
