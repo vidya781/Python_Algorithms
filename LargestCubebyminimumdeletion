@@ -1,0 +1,123 @@
+'''Find the Largest Cube formed by Deleting minimum Digits from a number
+
+Given a number n, the task is to find the largest perfect cube that can be formed
+by deleting minimum digits(possibly 0) from the number.
+
+X is called a perfect cube if X = Y^3 for some Y.
+
+Input: 4125
+Output : 125
+
+Explanation:
+125 = 5^3 We can form 125 by deleting digit 4 from 4125
+
+Input 876 We can form 8 by deleting digits 7 and 6 from 876'''
+
+n = 876
+
+L = [int(d) for d in str(n)]  # common LC hack for conversion n to digit list
+L_front = []
+
+def givefrontlistoflists(L):
+    for i in range(len(L)):
+        L_front.append(L[i+1:])
+    return L_front[:len(L)-1]
+
+#print(givefrontlistoflists(L))
+
+a = givefrontlistoflists(L)   
+
+# At this point we have L_front which holds the list of lists of the individual digits, we want these strung to get individual numbers
+
+# we can define a list local to our next function
+
+def givefront(a):
+    A_front = []
+    for i in range(len(a)):
+        A_front.append(int(''.join(str(i) for i in a[i])))
+    return A_front
+
+#print(givefront(a))
+
+b = givefront(a)
+
+# Now we have a list of the individual numbers with leading digits eliminated
+
+# We need to perform similar operation for the back of the list
+
+L_back = []
+
+def givebacklistoflists(L):
+    for i in range(len(L)):
+        L_back.append(L[:i+1])
+    return L_back[:len(L)-1]
+
+#print(givebacklistoflists(L))
+
+c = givebacklistoflists(L)
+
+def giveback(c):
+    A_back = []
+    for i in range(len(c)):
+        A_back.append(int(''.join(str(i) for i in c[i])))
+    return A_back
+
+#print(giveback(c))
+
+d = giveback(c)
+
+Combined_list = b + d
+
+# Now we have at this point all possible numbers that we can get out of the list , need to test for perfect cubes 
+
+        
+def getdivs(n):
+    divs = []
+    for i in range(1,n+1):
+        if n % i == 0:
+            divs.append(i)
+    return divs
+
+
+Factors = [getdivs(item) for item in Combined_list]
+
+Filtered_factors = []
+for item in Factors:
+    if len(item) >= 3:              # Min requirement for perfect cube
+        Filtered_factors.append(item)
+
+print(Filtered_factors)
+
+
+CF = []    # short for cubefactors
+
+def getc(Filtered_factors):
+    for i in range(len(Filtered_factors)):
+        for j in Filtered_factors[i]:
+            if j**3 == max(Filtered_factors[i]):
+                CF.append(j)
+    return CF
+    
+    
+print(getc(Filtered_factors))
+
+# Note that the only value that is returned as output is 5 which is an item from the first list
+
+cubes = []
+
+def getcubes(Filtered_factors,CF):
+    for i in range(len(Filtered_factors)):
+        for j in CF:
+            if j in Filtered_factors[i] and j**3 == max(Filtered_factors[i]):
+                cubes.append(max(Filtered_factors[i]))
+    return cubes
+
+print(getcubes(Filtered_factors,CF))
+
+
+Lfin = getcubes(Filtered_factors,CF)
+
+LFIN = [int(d) for d in str(Lfin[0])]  # reconverting to a list 
+
+Diffdigits = len(L)-len(LFIN)     # get difference of digits
+print(Diffdigits)
