@@ -1,0 +1,50 @@
+''' A program to get all substrings of a number and give out the largest prime'''
+
+N = 2478
+N = [int(d) for d in str(N)]
+
+def getallstrings(N):
+    length = len(N)
+    alist = []
+    for i in range(length):
+        for j in range(i,length):
+            alist.append(N[i:j+1])
+    return alist
+
+#print(getallstrings(N))
+y = getallstrings(N)
+
+def getstringednumbers(y):
+    Numbers = []
+    for item in y:
+        Numbers.append(''.join(map(str,item)))
+    return Numbers
+
+z = getstringednumbers(y)
+
+AllNumbers = [int(x) for x in z]
+
+def is_prime(n):
+    
+    for i in range(2,n-1):
+        if n % i == 0:
+            return False
+        else:
+            return True
+
+def getprimes(AllNumbers):
+    Primes = []
+    for num in AllNumbers:
+        if is_prime(num)==True:
+            Primes.append(num)
+    return Primes
+
+P = getprimes(AllNumbers)
+
+LargestPrime = max(P)
+
+print(LargestPrime)
+
+
+
+      
