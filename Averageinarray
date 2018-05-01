@@ -1,0 +1,51 @@
+'''You are given a sequence of integers a1, a2, ..., aN. An element ak is said to be an average element if there are indices i, j (with i ≠ j) such that ak = (ai + aj) / 2.
+
+In the sequence
+
+3  7  10  22  17  15
+for i=1, j=5 and k=3, we get ak = (ai + aj)/2. Thus a3 = 10 is an average element in this sequence. You can check that a3 is the only average element in this sequence.
+
+Consider the sequence
+
+3  7  10  3  18
+With i=1, j=4 and k=1 we get ak = (ai +aj)/2. Thus a1=3 is an average element. We could also choose i=1, j=4 and k=4 and get ak=(ai +aj)/2. You can check that a1 and a4 are the only average elements of this sequence.
+
+On the other hand, the sequence
+
+3  8  11  17  30
+has no average elements.
+
+The task is to count the number of average elements in the given sequence.'''
+
+
+'''Approach: We will be resuing some code from sumfree problem for this purpose simply for generating the pairings and obtaining the sums. We then proceed to find the avergae element by looping through both lists'''
+
+L = [3,7,10,22,17,15]
+
+def generatepairs(L):
+    result = []
+    for i in range(len(L)):
+        for j in range(i+1,len(L)):
+            result.append([L[i],L[j]])
+    return result
+
+pairings = generatepairs(L)
+#print("%d pairings"%len(pairings))
+for pair in pairings:
+    print(pair)
+
+LOL = [int(sum(pair)/2) for pair in pairings]   # holds the average of the paired elements
+print(LOL)
+    
+def givecount(LOL):
+    count = 0
+    for item in L:
+        if item in LOL:
+            count += 1
+    return count
+        
+print(givecount(LOL))
+
+y = givecount(LOL)
+if y == 0:
+    print("No average element")
