@@ -1,0 +1,53 @@
+'''This is a rather simple problem to describe.This is an Indian Informatics Olympiad problem'''
+
+Given are three numbers S, P, k. Task is to find if there are 3 numbers n1, n2 ....nk such that n1+n2+..nk = S
+n1*n2*n3*...*nk = P.If such integers exist, print them out. If no such integers exist, print 'NO'.
+For example, if S = 11, P = 48 and k = 3 then 3, 4, 4 is a solution
+
+On the other hand if S = 11,P = 100 and k = 3 there is no solution and you should print NO'''
+
+P = 48
+S = 11
+K = 3
+
+'''Approach: first get the factors of the given number P and filter out further for factors less than the given Sum S. Filetering out by product is easier as you get tow rok with smaller numbers for the Sum as S < P.
+Then using the length criteria K, obtain the desired numbers if they exist.'''
+
+def getfactors(P):
+    factors = []
+    for i in range(1,P):
+        if P%i == 0:
+            factors.append(i)
+    return factors
+
+Numbers = [i for i in getfactors(P) if i <= S]
+print(Numbers)
+
+def filtered(Numbers):
+    Num = []
+    for i in range(len(Numbers)):
+        for j in range(1,len(Numbers)):
+            for k in range(j,len(Numbers)):
+                if Numbers[i]*Numbers[j]*Numbers[k] == 48:
+                    Num.append(Numbers[i])
+    return Num
+print(filtered(Numbers))
+
+p = filtered(Numbers)
+n = len(p)
+
+# Now it boils down to finding a subarray with a given sum,we also note that it is a contiguous array that sums to the given S
+
+def final(p):
+    Subarray = []
+    for i in range(len(p)):
+        if sum(p[i:i+K])== S:
+            Subarray.extend(p[i:i+K])   #using extend instead of append as we want an array
+            return Subarray
+    else:
+            print("No subarray found")
+    
+
+print(final(p))
+
+             
