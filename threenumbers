@@ -28,7 +28,7 @@ def filtered(Numbers):
     for i in range(len(Numbers)):
         for j in range(1,len(Numbers)):
             for k in range(j,len(Numbers)):
-                if Numbers[i]*Numbers[j]*Numbers[k] == 48:
+                if Numbers[i]*Numbers[j]*Numbers[k] == P:
                     Num.append(Numbers[i])
     return Num
 print(filtered(Numbers))
@@ -42,7 +42,7 @@ def final(p):
     Subarray = []
     for i in range(len(p)):
         if sum(p[i:i+K])== S:
-            Subarray.extend(p[i:i+K])   #using extend instead of append as we want an array
+            Subarray.extend(p[i:i+K])   #using extend instead of append as we want a slice stepping by K
             return Subarray
     else:
             print("No subarray found")
