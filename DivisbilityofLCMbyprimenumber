@@ -1,0 +1,21 @@
+Check if LCM of array elems is divisible by prime number or not.
+
+int[] a = [10,20,15,25]
+k = 3
+
+1) First find the LCM
+2) Second check if LCM % k == 0 or not
+
+One could also say that if any of the array elems is divisible by k then the LCM of the array is also divisible by k
+
+def func(a,k,n):
+    for i in range(0,n):
+        if (a[i] % k == 0):
+            return True
+    a = [14,27,38,76,84]
+    k = 19
+    res = func(a,k,5)
+    if(res):
+       print("true")
+    else:
+       print("false")
