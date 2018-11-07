@@ -1,0 +1,56 @@
+Given an array a, we have to find minimum product possible with the subset of elements present in the array. The minimum product can be single element also.
+
+Examples:
+
+Input : a[] = { -1, -1, -2, 4, 3 }
+Output : -24
+Explanation : Minimum product will be ( -2 * -1 * -1 * 4 * 3 ) = -24
+
+Input : a[] = { -1, 0 }
+Output : -1
+Explanation : -1(single element) is minimum product possible
+ 
+Input : a[] = { 0, 0, 0 }
+Output : 0
+
+Approach/Idea: Idea is to find all possible subsets and get the product of each of these and select out for maximum or minimum
+
+Consider the following:
+
+If there are odd number of negative numbers and no zeros, then the min product is the product of all
+
+If there are only positive numbers and zeros, then the min product is simply the product of all numbers in the array
+
+def minProductSubset(a,n):
+    if(n==1):
+       return a[0]
+    
+    maxneg = float('-inf')
+    minpos = float('inf')
+    countneg = 0
+    countzero = 0
+    prod = 1
+    for i in range(0,n):
+        if (a[i] == 0):
+             countzero = countzero + 1
+             continue
+        if (a[i] < 0):
+             countneg = countneg + 1
+             maxneg = max(maxneg,a[i])
+        if (a[i] > 0):
+             minpos = min(minpos,a[i])
+        prod = prod * a[i]
+     if(countzero == n or (countneg == 0 and countzero > 0)):
+        return 0
+     if(countneg == 0):
+        return minpos
+     if((countneg & 1) == 0 and countneg != 0):
+        prod = int(prod/maxneg)
+     return prod
+
+a = [-1,-1,-2,4,3]
+n = len(a)
+print(minproductsubset(a,n))
+
+TC: O(n)
+Aux space : O(1)
