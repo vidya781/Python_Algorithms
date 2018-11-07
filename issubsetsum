@@ -1,0 +1,26 @@
+Given a set of non negative integers and a value sum determine if there is a subset
+of the given set with sum equal to the given sum
+
+def issubsetsum(arr,checksum):
+    n = len(arr)
+    possiblesum = [[False]*(n+1) for _ in range(checksum + 1)]
+
+    for i in range(n+1):
+        possiblesum[0][i] = True
+
+    for i in range(1,checksum + 1):
+        for j in range(1,n+1):
+            if i < arr[j-1]:
+               possiblesum[i][j] = possiblesum[i][j-1]
+            elif i >= arr[j-1]:
+               possiblesum[i][j] = possiblesum[i][j-1] or possiblesum[i-arr[j-1]][j-1]
+    
+   return possiblesum[checksum][n]
+
+arr = [3,34,4,12,5,2]
+checksum = 9
+
+if issubsetsum(arr,checksum):
+   print("found subset with sum = ",checksum)
+else:
+   print("Subset with sum = ",checksum, "Not found")
