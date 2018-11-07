@@ -1,0 +1,62 @@
+Given a rod of length n inches and an array of prices that contains prices of all pieces of size smaller than n. Determine the maximum value obtainable by cutting up the rod and selling the pieces. For example, if length of the rod is 8 and the values of different pieces are given as following, then the maximum obtainable value is 22 (by cutting in two pieces of lengths 2 and 6)
+
+length  1  2  3  4   5  6   7   8
+price   1  5  8  9  10  17  17  20
+
+A naive solution for this problem is to generate all configurations of different prices and then find the highest prized configuration.
+
+However this solution is exponential in terms of TC.
+
+A DP approach can be used to solve this problem.
+
+1) Optimal Substructure:
+
+We can get the best price by making a cut at different positions and comparing the values obtained after a cut. We can recursively call the same function for a piece 
+obtained after a cut
+
+If cutrode(n) be the required(Best possible price) value for a rod of length n. cutrod(n) can be written as follows:
+
+cutrod(n) = max(price[i] + cutrod(n-i-1)) for all i in {0,1,...n-1}
+
+2)Overlapping subproblems
+
+import sys
+
+def max(a,b):
+    return a if (a > b) else b
+
+def cutrod(price,n):
+    if(n <= 0):
+        return 0
+    maxval = -sys.maxsize-1
+
+    for i in range(0,n):
+        maxval = max(maxval,price[i] + cutrod(price,n-i-1))
+    return maxval
+
+arr = [1,5,8,9,10,17,17,20]
+size = len(arr)
+print("Max Obtainable Value is ",cutrod(arr,size))
+
+
+----------------------------------------------------------------
+
+a DP based approach
+
+INTMIN = -32767
+def cutrod(price,n):
+    val = [0 for x in range(n+1)]
+    val[0] = 0
+    # Build the table val[] in the bottom up manner and return the last entry from the table
+    for i in range(1,n+1):
+        maxval = INTMIN
+        for j in range(i):
+            maxval = max(maxval,price[j] + val[i-j-1])
+        val[i] = maxval
+    return val[n]
+
+arr = [1,5,8,9,10,17,17,20]
+size = len(arr)
+print("Max obtainable value is " + str(cutrod(arr,size)))
+
+----------------------------------------------------------------------------
