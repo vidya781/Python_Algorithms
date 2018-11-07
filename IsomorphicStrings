@@ -1,0 +1,37 @@
+Two strings str1 and str2 are called isomorphic if there is a one to one mapping possible for every character of str1 to every character of str2. And all occurrences of every character in ‘str1’ map to same character in ‘str2’
+
+Input:  str1 = "aab", str2 = "xxy"
+Output: True
+'a' is mapped to 'x' and 'b' is mapped to 'y'.
+
+Input:  str1 = "aab", str2 = "xyz"
+Output: False
+One occurrence of 'a' in str1 has 'x' in str2 and 
+other occurrence of 'a' has 'y'.
+
+MAX_CHARS = 256
+
+def isisomorphic(string1, string2):
+    m = len(string1)
+    n = len(string2)
+
+    if m != n:
+       return False    # length must be same for one to one correspondence
+
+    marked = [False]*MAX_CHARS   # to mark visited characters in str2
+   
+    map = [-1]*MAX_CHARS   # To store mapping of every char from str1 to str2. Initialise all entries of map as -1
+
+    for i in range(n):        # process all chars one by one
+        if map[ord(string1[i])] == -1:   # if curr character of str1 is seen first 
+           if marked[ord(string2[i])] == True:  #  if curr char of st2 is already seen one to one mapping not possible
+              return False
+            marked[ord(string2[i])] = True  # mark curr char of str2 as visited
+            map[ord(string1[i])] = string2[i]  # store mapping of curr characters
+        elif map[ord(string1[i])] != string2[i]: # if this is not the first appearance of curr chara in str1 then check if previous appearance mapped to same char of str2
+             return False
+    return True
+
+print isisomorphic("aab","xxy")
+print isisomorphic("aab","xyz")
+
