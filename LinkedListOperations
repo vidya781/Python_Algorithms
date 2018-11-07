@@ -1,0 +1,137 @@
+
+"""LinkedList operations"""
+class Node:
+     def __init__(self,data):
+         self.data = data
+         self.next =  None
+
+      class LinkedList:
+          def __init__(self):
+              self.head = None
+
+def push(self,newdata):
+    newnode = Node(newdata)
+    newnode.next = self.head # make next of new node as head
+    self.head = newnode # move the head to point to the new node
+
+def insertafter(self,prevnode,newdata):
+    if prevnode is None:
+       print("The given prev node must be in linkedlist.")
+       return
+
+    newnode = Node(newdata)
+    newnode.next = prevnode.next
+    prevnode.next = newnode
+
+def insertatend(self,newdata):
+    newnode = Node(newdata)
+    if self.head is None:
+       self.head = newnode
+       return
+
+    last = self.head
+    while(last.next):
+         last = last.next
+    last.next = newnode
+
+def printList(self):
+    temp = self.head
+    while(temp):
+        print temp.data
+        temp = temp.next
+
+if __name__=='__main__':
+  llist = LinkedList()
+  llist.append(6)
+  llist.push(7)
+  llist.push(1)
+  llist.insertatend(4)
+  llist.insertafter(llist.head.next,8)
+  print('Create Linked list is:')
+  llist.printlist()
+
+# searching for an element in the Linked List
+
+def search(self,x):
+    current = self.head  # initialise current to head
+    while current != None:
+         if current.data == x:
+             return True  # data found
+         current = current.next
+    return False # Data not found
+
+if llist.search(21):
+     print("Yes")
+else:
+     print("No")
+
+
+# Returns data at given index in Linked List
+def getNth(self,index):
+    current = self.head  # initialise temp
+    count = 0  # Index of current node
+    # Loop while end of LL is not reached
+    while(current):
+        if(count == index):
+           return current.data
+        count += 1
+        current = current.next
+     # if one gets here, caller asking for non existent elem so assert can be used here
+    assert(false)
+    return 0;
+
+# finding the middle node 
+
+def findmiddle(node):
+    middle = node
+    current = node
+    odd = true
+    while(current.next is not None):
+        print("Current: "+current.data,"Middle: "+middle.data,"odd: "+repr(odd))
+        if(not odd):
+                middle = middle.next
+        current = current.next
+        odd = not odd
+     print("Current: "+current.data,"Middle: "+middle.data,"odd: "+repr(odd))
+
+
+# a function that counts the number of times a given int occurs in a Linked List
+
+Given a singly LL, and a key, count the number of occurences of a given key  in LL.
+If given LL is 1-->2-->1-->2-->1-->3-->1 and given key is 1, count is 4
+
+Method 1-Without recursion
+
+1) Initialise count as zero
+2) Loop thru each elem of LL:
+     a) If elem data is equal to the passed number then increment count
+3) Return count
+
+def count(self,searchfor):
+    current = self.head
+    count = 0
+    while(current is not None):
+        if current.data == searchfor:
+           count += 1
+        current = current.next
+    return count
+
+
+# code for detecting a loop in a LinkedList
+
+def detectLoop(self):
+    s = set()
+    temp = self.head
+    while(temp):
+        if(temp in s):
+           return true
+         s.add(temp)
+         temp = temp.next
+    return False
+
+llist.head.next.next.next.next = llist.head;
+if(llist.detectLoop()):
+   print("Loop found")
+else:
+   print("No loop")
+
