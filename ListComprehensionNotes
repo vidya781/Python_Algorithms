@@ -1,0 +1,95 @@
+squares = [x * x for x in range(10)]
+
+squares
+[0,1,4,9,16,25,36,49,64,81]
+
+squares = []
+for x in range(10):
+    squares.append(x*x)
+
+Generalising
+
+values = [expression for item in collection]
+
+values = []
+for item in collection:
+    values.append(expression)
+
+# only even squares
+
+even_squares = [x*x for x in range(10) if x % 2 == 0]
+
+[0,4,16,36,64]
+
+even_squares = []
+for x in range(10):
+    if x % 2 == 0:
+       even_squares.append(x * x)
+
+values = [expression for item in collection if condition]
+
+values = []
+for item in collection:
+     if condition:
+         values.append(expression)
+
+Just as there are list comprehensions there are set and dict comprehensions also
+
+{x*x for x in range(-9,10)}
+set([64,1,36,0,49,9,16,81,25,4])
+
+Note: Lists retain the order of the elems in them, Python sets are an unordered collection type. So one will get more or less "random" order when items are added to a set container
+
+This is a dictionary comprehension
+{x:x*x for x in range(5)}
+{0: 0, 1:1, 2:4, 3:9, 4:16}
+
+List slicing Tricks
+
+L = [1,2,3,4,5]
+L
+[1,2,3,4,5]
+
+L[1:3:1]
+[2,3]
+
+L[1:3]
+[2,3]
+
+L[::2] # sushi operator
+[1,3,5]
+
+L[::-1]
+[5,4,3,2,1]
+
+L.reverse() # alternative
+
+Use the [:] operator to clear all the elements from a list without destroyig the list objects itself
+
+L = [1,2,3,4,5]
+del L[:]
+L
+[]
+
+Thus, this removes all elems from lst but leaves the list object intact. In Python 3, one can use the lst.clear() for the same purpose. However clear() is not available in Python 2.
+
+original_list = L
+L[:] = [7,8,9]
+L
+[7,8,9]
+original_list
+[7,8,9]
+original_list is L
+True
+
+The previous code replaced all elems in L but did not destroy and recreate the list itself. The old references to the original list object are therefore still valid.
+
+copied_list = L[:]
+copied_list
+[7,8,9]
+copied_list is L
+False
+
+Creating a shallow copy means that only the structure of the elements is copied ,not the elements themselves. Both copies of the list share the same instances of the individual elements.
+
+If there is a need to duplicate everything, including the elems, then the deep copy has to be used.For this, use the Pythons built in copy module
