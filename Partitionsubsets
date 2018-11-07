@@ -1,0 +1,50 @@
+Partition problem is to determine whether a given set can be partitioned into two subsets such that the sum of elements in both subsets is same.
+
+arr[] = {1, 5, 11, 5}
+Output: true 
+The array can be partitioned as {1, 5, 5} and {11}
+
+arr[] = {1, 5, 3}
+Output: false 
+The array cannot be partitioned into equal sum sets.
+
+Let issubsetsum(arr,n,sum/2) be the function that returns true if there is a subset of arr[0....n-1] with sum equal to sum/2
+
+The issubsetsum problem can be divided into 2 subproblems
+
+a) issubsetsum() without considering the last element (reducing n to n-1)
+b) issubsetsum considering the last element
+   (reducing sum/2 by arr[n-1] and n to n-1)
+
+If any of the above subproblems return true, then return true
+issubsetsum(arr,n,sum/2) = issubsetsum(arr,n-1,sum/2) || issubsetsum(arr,n-1,sum/2-arr[n-1])
+
+def issubsetsum(arr,n,sums):
+    # base cases
+    if sums==0:
+        return True
+    if n==0 and sums != 0:
+       return False
+    if arr[n-1] >sums:
+       return issubsetsum(arr,n-1,sums)   # ignore if the last elem is greater than sum
+    """ else check ifthe sum can be obtained by any of the foll
+     a) including the last elem
+     b) excluding the last elem
+    return issubsetsum(arr,n-1,sum) or issubsetsum(arr,n-1,sum-arr[n-1])
+ 
+def findpartition(arr,n):
+    # calculate the sum of elements in array
+    sums = 0
+    for i in range(0,n):
+        sums += arr[i]
+    # If the sum is odd, there cannot be two subsets with equal sum
+    if sum % 2 != 0:
+       return false
+    return issubsetsum(arr,n,sum//2)
+
+arr = [3,1,5,9,12]
+n = len(arr)
+if findpartition(arr,n) == True:
+    print ("Can be divided into two subsets of equal sum")
+else:
+    print("Cannot be divided into two subsets of equal sum")
