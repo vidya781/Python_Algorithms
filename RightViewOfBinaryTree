@@ -1,0 +1,56 @@
+Print Right View of a Binary Tree
+
+Given a BT, print Right View of the tree.Right view of a BT is a set of nodes visble 
+when tree is visited from the Right Side
+
+     1
+
+  2    3
+
+4   5 6  7
+ 
+           8
+
+The Right View contains all nodes that are last nodes in their levels. If one does Level order traversal then one can print the last nodes at every level
+
+class Node:
+    def __init__(self,item):
+        self.data = item
+        self.left = None
+        self.right = None
+
+   # Recursive function to print right view of BT
+   # used maxlevel as reference list...only maxlevel[0] is what we want
+
+    def rightviewutil(root,level,maxlevel):
+        # Base case
+        if root is None:
+           return
+        # If this is the last node of its level
+        if(maxlevel[0] < level):
+          print("%d " %(root.data),
+          maxlevel[0] = level
+
+        # Recur for right subtree first, then left sub tree
+       rightViewUtil(root.right,level+1,maxlevel)
+       rightViewUtil(root.left,level+1,maxlevel)
+
+    def rightView(root):
+        maxlevel = [0]
+        rightViewUtil(root,1,maxlevel)
+
+  # Driver program to test above function
+   root = Node(1)
+   root.left = Node(2)
+   root.right = Node(3)
+   root.left.left = Node(4)
+   root.left.right = Node(5)
+   root.right.left = Node(6)
+   root.right.right = Node(7)
+   root.right.left.right = Node(8)
+
+   rightView(root)
+
+   Right View of Binary Tree using Queue
+
+TC : Function does a simple traversal of the tree, so complexity is O(n)
