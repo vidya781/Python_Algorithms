@@ -1,0 +1,48 @@
+Implement a function countwords() in Python that takes as input string word_string and a number called number_of_words that returns the n most frequently occuring words in word_string
+Skiena
+
+Return value should be a list of tuples-the top n words paired with their respective copunts[(,),(,)...] sorted in descending count order
+
+All input willl be in lowercase and there will be no punctuations or other charcaters. In case of a tie ( equal count) order the tied words alphabetically.
+
+print count_words('the lazy fox flew over the lazy dog in order to order in a lazy pizza')
+
+[('lazy',3),('the',2),('in',2)]
+
+def countwords(word_string,number_of_words):
+    wordarray = word_string.split('')
+    wordoccurarray = []
+    for word in wordarray:
+       if word in word_string:
+          occurrencecount = wordarray.count(word)
+         wordoccurarray = wordarray.append((word,occurencecount))
+       else:
+          # no of occurences, count = 0
+          wordoccurarray.append((word,0))
+
+     wordoccurarray = list(set(wordoccurarray))
+     wordoccurarray.sort(key=lambda tup: (-tup[-1],tup[0]))
+     return wordoccurarray[:number_of_words]
+       
+print(countwords('the lazy fox flew over the lazy dog in order to order in a pizza', 3))
+
+Do a scraping operation on the webpage in order to get all the words into a string and subsequently a list
+
+import re
+import urllib.request
+from bs4 import BeautifulSoup
+
+html = urrlib.request.urlopen('http://chosen web site')
+soup = BeautifulSoup(html)
+data = soup.findAll(text=True)
+
+def visible(element):
+    if element.parent.name in ['style','script','[document]','head','title']:
+        return False
+    elif re.match('<!--.*-->',str(element.encode('utf-8'))):
+         return False
+    return True
+
+result = filter(visible,data)
+result = word_string
+print(list(word_string))
