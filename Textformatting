@@ -1,0 +1,16 @@
+The objective of this piece of code is to clean the list of strings using regular expressions
+
+strings = [ '    Alabama ','Georgia!','Georgia','georgia','FlOrIda','south  carolina##','West virginia?']
+
+import re
+
+def clean_strings(strings):
+    result = []
+    for value in strings:
+        value = value.strip()
+        value = re.sub('[!#?]','',value)
+        value = value.title()
+        result.append(value)
+    return result
+
+print clean_strings(strings)
