@@ -1,0 +1,132 @@
+What is TF?
+
+Library developed by Google for solving complex math problems
+
+1) Solving complex math expressions
+2) ML techniques, 00give sample of data for training, give another sample of data to predict the result based on training data
+(part of AI)
+3) GPU use and support---2 variations of TF-CPU and GPU
+
+Basics:
+
+Tensor main blocks of data that TF uses, like the variables hat TF uses to work with data. Each tensor has a dimension and a Type.
+
+The dimension is the rows and columns of T, there can be one dimensional T, 2 dimensional T and 3 dimensional T
+
+Type is the data type for elements of the T
+
+
+
+One dim tensor:
+
+create a numpy array or Python list and convert it to a T using the tf_convert_to_tensor function
+
+impprt numpy as np
+arr = np.array([1,5.5,3,15,20])
+
+print(arr)
+print(arr.ndim)
+print(arr.shape)
+print(arr.dtype)
+
+import numpy as np
+import tensorflow as tf
+arr = np.array([1,5,5,3,15,20])
+tensor = tf.convert_to_tensor(arr,tf.float64)
+print(tensor)
+
+sess = tf.Session()
+print(sess.run(tensor))
+print(sess.run(tensor[1]))
+
+Now for a 2 dimensional tensor
+
+arr = np.array([1,5,5,3,15,20),(10,20,30,40,50),(60,70,80,90,100)])
+
+import numpy as np
+import tensorflow as tf
+arr = np.array([1,5,5,3,15,20),(10,20,30,40,50),(60,70,80,90,100)])
+tensor = tf.convert_to_tensor(arr)
+sess = tf.Session()
+print(sess.run(tensor))
+
+Performing math operations
+
+arr1 = np.array([1,2,3),(4,5,6)])
+arr2 = np.array([7,8,9),(10,11,12)])
+
+arr3 = tf.add(arr1,arr2)
+
+sess = tf.Session()
+tensor = sess.run(arr3)
+print(tensor)
+
+arr4 = tf.multiple(arr1,arr2)
+sess = tf.Session()
+tensor = sess.run(arr4)
+print(tensor)
+
+3 dimensional tensor
+--------------------------
+
+Use of an RGB image where each piece of the image is specified by x,y and z coordinates
+
+Width, Height, and Color depth are our metrics.
+
+import matplotlib.image as img
+myfile = "someimage.png"
+myimage = img.imread(myfile)
+print(myimage.ndim)
+print(myimage.shape)
+plot.imshow(myimage)
+plot.show()
+
+One can also crop or slice the image using TF
+
+import tensorflow as tf
+import matplotlib.image as img
+import matplotlib.pyplot as plot
+
+myfile = "someimage.png"
+myimage = img.imread(myfile)
+slice = tf.placeholder("int32",[None,None,3])
+cropped = tf.slice(myimage,[10,0,0],[16,-1,-1])
+sess = tf.Session()
+result = sess.run(cropped,feed_dict={slice:myimage})
+plot.imshow(result)
+plot.show()
+
+Transposing images 
+
+import tensorflow as tf
+import matplotlib.image as img
+import matplotlib.pyplot as plot
+myfile = "someimage.png"
+myimage = img.imread(myfile)
+image = tf.Variable(myimage,name='image')
+vars = tf.global_variables_initializer()
+sess = tf.Session()
+flipped = tf.transpose(image, perm=[1,0,2])
+sess.run(vars)
+result=sess.run(flipped)
+plot.imshow(result)
+plot.show()
+
+--------------------------------------------
+To read from the CSV file, one can use the TextLineReader
+
+files = tf.train.string_input_producer(["file0.csv","file1.csv"])
+reader = tf.TextLineReader()
+key,value = reader.read(files)
+record_defaults = [[1],[1],[1],[1]]  # set the default data to 4 columns
+col1,col2,col3,col4 = tf.decode_csv(value,record_defaults=record_defaults)
+features = tf.stack([col1,col2,col3,col4])
+
+# Training the model
+tf.Session() as sess:
+
+coord = tf.train.Coordinator()
+threads = tf.train.start_queue_runners(coord = coord)
+
+
+
