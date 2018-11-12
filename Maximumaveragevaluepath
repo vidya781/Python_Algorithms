@@ -1,0 +1,54 @@
+Path with maximum average value
+Given a square matrix of size N*N, where each cell is associated with a specific cost. A path is defined as a specific sequence of cells which starts from top left cell move only right or down and ends on bottom right cell. We want to find a path with maximum average over all existing paths. Average is computed as total cost divided by number of cells visited in path.
+Examples:
+
+Input : Matrix = [1, 2, 3
+                  4, 5, 6
+                  7, 8, 9]
+Output : 5.8
+Path with maximum average is, 1 -> 4 -> 7 -> 8 -> 9
+Sum of the path is 29 and average is 29/5 = 5.8
+
+Note that we need a total of 2N-1 moves to get to the bottom right from teh top left.
+
+Denominator is fixed and we need to maximise the numerator
+
+Calculating the max sum of path is DP.
+If dp[i][j] represents max sum till cell(i,j) from (0,0) tehn at each cell(i,j), one updates dp[i][j] as below
+
+for all i, i <=i <=N
+   dp[i][0] = dp[i-1][0] + cost[i][0];
+for all j, 1 <= j <=N
+   dp[0][j] = dp[0][j-1] + cost[0][j];
+otherwise
+   dp[i][j] = max(dp[i-1][j], dp[i][j-1]) + cost[i][j];
+
+def maxAveragePath(cost,N):
+
+    dp = [[0 for i in range(N+1)] for j in range(N+1)]
+    dp[0][0] = cost[0]]0]
+
+    # Initialize first column of total cost(dp) array
+    for i in range(1,N):
+        dp[i][0] = dp[i-1][0] + cost[i][0]
+
+    # Initialize first row of dp array
+    for j in range(1,N):
+        dp[0][j] = dp[0][j-1] + cost[0][j]
+
+     # Construct rest of the dp array
+     for i in range(1,N):
+         for j in range(1,N):
+             dp[i][j] = max(dp[i-1][j],dp[i][j-1]) + cost[i][j]
+
+       # divide max sum by constant path
+      # length : (2N-1) for getting average
+      return dp[N-1][N-1]/(2*N-1)
+
+# driver program to test the function
+
+cost = [[1,2,3],
+        [6,5,4],
+        [7,3,9]]
+
+print (maxAverageOfPath(cost,3))
