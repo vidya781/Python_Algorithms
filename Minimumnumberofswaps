@@ -1,0 +1,70 @@
+Find the min number of swaps to make 2 arrays identical
+
+arrA[] = {3,6,4,8}
+arrB[] = {4,6,8,3}
+
+6 is present at location/index 1 in both the arrays.We have before us 2 possibilities:
+
+swap 4,8 / swap 4,3
+
+arrA[] = {3,6,4,8}
+arrB[] = {3,6,8,4}
+
+One swap more
+
+arrA[] = {3,6,4,8}
+arrB[] = {3,6,4,8}
+
+Total of 2 swaps
+
+Alternate way
+
+arrA[] = {3,6,4,8}
+arrB[] = {4,6,8,3}
+
+arrA[] = {3,6,4,8}
+arrB[] = {8,6,4,3}  # swapping (8,4)
+
+One additional swap
+
+arrA[] = {3,6,4,8}
+arrB[] = {3,6,4,8}
+
+In any case, total number of swaps = 2
+
+def minswaps(L1,L2)  # assume L1, L2 exist and are of equal length and contain the same elements but in different order
+    L3 = [None]*len(L1)
+    for i in range(len(l1)):
+        L3[i] = L2.index(L1[i])
+     swapcount = 0
+    for k in range(len(L3)):
+        if k is not L3[k]:
+             L3[k],L3[L3[k]] = L3[L3[k]],L3[k]
+              swapcount += 1
+        pass
+     return swapcount
+
+L1=  [1,2,3,0,4]
+L2 = [3,4,1,0,2]
+
+print minswaps(L1,L2) 
+
+
+Some simple code is as follows: more pythonic
+
+def miniswaps(L1,L2):
+    wrongcount = 0  # add a running tally
+
+    # Iterate over the items
+    for item in L1:
+         # Index the item in both the lists
+         L1_index = L1.index(item)
+         L2_index = L2.index(item)
+
+         # If the item is not in the same place in both the lists
+         if L1_index != L2_index:
+             # add one to the tally
+             wrongcount += 1
+         # Since one is swapping these around, every swap will correct 2 items; so divide the count by two.
+     return wrongcount/2
+
