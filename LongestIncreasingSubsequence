@@ -1,0 +1,51 @@
+Longest Increasing Subsequence
+
+Given sequence of numbers determine a subsequence ( not necesarrily contiguous) of maximum length in which the values in the subsequence 
+form a strictly increasing sequence
+
+(5,6,2,3,4,1,9,9,8,9,5) then (5,6),(3,5) and (1,8,9) are all increasing sub sequences
+The longest one of them is (2,3,4,8,9) , we need an algorithm to find it
+
+Recursively we can attempt to solve this as:
+
+L(i) = Max (j < i) and A[j] < A[i]{L[j]} + 1
+
+def LIS(L):
+    LISTable =[1]
+    for i in range(1,len(L)):
+        LISTable.append(1)
+        for j in range(0,i):
+            if L[i] > L[j] and LISTable[i] <= LISTable[j]:
+               LISTable[i] = 1 + LISTable[j]
+    print LISTable
+    return max(LISTable)
+
+print LIS([3,2,6,4,5,1])
+
+Using DP
+
+arr[] 10 23 9 34 20 51 41 60 85
+LIS   1  2    3     4     5   6
+
+def lis(arr):
+    n = len(arr)
+
+    lis = [1]*n
+
+    for i in range(1,n):
+        for j in range(0,i):
+            if arr[i] > arr[j] and lis[i] < lis[j] + 1:
+               lis[i] = lis[j] + 1
+
+    maximum = 0
+
+    for i in range(n):
+        maximum = max(maximum, lis[i])
+
+    return maximum
+
+# driver prog
+
+arr = [10,23,9,34,20,51,41,60,85]
+
+print("Length of lis is ",lis(arr))
