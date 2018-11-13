@@ -1,0 +1,64 @@
+Iterator Chains
+
+By chaining together multiple iterators one can write highly efficient data processing pipelines.
+
+The goal is to build iterator chains and use such constructs in one's own programs.
+
+Quick recall: Generators and generator expressions are syntactic sugar for writing iterators in Python. They abstract away much of the boiler plate code
+needed when writing out class based iterators.
+
+While a regular function produces a single return value, generators produce a sequence of results. They generate a stream of values over the course of their lifetime.
+
+def integers():
+    for i in range(1,9):
+        yield i
+
+chain = integers()
+list(chain)
+[1,2,3,4,5,6,7,8]
+
+Take the stream of values coming out of the integers() generator and feed them into another generator again
+
+def squared(seq):
+    for i in seq:
+        yield i * i
+
+chain = squared(integers())
+list(chain)
+
+And thus new building blocks to this pipeline can be added. Data is flowing in one direction only and each processing step is shielded from the others via a well defined interface
+
+Similar to how pipelines work in Unix. We chain together a sequence of processes so that the output of each process feeds directly as input to the next one.
+
+def negated(seq):
+    for i in seq:
+        yield -i
+
+If the rebuild is given for the chain of generators and add negated at th end, we get teh foll output:
+
+chain = negated(squared(integers()))
+list(chain)
+[-1,-4,-9,-16,-25,-36,-49,-64]
+
+Chaining generators-data processing happens one element at a time and there is no buffering between the processing steps in the chain.
+
+1] The integers generator yields a single value, say 3
+2] This "activates" the squared generator which processes the value and passes it on to the next stage as 3 X 3 = 9
+3] The square number yielded by the squared generator gets fed immediately into the negated generator, which modifies it to -9 and yields it again
+
+One could keep extending this chain of generators to build out a processing pipeline with many steps. It would still perform efficiently and could easily be m,odified because each step in the chain is an individual generator function.
+
+integers = range(8)
+squared = (i*i for i in integers)
+negated = (-i for i in squared)
+
+generator expression is built on the output of the previous step and this code is equivalent to the chain of generators that one builds 
+
+negated
+<generator objet <genexpr> at some XXXmemoryloc>
+
+list(negated)
+[0,-1,-4,-9,-16,-25,-36,-49]
+
+Only downside to using generator expressions is that they cant be configurd with function arguments and one cant reuse the same generator expression mutiple times in the same processing pipeline.
+
