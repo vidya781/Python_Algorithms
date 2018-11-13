@@ -1,0 +1,10 @@
+Reversing Sentence using a function
+
+def reversewordsentence(Sentence):
+    words = Sentence.split(" ")
+    newwords = [word[::-1] for word in words]
+    newsentence = " ".join(newwords)
+    return newsentence
+
+Sentence = "Truthful people are a rare lot"
+print(reversewordssentence(Sentence))
