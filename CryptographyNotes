@@ -1,0 +1,242 @@
+The science of writing secret codes is called cryptography. For thousands of years cryptography has made secret messages that only the sender and recipient could read, even if someone captured the messenger and read the coded message. A secret code system is called a cipher. The cipher used by the program is called the Caesar cipher.
+
+In cryptography, we call the message that we want to be secret the plaintext.
+ The plaintext could look like this:
+
+Hello there! The keys to the house are hidden under the flower pot.
+
+Converting the plaintext into the encoded message is called encrypting the plaintext. The plaintext is encrypted into the ciphertext. The ciphertext looks like random letters, and we cannot understand what the original plaintext was just by looking at the ciphertext. Here is the previous example encrypted into ciphertext:
+
+Yvccf kyviv! Kyv bvpj kf kyv yfljv riv yzuuve leuvi kyv wcfnvi gfk.
+
+If one knows the cipher used to encrypt the message one can decrypt the ciphertext back to the plaintext
+
+Many ciphers also use keys. Keys are secret values that let one decrypt the ciphertext that was encrypted using a specific cipher. The cipher is a door lock and one can unlock it only with a particular key.
+
+Caesar Cipher
+
+The key for the Caesar cipher is a number from 1 to 26. Unless one knows the key( that is the number used to encrypt the message) one will not be able to decrypt the message.
+
+The Caesar cipher was one of the earliest ciphers ever invented. What happens is a lateral shift of the alphabet or the number or the symbol to another number, letter or symbol in the same set translocated by the shift.
+
+Example:
+
+If the shift is 1 A---> B and B---> C and so on 
+If shift is 3 A-->D, B-->E and so on
+
+To get the shifted letter, it is best to draw out a row of boxes with each letter of the alphabet. Then draw a second row of boxes under it bu start a certain number ( This number is the key) of spaces over. After letters at the end wrap 
+around back to the start of the boxes 
+
+A B C D E F...
+
+D E F G H I....
+
+So going by this logic, the ciphertext of Hello with key 3 becomes Krzgb
+
+Conversion by ASCII
+
+The capital letters A through Z have the ASCII numbers 65 to 90. The lowercase a through z have the ASCII numbers 97 through 122. The numeric digits 0 through 9 have the ASCII numbers 48 through 57.
+
+Refer to the ASCII table for details:
+
+If one wants the A to be shifted to D the convert A to the ordinal (65) , add 3 to get 68 and convert the ordinal 68 back to a letter D
+
+The chr() and ord() functions can convert between characters and ordinals
+
+>> chr(65)
+'A'
+ord('A')
+65
+
+chr(ord('G'))
+G
+
+ord(chr(68))
+68
+
+Sample run of the caesar cipher
+
+Do you wish to encrypt or decrypt a message?
+encrypt
+Enter your message:
+The sky above the port was the color of television, tuned to a dead channel.
+Enter the key number (1-26)
+13
+Your translated text is:
+Gur fxl nobir gur cbeg jnf gur pbybe bs gryrivfvba, gharq gb n qrnq punaary.
+-------------------
+Do you wish to encrypt or decrypt a message?
+decrypt
+Enter your message:
+Gur fxl nobir gur cbeg jnf gur pbybe bs gryrivfvba, gharq gb n qrnq punaary.
+Enter the key number (1-26)
+13
+Your translated text is:
+The sky above the port was the color of television, tuned to a dead channel.
+---
+
+However if the decryption with the correct key is not done, then the result will be garbage data
+
+Do you wish to encrypt or decrypt a message?
+decrypt
+Enter your message:
+Gur fxl nobir gur cbeg jnf gur pbybe bs gryrivfvba, gharq gb n qrnq punaary.
+Enter the key number (1-26)
+15
+Your translated text is:
+Rfc qiw yzmtc rfc nmpr uyq rfc amjmp md rcjctgqgml, rslcb rm y bcyb afyllcj.
+
+SO obviously the 2 parties in question must exchange and agree on the correct key to be used a priori
+
+MAX_KEY_SIZE = 26
+
+def getMode():
+    while True:
+        print('Do you wish to encrypt or decrypt a message?')
+        mode = input().lower()
+        if mode in 'encrypt e decrypt d'.split():
+            return mode
+        else:
+            print('Enter either "encrypt" or "e" or "decrypt" or"d".')
+
+def getMessage():
+    print('Enter your message:')
+    return input()
+
+def getKey():
+    key = 0
+    while True:
+         print('Enter the key number (1-%s)' %(MAX_KEY_SIZE))
+         key = int(input())
+         if(key >= 1 and key <= MAX_KEY_SIZE):
+            return key
+
+def gettranslatedmessage(mode, message,key):
+    if mode[0] == 'd':
+       key = -key
+    translated = ''
+
+    for symbol in message:
+        if symbol.isalpha():
+           num = ord(symbol)
+           num += key
+
+           if symbol.isupper():
+              if num > ord('Z'):
+                 num -= 26
+              elif num < ord('A'):
+                  num += 26
+           elif symbol.islower():
+               if num > ord('z'):
+                  num -= 26
+               elif num < ord('a'):
+                   num += 26
+
+           translated += chr(num)
+         else:
+           translated += symbol
+     return translated
+
+mode = getMode()
+message = getMessage()
+key = getKey()
+
+print('Your translated text is: ')
+print(getTranslatedMessage(mode,message,key))
+
+
+Some subtle points:
+
+The isalpha() string method will return True if the string is an uppercase or lowercase letter from A to Z. If the string contains any non-letter characters, then isalpha() will return False. Try entering the following into the interactive shell:
+
+>>> 'Hello'.isalpha()
+True
+>>> 'Forty two'.isalpha()
+False
+>>> 'Fortytwo'.isalpha()
+True
+>>> '42'.isalpha()
+False
+>>> ''.isalpha()
+False
+
+
+As one can see, 'Forty two'.isalpha() will return False because 'Forty two' has a space in it, which is a non-letter character. 'Fortytwo'.isalpha() returns True because it doesn’t have this space.
+
+'42'.isalpha() returns False because both '4' and '2' are non-letter characters. isalpha() only returns True if the string has only letter characters and isn’t blank.
+
+The process of encrypting or decrypting each letter
+
+Consider the foll snippet of code:
+
+ if symbol.isupper():
+                if num > ord('Z'):
+                      num -= 26
+                elif num < ord('A'):
+                    num += 26
+
+The first line checks if symbol is an upper case leter. if so there are some special cases here. 
+What if symbol was 'Z' and key was 4? If that were the case, the value of num here would be the character '^' (The ordinal of '^' is 94). But ^ isn’t a letter at all. You want the ciphertext to “wrap around” to the beginning of the alphabet.
+
+Check if num has a value larger than the ordinal value for “Z”. If so, then subtract 26 (because there are 26 letters in total) from num. After doing this, the value of num is 68. 68 is the correct ordinal value for 'D'.
+
+                elif symbol.islower():
+                    if num > ord('z'):
+                        num -= 26
+                    elif num < ord('a'):
+                         num += 26
+
+n decrypting mode, then key would be negative. The special case would be where num -= 26 is less than the ASCII value for “a”. In that case, add 26 to num to have it “wrap around” to the end of the alphabet.
+
+If the symbol was not an uppercase or lowercase letter, then line 48 concatenates the original symbol to the translated string. Therefore, spaces, numbers, punctuation marks, and other characters won’t be encrypted or decrypted.
+
+return translated
+
+However since there are only 26 keys, it is certain that one of them is used for the process of encryption and decryption.
+
+Cryptanalyst can break this easly.
+
+So we can add a BF technique to the code
+
+def getMode():
+     while True:
+         print('DO you wish to encrypt or decrypt or Brute Force a message?')
+         mode = input.lower()
+         if mode in 'encrypt e decrypt d brute b'.split():
+            return mode[0]
+         else:
+             print('Enter eith "encrypt" or "e" or "decrypt" or "d" or "brute" or "b".')
+
+mode = getMode()
+message = getMessage()
+if mode[0] != 'b':
+   key = getKey()
+
+print('Your transalted text is : ')
+if mode[0] != 'b':
+      print(getTranslatedMessage(mode,message,key))
+else:
+    for key in range(1,MAX_KEY_SIZE + 1):
+        print(key,getTransalatedMessage('decrypt',message,key))
+
+
+there are a couple of additional ays one can think of encryption and decryption: If all that is required to encrypt the message is a key then a simple concatenation of the text pattern of 
+the sample document can be converted into a numerical pattern and thus concatenated.
+
+For example: ARMADILLO = ord(A)+ord(R)+ord(M)+ord(A)...+ord(0) will take the ASCCI values and string them together
+But that may sttill be easy to guess. So it might be worthwhile mutiplying then ordvalues by some large number to carry out the oprocessing
+
+How do we generate this large number:
+
+Simply count the number of words in the document text and multiply every ord(value) by this number.Or one could find the largest prime just below this number and multiply the ord value by it and string it
+
+Pseudo code:
+
+1) Get a count of the number of words of the text document
+2) Generate a list of primes in this range and select out the largest prime
+   ie max(getPrimes(1,len(document))
+3) Multiply this by the ordvalue of every alphabet in the document and string the final result.
+4) The end document with this list of numbers is the required encrypted text.
+
+
+
