@@ -1,0 +1,38 @@
+Finding the mode of numbers of a list (Skiena, Pg 139)
+
+(4,6,2,4,3,1) has a mode of 4
+
+L = [4,6,2,4,3,1]
+
+from collections import Counter
+data = Counter(L)
+data.most_common()   # returns all unique items and their counts
+data.most_common(1)   # returns the highest occurring item
+
+Thats the import approach but suppose we want to find a function that would do the needful
+
+Can we have a dictioanry with the frequency of the numbers?
+
+def getmode(L):
+    counts = {}
+    for item in L:
+        counts[item] = counts.get(item,0) + 1
+    maxcount = 0
+    maxitem = None
+    for k,v in counts.items():
+        if v > maxcount:
+           maxitem = k
+           maxcount = v
+        if maxcount == 1:
+           print("All values only appear once")
+        elif counts.values().count(maxcount) > 1:
+             print("List has multiple modes")
+        else:
+             print("Mode of list:"),maxitem
+using a LC
+
+def mode(L):
+    m = max([L.count(a) for a in L])
+    return[x for x in L if L.count(x) == m][0] if m > 1 else None
+
+
