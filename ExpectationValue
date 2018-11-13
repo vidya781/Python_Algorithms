@@ -1,0 +1,29 @@
+Expectation value of an array or any group of numbers in probability is the long run average 
+value of the repetitions of the experiment it represents.
+
+For example, the expected value in rolling a six sided die is 3.5 as the average of all the numbers that come up in extrememly large number of rolls is close to 3.5.
+
+More correctly, the law of large numbers states hat the arithmetic mean of the values almost surely converges to the expected va;ue as the numbr of repetitions approachs infinity.
+This expected value is known as the expectation, mathematical expectation.
+
+{1.0,2.0,3.0,4.0,5.0,6.0}
+Output 3.5
+
+def calc_Expectation(a,n):
+    prb = 1/n  # same for every elem
+    sum = 0     # calc the overall expectation
+    for i in range(0,n):
+        sum += (a[i] * prb)
+    return float(sum) # returning expectation as the sum
+
+n = 6
+a = [1.0,2.0,3.0,4.0,5.0,6.0]
+
+expect = calc_Expectation(a,n)
+
+print("Expectation of array E(X) is : ", expect)
+
+
+# on running this program did not get the right output
+
+TC : O(n)
