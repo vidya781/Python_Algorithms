@@ -1,0 +1,42 @@
+Given a sorted array arr[] and a number x, write a function that counts the occurrences of x in arr[]. Expected time complexity is O(Logn)
+
+If x is present in the array then returns the count of occurences of x else returns -1
+
+def count(L,x,n):
+    i = first(L,0,n-1,x,n)
+    if i == -1:
+        return i
+    j - last(L,n-1,x,n)
+    return j-i+1
+
+Now proceed to define first and last to get the occurences
+
+def first(L,low,high,x,n):
+     if high >= low:
+        mid = (low + high)//2
+     if(mid == 0 or x > L[mid-1] and L[mid] == x:
+        return mid
+     elif x > L[mid]:
+          return first(L,(mid+1),high,x,n)
+     else:
+          return first(L,low,(mid-1),x,n)
+     return -1
+
+def last(L,low,high,x,n):
+    if high >= low:
+       mid = (low + high)//2
+    if(mid == n-1 or x < L[mid+1]) and L[mid] == x):
+       return mid
+    elif x < L[mid]:
+        return last(L,low,(mid-1),x,n)
+    else:
+        return last(L,(mid+1),high,x,n)
+    return -1
+
+L = [1,2,2,3,3,3,3]
+x = 3
+n = len(L)
+c = count(L,x,n)
+print("%d occurs %d times "%(x,c))
+
+Time Complexity : O(logn)
