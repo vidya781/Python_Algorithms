@@ -1,0 +1,63 @@
+Evaluation of Postfix Expression
+
+The Postfix nottaion is used for algebraic expressions. The expressions written in postfix form are evaulated faster compared to infix notation as parentheses not required in 
+postfix.
+
+Following is algorithm for evaluation postfix exp:
+1) Create a stack to store operands(or values)
+2) Scan the given expression and do the following for all scanned elems
+   a) If elem is a number push it on to the stack
+   b) If the elem is an operator, pop operands for the operator from stack. Evaluate the operator and push result back to stack
+3) When expression has ended the number in stack is the final answer
+
+Example
+
+"2 3 1 * + 9-" Scan all elems one by one
+
+1) Scan 2, a number so pushed on to the stack. Stack contains 2
+2) Scan 3 again a number push it to stack stack now has 2 3(from bottom to top)
+3) Scan 1 again a number push it to stack stack now becomes 2 3 1
+4) Scan *, operator has to work on 2 operands, apply * to 3 and 1 to get 3 and push this no on the existing stack to get 2 3
+5) Scan +, operator has to work on 2 items to get 2 + 3 to yield 5 and push onto stack to get 5
+6) Scan 9 a number and push onto stack to yield 5 9
+7) Scan now -, pop 2 operands 5-9 = -4 and push it to stack to get -4 on the stack
+8) No more elems to scan so teh top elem ins returned from stack(which is the only elem left in stack)
+
+class Evaluate:
+     def__init__(self,cap):
+        self.top = -1
+        self.cap = cap
+        self.array = []
+
+      def isEmpty(self):
+          return True if self.top == -1 else False
+
+      def peek(self):
+          return self.array[-1]  # Return value of the top pf the stack
+ 
+      def pop(self):
+          if not self.isEmpty():
+             self.top -= 1      # top which was holding the topmost elem points to teh elem below it
+             return self.array.pop() # the top most elem is now popped out
+          else:
+              return "$"
+
+      def push(self,op):
+          self.top += 1
+          self.array.append(op)
+
+      def evaluatepostfix(self,exp):
+          for i in exp:
+
+               if i.isdigit():
+                  self.push(i)      # if scanned char is an operatorin this case a number push onto stack
+               else:
+                  val1 = self.pop()
+                  val2 = self.pop()   # If scanned char s an operator pop two elems from stack apply it
+                  self.push(str(eval(val2 + i + va11)))
+           return int(self.pop())
+
+# Driver prog to test above function
+ exp = "231*+9-"
+ obj = Evaluate(len(exp))
+ print("Value of %s is %d",%(exp,obj.evaluatePostfix(exp))
