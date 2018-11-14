@@ -1,0 +1,181 @@
+DP in some depth:
+
+1] identifying a DP problem 
+
+Technique that solves some paricular type of problems in Polynomial Time. DP solutions are faster than exponential BF method and can be easily proved for their correctness.
+
+Some key elements:
+
+1] Overlapping subproblems
+2] Optimal Substructure property
+
+Steps for solving DP
+1) identify if it is a DP problem
+2) Decide a state expression with least parameters
+3) Formulate state relationship
+4) Do tabulation ( or add memoization)
+
+Classification of a DP:
+
+Typically all the problems that require to maximise or minimize acertain quantity or counting problems that count the 
+arrangements under certain conditions or certain probability problems can be solved by using DP
+
+All DP problems satisfy the overlapping subproblems propertuy and mopst of the classic Dynamic problems also satisfy the optimal sub structure property
+
+Deciding the state
+DP problems are all about state and their transition. State transition depends on the choice of state definition one makes. 
+
+State: can de defined as the set of parameters that can uniquely identify a certain position or standing in a given problem.This set of parameters should be as small as possible to reduce state space.
+
+For example: in the famous knapsack problem, we define the state by 2 parameters index and weight,
+DP[index][weight].Here DP[index][weight] tells us the max Profit it can make by taking items from range 0 to index having the capacity of sack to weight. Therefore here the parameters index and weight together identify a unique subproblem for the knapsack proble,
+
+step 3: Formulating a relation among the states
+
+This is the hardest part for solving a DP and requires  a lot of intuition, obs and practice.
+
+Take a simple example:
+
+Given 3 numbers {1,3,5}, we need to output the toital number of ways we can forma  number N using the sum of 3 given numbers with reps allowed
+Consider different arrangements
+
+Total number of ways to form 6 : 8
+1 + 1 + 1 + 1 + 1
+1 + 1 + 1 + 3
+1 + 1 + 3 + 1
+1 + 3 + 1 + 1
+3 + 1 + 1 + 1
+3 + 3
+1 + 5
+5 + 1
+
+Firstly, we decide a state for the given problem. We will take a parameter n to deciee state as it can uniquely indentify any subproble
+
+So our state dp will look like state(n). State(n) means the total number of arerangments to form n by using {1,3 5} as elements
+
+Need to compute state(n)
+
+As we only use 1, 3 or 5 to form a given number. 
+state(n=1),state(n=2),state(n=3) ...state(n= 6)
+
+We can only add 1, 3 and 5 and now get a total of 7 by the following ways:
+
+1) Adding 1 to all poss combinations of state(n= 6)
+[(1 + 1 + 1 + 1 + 1 + 1)+1]
+[(1 + 1 + 1 + 3) + 1]
+[(1 + 1 + 3 + 1) + 1]
+[(1 + 3 + 1 + 1) + 1]
+[(3 + 3) + 1]
+[(1 + 5) + 1]
+[(5 + 1) + 1]
+
+2)Adding 3 to all possible combinations of state(n=4)
+[( 1 + 1 + 1 + 1) + 3]
+[(1 + 3) + 3]
+[(3 + 1) + 3]
+
+3) Adding 5 to all possible combinations of state(n=2)
+[(1+1) + 5]
+
+state(7) = state(6) + state(4) + state(2)
+state(7) = state(7-1) + state(7-3) + state(7-5)
+
+state(n) = state(n-1) + state(n-3) + state(n-5)
+
+ defining a recursion now
+
+int solve(int n)
+{
+   // base case
+   if (n < 0)
+       return 0;
+   if (n == 0)
+       return 1;
+   return solve(n-1) + solve(n-3) + solve(n-5);
+}
+
+# need to add a memoization now to prevent repetitive calculations
+
+Adding memoization or tabulation for the state
+
+// initialize to -1
+int dp[MAXN];
+
+int solve(int n)
+{
+  // base case
+  if(n < 0)
+     return 0;
+  if(n==0)
+     return 1;
+  // checking if already calculated
+   if(dp[n] != -1)
+      return dp[n];
+   return dp[n] = solve(n-1) + solve(n-3) + solve(n-5);
+ }
+
+
+--------------------------------------
+
+Given a value N, if we want to make change for N cents, and we have infinite supply of each of S = { S1, S2, .. , Sm} valued coins, how many ways can we make the change? The order of coins doesn’t matter.
+
+For example, for N = 4 and S = {1,2,3}, there are four solutions: {1,1,1,1},{1,1,2},{2,2},{1,3}. So output should be 4. For N = 10 and S = {2, 5, 3, 6}, there are five solutions: {2,2,2,2,2}, {2,2,3,3}, {2,2,6}, {2,3,5} and {5,5}. So the output should be 5.
+
+Optimal Substructure
+
+To count the total number of solutions, we can divide all set solutions into 2 sets
+1) Solutions that do not contain mth coin(or Sm)
+2) Solutions that contain mth coin ( or Sm)
+Let count(S[],m,n) be the function to count the number of solutions, then it can be sum of count(S[],m-1,n) and count(S[],m,n-Sm)
+
+Therefore the problem has optimal substructure propert as the problem can be solved using solutions to subproblems
+
+def count(S,m,n):
+    if(n==0):
+      return 1
+    if(n < 0):
+      return 0;
+    if(m <= 0 and n >= 1):
+       return 0
+    return count(S,m-1,n) + count(S,m,n-S[m-1]);
+
+arr = [1,2,3]
+m = len(arr)
+print(count(arr,m,4))
+
+-----------------------------
+
+def count(S,m,n):
+    table = [[0 for x in range(m) for x in range(n+1)]
+    for i in range(m):
+        table[0][i] = 1
+    for i in range(1,n+1):
+        for j in range(m):
+            x = table[i-S[i]] if i-S[j] >= 0 else 0
+            y = table[i][j-1] >= 1 else 0
+            table[i][j] = x + y
+    return rable[n][m-1]
+
+arr = [1,2,3]
+m = len(arr)
+n = 4
+print(count(arr,m,n))
+
+TC: O(mn)
+
+---------------------------------
+
+def count(S,m,n):
+    table = [0 for k in range(n+1)]  # table[i] will be storing the number of solutions for the value i. We need n+1 rows as table is constructed in bottom up manner using base case (n=0) and initialise all table values as 0
+    table[0] = 1  # base case if given value is 0
+    for i in range(0,m):
+        for j in range(S[i],n+1):
+            table[j] += table[j-S[j]]
+    return table[n]
+
+arr = [1,2,3]
+m = len(arr)
+n = 4
+x = count(arr,m,n)
+print(x)
+------------------------------------------------------
