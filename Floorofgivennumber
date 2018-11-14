@@ -1,0 +1,67 @@
+Given a sorted array and a value x, the floor of x is the largest element in array smaller than or equal to x. Write efficient functions to find floor of x.
+
+Input : arr[] = {1, 2, 8, 10, 10, 12, 19}, x = 5
+Output : 2
+2 is the largest element in arr[] smaller than 5.
+
+Input : arr[] = {1, 2, 8, 10, 10, 12, 19}, x = 20
+Output : 19
+19 is the largest element in arr[] smaller than 20.
+
+Input : arr[] = {1, 2, 8, 10, 10, 12, 19}, x = 0
+Output : -1
+Since floor doesn't exist, output is -1.
+
+def floorsearch(arr,n,x):
+    if(x >= arr[n-1]):
+        return n-1
+    if(x < arr[0]):
+        return -1
+    for i in range(1,n):
+        if(arr[i] > x):
+           return (i-1)
+    return -1
+
+    for i in range(1,n):
+        if(arr[i] > x):
+              return (i-1)
+    return -1
+
+arr = [1,2,4,6,10,12,14]
+n = len(arr)
+index = floorsearch(arr,n-1,x)
+
+if(index == -1):
+    print("Floor of",x,"doesn't exist in array ", end = " ")
+else:
+    print("FLoor of ",x,"is" arr[index])
+
+TC : O(n)
+
+A more efficient way is to use Binary Search.
+
+def floorSearch(arr,low,high,x):
+    if(low > high):
+       return -1
+    if(x >= arr[high]):
+       return high
+    mid = int((low + high)/2)
+    if(arr[mid] == x):   # if middle point is floor
+       return mid
+    if(mid > 0 and arr[mid-1] <= x and x < arr[mid]): # if x lies between mid-1 and mid
+       return mid - 1
+    if(x < arr[mid]):    # If x is smaller than mid, floor in lefthalf
+       return floorsearch(arr,low,mid-1,x)
+    return floorsearch(arr,mid+1,high,x)
+
+arr = [1,2,4,6,10,12,14]
+n = len(arr)
+x = 7
+index = floorsearch(arr,0,n-1,x)
+
+if(index == -1):
+   print("FLoor of ",x,"doesn't exist in array", and = " ")
+else:
+   print("Floor of ", x, "is",arr[index])
+
+TC: O(logn)
