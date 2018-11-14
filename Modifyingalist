@@ -1,0 +1,166 @@
+Given an array or list as input put all 0s at the end and if the number is repeated, add the number and and put the enxt index value to 0
+
+[0 2 2 2 0 6 6 0 8]
+
+This transforms to [ 0 4 0 2 0 12 0 8]
+
+This further transforms to [4 2 12 8 0 0 0 0]
+
+There are couple of ways one could approach this one
+
+In place or making an extra list , if the list is not too large we could go in for an extra list
+
+First condition if there are dups in the list the number is doubled and a zero is inputed at the neighboring index
+
+Loop through the list first the condition being that L[i-1] == L[i] ( the core condition)
+
+Have 2 empty lists called list_numbers and list_zeros
+
+List_numbers will hold the numbers which follow the condition and the core logic and then append this incremented number to this list
+
+Also a thing to be noted is that if the core logic holds, then have a count variable which would hold a count of zeros.(w e need to account of zeros in the L separately)
+
+Get a count of the 0 s in L and get count as well then create [0]*totalcount
+
+finally append list_numbers and [0]*totalcount
+
+Lets construct the prog:
+
+def getcountofzerosinL(L):
+    origcount = 0
+    for i in range(0, len(L) + 1):   # get to the last elem also assuming the 0s can occur anywhere in the list
+        if L[i] == 0:
+             origcount += 1
+    return origcount
+
+y = getcountofzerosinL(L)
+
+def corecondition(L):
+    list_numbers = []
+    countofzeros = 0
+    for i in range(1, len(L) + 1):
+        if L[i-1] == L[i]:            # the moment 2 neighboring elems are equal, double the elem and append it to the newlist for this purpsoe and increment the zero count by 1
+            list_numbers.append(2*L[i])
+            countofzeros += 1
+    return list_numbers,countofzeros
+
+listofnumbers = corecondition(L)[0]
+countofzeros = corecondition(L)[1]
+
+listofzeros = [0]*(countofzeros + origcount)
+
+def finallist(listofnumbers,countofzeros):
+    return listofnumbers + listofzeros
+
+print(finallist(listofnumbers,countofzeros))
+
+Without recourse to a new list how would we do this in place?
+
+Lets take a look at the original list
+
+[0 2 2 2 0 6 6 0 8]
+
+We break the problem into 2 parts:
+
+1) Recursively shift the zeros if it appears before a number
+2) Then work on doubling the first number if its neighbor is identical
+
+[2 0 2 2 6 0 6 8 0]
+[2 2 0 2 6 6 0 8 0]
+[2 2 2 0 6 6 8 0 0]
+[2 2 2 6 0 6 8 0 0]
+[2 2 2 6 6 0 8 0 0]
+[2 2 2 6 6 8 0 0 0]
+Thus we see that starting from the first config, we need 5 iterations to get the sorted array with zeros at one end
+
+def recurssortzeros(L):  
+    if len(L) == 0 or len(L) == 1:
+       return -1
+    else:
+        for item in L:
+            if item != 0:
+                  print('No zeros in list')
+     for i in range(1,len(L)):
+         try:
+             if L[i-1] == 0 and L[i] != 0:
+                 L[i-1],L[i] = L[i],L[i-1]
+                 recursortzeros(L)
+         except IndexError:
+                 pass
+     return L
+ y = recurssortzeros(L)   
+
+# As a digression consider the bubblesort recursive algo
+
+def bubblesort(L):
+    for i,num in enumerate(L):
+        try:
+           if L[i+1] < num:
+             L[i] = L[i+1]
+             L[i+1] = num
+             bubblesort(L)
+        except IndexError:
+             pass
+    return L
+
+Structure is similar so it should work
+
+However we need not loop through the entire list, we only need to loop through the index at which the last non zero elem is present
+
+indexoflastnonzero = L.index(0)-1
+
+def modifylist(y):  # y is the mod list which has zeros at the end
+    for i in range(1,indexoflastnonzero):
+        if y[i-1] == y[i]:
+           y[i-1] = 2*y[i]
+           y[i] = 0
+   return recursortzeros(y)
+
+Mechanics of the prog:
+
+[ 2 2 2 6 6 8 0 0 0]
+
+[4 0 2 12 0 8 0 0 0]
+
+However we must apply recursort again to this list to get the foll
+
+[4 2 0 12 8 0 0 0]
+[4 2 12 0 8 0 0 0]
+[4 2 12 8 0 0 0 0]
+
+At this point its sorted , 2 calls to recursortzeros and one call to modifylist 
+
+Total TC : 2 * O(n^2) + O(n) ~ O(n^2)
+
+Consider an alternate possibility:
+
+If we were to apply step 2 first what happens?
+
+[2 0 2 2 6 0 6 8 0]
+
+[2 0 4 0 6 0 6 8 0]
+
+now apply recurssortzeros  to get the sorted array
+
+The key thing to note is that it doesnt matter in which order we break the problem down, the end complexity remains the same
+
+
+Also look at sepzerosandnonzeros which has O(n) complexity so we could use that as well except that a modification in the code has to be made
+
+def separatezerosandnonzeros(A):
+    left = 0
+    right = len(A)-1
+    while(left < right):
+         while(A[left] == 0 and left < right):
+                left += 1
+         while(A[right] != 0 and left < right):  # needed to tweak here A[right] == 1 to A[right] != 0
+                right -= 1
+         if(left < right):
+                  A[left],A[right] = A[right],A[left]
+                  left += 1
+                  right -= 1
+A = [ 2 0 2 2 6 0 6 8 0]
+print(separatezerosandnonzeros(A))
+
+TC : O(n) and SC: O(1)
+
