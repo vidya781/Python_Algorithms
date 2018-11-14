@@ -1,0 +1,249 @@
+Given an array of n real numbers consider the problem of finding the max sum in any contiguous
+sum in any contiguous subvector of the input.
+
+Consider array {31,-41,59,26,-53,58,97,-83,-23,84}
+
+Max achieved by summing the third through the seventh elems 59 + 26 + -53 + 58 + 97 = 187
+When all the numbers are positive the entre array is the answer while if the arry is filled with negative numbers them the empty array maximises at 0
+
+from sys import maxint
+def maxsubarraysum(a,size):
+    maxsofar = -maxint - 1   # maxint = infinity
+    maxendinghere = 0
+
+    for i in range(0,size):
+        maxendinghere = maxendinghere + a[i]
+        if(maxsofar < maxendinghere):
+           maxsofar = maxendinghere
+
+        if maxendinghere < 0:
+           maxendinghere = 0
+     return maxsofar
+
+a = [-13,-3,-25,-20,-3,-16,-23,-12,-5,-22,-15,-4,-7]
+print("Maximum contiguous sum "),maxsubarraysum(a,len(a))
+
+By Dynamic Programming
+
+def maxsubarraysum(a,size):
+    maxsofar = a[0]
+    currmax = a[0]    # initialise both of them to -13 the first element
+    
+    for i in range(1,size):
+        currmax = max(a[i],currmax + a[i])
+        maxsofar = max(maxsofar,currmax)
+    return maxsofar
+print("Maximum contiguous sum is "),maxsubarraysum(a,len(a))
+
+Dynamics of prog :
+a = [-2,-3,4,-1,-2,1,5,-3]
+focus on the for loop:
+for i in range(1,size) i---> range(1,8) {1,2,3,4,5,6,7}
+    currmax = max(a[1], a[0] + a[1])= max(-3,-5) = -3
+    maxsofar = max(a[0],currmax) = max(-2,-3) = -2
+i = 2
+maxsofar at the end of first iteration is -2
+
+i = 2
+currmax = max(a[2],-2 + a[2]) = max(4,-2 + 4)= 4
+maxsofar = max(-2,4 ) = 4
+and so on
+
+
+One alternate way to Kadane's algo is the following
+
+Look at array and locate all possible positive numbers in the array and get their indices
+
+Lets take an example : [-2,-3,4,-1,-2,1,5,-3]
+      positivenumindices = {2,5,6}
+[-2,-3,-1,-2,-3] Negative numbers
+
+[4,1,5]  Positive numbers 
+
+In the original array A, between 4,1,5 there appear 2 numbers -1 and -2 and since we are to have contiguous sums these 2 have to beincluded in the sum
+
+We consider various possibilities:
+
+if 4,1, 5 were contiguous in the orig array then all we do is sum the three to get 10 and leave it as all other elems are negative
+
+The clue to the numbers in between is found by mutually subracting indices and getting those negative numbers from the original array
+
+Pick out the max index and get subtract allother indices from it , In this case max(2,5,6) = 6 so do 6-2, 6-5 = 4,1
+  Now pick out the second maximum and subtract allindices lower than it in this case 5-2 = 3
+
+# slightly cumbersome approach the above step alone
+
+Better approach is
+
+find missing indices range(min(positiveindices),max(positiveindices)) = 2,3,4,5,6 = missingindexrange
+
+Now apply the get diff function :
+
+def getdiff(positivenumindices, missingnumberrange):
+    missingindices = (list(set(missingnumberrange)-set(positivenumindices))
+    return missingindices
+
+Now get indices corresponding to these indices
+
+missingindices = [3,4]
+sumsatmissingindices = 0
+for item in missingindices:
+    sumsatmissingindices += A[item]
+return sumsatmissingindices
+
+maxcontiguoussum = sumsatmissingindices + sum(Positivenumbers) # -3 + 10 = 7
+
+Putting it all together:
+
+1] In the array get the indices of all the postive number and collect this in a list called posnumindices
+2] Get all positive numbers into a list as well and call it posnumbers
+3] Posnumindices will already be sorted and so focus on getting the missing numbers(indices) by applying the getdiff function (as defined above) by making a comparison
+   with Posnumindices and missing indices ( get this from range(min(posnumindices),max(posnumindices))
+4] Get the numbers from the original list corresponding to these missingindices
+5] Get the sum of the numbers at these missing indices and add it to the sum of posnumbers , the algo is now complete
+Edge cases:
+All the numbers are positive, entire array is summed
+All the numbers are negative, the index at either extremity should be returned cause the max neg elem could be at index 0 or len(array)-1
+
+def maxcontigsum2kadane(A):
+    for item in A:
+        if item > 0:
+           return sum(A)
+        elif item < 0:
+           return max(A[0],A[len(A)-1])  # the edge cases
+   
+    posnumindices = []
+    posnumbers = []
+    for i in range(0,len(A)):
+        if A[i] > 0:
+           posnumindices.append(i)
+           posnumbers.append(A[i])
+    return sort(posnumindices),posnumbers   # step 1,2 of Pseudocode completed here
+
+posindexmaxlist = list(range(min(posnumindices),max(posnumindices)))
+
+# Use a List comprehension to get the missing indices between posindexmaxlist and posnumindices the former being the bigger of the two
+
+missingindices = [i for i in posindexmaxlist + posnumindices if i not in posindexmaxlist or i not in posnumindices]  # step 3 of pseudocode completed here
+
+
+def sumsatmissingindices(A,missingindices):
+    sumsatMI = 0
+    for item in missingindices:      # step 4 completed here
+        sumsatMI += A[item]
+    return sumsatMI
+
+
+def getmaxsum(sumsatMI,posnumbers):
+    return sumsatMI + sum(posnumbers)   # step 5 completed here
+
+# Assumption: the array contains  a mix of positive and negative numbers
+
+    
+This alternate algo(to be tested soon) is dedicated to Skiena whose book was just glanced before hitting upon this idea
+
+Reflections on this alternative kadanes' algo
+
+A couple of days, came up with algo based on indices but to my dismay, the algo did not perform on all inputs . It did well only on certain specific configurations whih is obviously not the way a good algo works. 
+It should be clear, concise and correct for all possible inputs and this was not teh case with this. One thing that led me to believe this algo was correct was test only a very specific input on GFG being fooled by the diagram that was.
+Neg numbers could appear anywhere on the array and so a static idea of getting the indices of the positive numbers and working with them separately. Only a dynamic prog approach would work for such kinds of problems simply because of a substructure inherent in the problem and the growth of the subarray. Oh well lesson learnt that whatver algo one designs , it is important to test it for a variety of reasonable inputs.
+
+
+Putting it all together:
+
+1] In the array get the indices of all the postive number and collect this in a list called posnumindices
+2] Get all positive numbers into a list as well and call it posnumbers
+3] Posnumindices will already be sorted and so focus on getting the missing numbers(indices) by applying the getdiff function (as defined above) by making a comparison
+   with Posnumindices and missing indices ( get this from range(min(posnumindices),max(posnumindices))
+4] Get the numbers from the original list corresponding to these missingindices
+5] Get the sum of the numbers at these missing indices and add it to the sum of posnumbers , the algo is now complete
+Edge cases:
+All the numbers are positive, entire array is summed
+All the numbers are negative, the index at either extremity should be returned cause the max neg elem could be at index 0 or len(array)-1
+
+def maxcontigsum2kadane(A):
+    for item in A:
+        if item > 0:
+           return sum(A)
+        elif item < 0:
+           return max(A[0],A[len(A)-1])  # the edge cases
+   
+    posnumindices = []
+    posnumbers = []
+    for i in range(0,len(A)):
+        if A[i] > 0:
+           posnumindices.append(i)
+           posnumbers.append(A[i])
+    return sort(posnumindices),posnumbers   # step 1,2 of Pseudocode completed here
+
+posindexmaxlist = list(range(min(posnumindices),max(posnumindices)))
+
+# Use a List comprehension to get the missing indices between posindexmaxlist and posnumindices the former being the bigger of the two
+
+missingindices = [i for i in posindexmaxlist + posnumindices if i not in posindexmaxlist or i not in posnumindices]  # step 3 of pseudocode completed here
+
+
+def sumsatmissingindices(A,missingindices):
+    sumsatMI = 0
+    for item in missingindices:      # step 4 completed here
+        sumsatMI += A[item]
+    return sumsatMI
+
+
+def getmaxsum(sumsatMI,posnumbers):
+    return sumsatMI + sum(posnumbers)   # step 5 completed here
+
+# Assumption: the array contains  a mix of positive and negative numbers
+
+    
+This alternate algo(to be tested soon) is dedicated to Skiena whose book was just glanced before hitting upon this idea
+Time : 4:30 p.m 
+Date : 1/6/2018
+
+A closer look at kadanes algo and if it really is a DP problem
+
+Initialize:
+   maxsofar = 0
+   maxendinghere = 0
+
+Loop for each elem of array
+ a) maxendinghere = maxendinghere + a[i]
+ b) if(maxendinghere < 0)
+        maxendinghere = 0
+ c) if(maxsofar < maxendinghere)
+         maxsofar = maxendinghere
+return maxsofar
+
+from sys import maxint
+def maxsubarraysum(a,size):
+    maxsofar = -maxint - 1
+    maxendinghere = 0
+    for i in range(0,size):
+        maxendinghere = maxendinghere + a[i]
+        if(maxsofar < maxendinghere):
+           maxsofar = maxendinghere
+        if maxendinghere < 0:
+           maxendinghere = 0
+    return maxsofar
+
+a = [-2,3,4,-1,-2,1,5,-3]
+print(maxsubarrasysum(a,len(a))
+
+Dynamics of why kadanes algo works:
+
+Consider function M(i) that denotes the sum of the max subarray of an array A
+ending at index i-1. Since the overall max subarray must end at some element, the max of all M(i) is the solutuion
+
+We see that M(0) is 0. Now its clear because the max sum of 0 elems is 0. In order to calculate M(i+1) we can do one of the foll things:
+1] Take M(i) (max subarray ending at previous elem) and add A[i] to it, effectively extending the previous array
+2] Do not take anything from A. Since M(i+1) must contain A[i], or nothing at all, A[i] might be so negative that its better off to take nothing.
+
+Taking the max of (1) and (2) we have
+
+M(i+1) = max(M(i) + A[i],0). As one can see to compute M(i+1) we only need the info M(i) and A[i] so we need not hold all of M in memory
+
+DP applies to algos which exhibit overlapping subproblems ( repeatedly computing the same things) and optimal substructure(using optimal solutions of subproblems).
+As one can easily see, the algo above does NOT have overlapping subproblems since M(i) only needs to be computed once. It does however have optimal substructure since we ue M(i-1) to compute M(i).
+Since the algo does not have overlapping subproblems which is the core of Dynamic programming problems, it would not be correct to classify as a DP based problem.It is however a subjective opinion as it does have optimal substructure.
+
+    
