@@ -1,0 +1,43 @@
+Find index of closing bracket for a given opening bracket in an expression
+
+Given a string with brackets, if the start index of the open bracket is given, find the 
+index of the closing bracket
+
+string = [ABC[23]][89]
+index = 0
+Output : 8
+The opening bracket at index 0 corresponds to closing bracket at index 8
+
+from collections import deque
+
+def getindex(s,i):
+    if s[i] != '[':  # invalid input case
+       return -1
+
+    d = deque()  # deque to use as stack
+
+    for k in range(i,len(s)):  # traverse thru all elems starting from i
+        if s[k] == ']':
+            d.popleft()
+
+        elif s[k] == '[':
+            d.append(s[i])
+
+        if not d:
+             return k   # if deque becomes empty
+
+    return -1
+
+def test(s,i):
+    matching_index = getindex(s,i)
+   print(s + "," + str(i_ + ": " + str(matching_index))
+
+def main():
+    test("[ABC[23]][89]",0) # should be 8
+    test("[ABC[23]][89]",4)  
+    test("[ABC[23]][89]",1)   # No matching bracket
+
+if __name__ == "__main__":
+   main()
+
+
