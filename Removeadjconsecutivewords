@@ -1,0 +1,22 @@
+str = 'This is a string, with words!'
+str.split()
+['This','is','a','string,'with','words!']
+
+However if there is a need to separate and eliminate the punctuation from the words
+("string", and "words!")
+
+or str = "tom jerry jerry tom"
+str.lower()
+
+
+def pairwiserecurse(str):
+    str = str.lower()  # convert sentence to lower case
+    import re
+    wordlist = re.sub("[^\w]"," ",str).split() # dealing with pure words, leaving out exclamation and other punctuation symbols
+    for i in range(1,len(wordlist),2):
+        if str[i-1] == str[i]:
+           str.remove(str[i])
+           pairwiserecurse(str)  # recurse function called again
+    return str
+
+print(pairwiserecurse(str))
