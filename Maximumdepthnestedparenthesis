@@ -1,0 +1,26 @@
+Python program that takes a string and returns the maximum depth nested parenthesis
+
+def maxdepth(S):
+    current_max = 0
+    max = 0
+    n = len(S)
+
+    for i in range(n):
+        if S[i] == '(':
+            currentmax += 1
+            if currentmax > max:
+               max = currentmax
+        elif S[i] == ')':
+            if currentmax > 0:
+               currentmax -= 1
+            else:
+               return -1
+    if currentmax != 0:
+         return -1
+    return max
+
+s = "( ((X))((Y))) )"
+print maxdepth(S)
+
+TC : O(n)
+Aux Space : O(1)
