@@ -1,0 +1,68 @@
+A palindrome is a number which has the same value when the order of the digits is reversed
+For example, 131,242,11 are all palindromes.
+
+Develop a program to check if a number is a palindrome or not.
+
+1) Convert the number into list of digits
+  n = 34567
+  L =[int(d) for d in str(n)]
+  #L now has [3,4,5,6,7]
+  i = 0
+  j = len(L)-1
+  while i < j:
+     L[i],L[j] = L[j],L[i]
+     i += 1
+     j -= 1
+  return L
+
+Putting it together in a function
+
+def checkreversedpalindrome(n):
+    L = [int(d) for d in str(n)]
+    i = 0
+    j = len(L)-1
+    while i < j:
+        L[i],L[j] = L[j],L[i]
+        i += 1
+        j -= 1
+    nmod = int(''.join(map(str,L)))
+    if n == nmod:
+       print('Reversed Number is a palindrome')
+    else:
+       print('Reversed Not a palindrome')
+
+An emirp is a prime number that is also a prime when its digits are reversed but is not a palindrome.
+
+1) So first condition is that we must get all primes between a given range N and M.
+2) Once we get the list of primes between a given range, check if that number is an emirp
+3) Get the primes in a list
+4) Reverse the digits and check if that number is also a prime but not a palindrome, this number is emirp, collect them in a list
+
+
+So we need to apply this function for every number in that range and colect out the primes if True
+
+List_of_Primes = []  
+
+NM = list(range(N,M+1))  # Given 2 numbers, get a lits of numbers between them
+
+def getprimenos(NM):
+    for num in NM:
+        if num > 1:
+            for i in range(2,num):
+                if (num % i) == 0:
+                    break
+            else:
+                 List_of_Primes.append(num)
+   return List_of_Primes
+
+print(getprimenos(NM))   # we are given the List_of-primes
+
+
+Now the reversal of the prime numbers should also be a prime
+
+Pseudo Code:
+
+1] List_of_Primes holds the primes between the range (N,M)
+2] Get a new list that holds the reversed numbers corresponding to List_of_Primes ( obviously the lengths of the two lists are equal)
+3] Check for primality and non palindromicity, so first for every number in the reversed numbers list, get the list of prime numbers in reversed_PN
+4] For every number in reversed_NM, check for non palindromicity
