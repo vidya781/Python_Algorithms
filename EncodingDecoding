@@ -1,0 +1,27 @@
+Algorithm for encoding and decoding
+
+
+def encode(text):
+        if not text:
+                return ""
+        else:
+                last_char = text[0]     # holding the first char of input string
+                max_index = len(text)   # holds the length of the string
+                i = 1
+                while i < max_index and last_char == text[i]:  # equivalence of 2 characters in the string
+                        i += 1
+                return last_char + str(i) + encode(text[i:])    # str(i) gives the number as a string and concatenates it to that char
+                                                                # then encode is called upon again to operate on the rest of the string
+print(encode("abbccc"))
+#a1b2c3
+
+def decode(text):
+       if not text:
+              return ""   # checking validity of string
+       else:
+               char = text[0]
+               quantity = text[1]
+               return char * int(quantity) + decode(text[2:])
+
+print(decode("a1b2c3"))
+#abbccc
