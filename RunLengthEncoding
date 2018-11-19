@@ -1,0 +1,70 @@
+
+Run Length Encoding
+
+str = 'wwwwaaadexxxxxx'
+
+Expected Output : 'w4a3d1e1x6'
+
+# Python code for RLE
+
+Create an ordered dictionary.This contains the characters of the input string as key 
+and 0 as their default value, now run a loop to count the frequency of each character 
+and will map to its corresponding key
+
+from collections import OrderedDict
+def runLengthEncoding(input):
+    # Generate ordered dictioanry of all lower
+    # case alphabets, output will be
+    # dict = {'w':0,'a':0,'d':0,'e':0,'x':0}
+    dict = OrderedDict.fromkeys(input,0)
+
+    #Iterating through the input string to calculate
+    # frequency of each character, its output will be
+    # dict = {'w':4,'a':3,'d':1,'e':1,'x':6}
+    for ch in input:
+        dict[ch] += 1
+
+    #iterate through dictionary to make
+    #output string from (key,value) pairs
+    output = ' '
+    for key,value in dict.iteritems():
+         output = output + key + str(value)
+    return output
+
+# Driver function
+
+if __name__ == "__main__":
+    input = 'wwwwaaadexxxxxx'
+    print runLengthEncoding(input)
+
+Another Run length Compression Algorithm
+
+#!/usr/bin/env python
+
+def runlen(s):
+    r = ""
+    l = len(s)
+    if l == 0:
+       return ""
+    if l == 1:
+        return s + "1"
+    last = s[0]     # holds the first item of the string 
+    cnt = 1
+    i = 1
+    while i < l:
+         if s[i] == s[i-1]: # check if its the same letter
+            cnt += 1
+         else:
+            r = r + s[i-1] + str(cnt)  # if not store previous data
+            cnt = 1
+         i += 1
+    r = r + s[i-1] + str(cnt)
+    return r
+
+if __name__ == "__main__":
+   print runlen("aaabbccccddddd")
+   print runlen("a")
+   print runlen("")
+   print runlen("abcdefg")
+
+
