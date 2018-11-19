@@ -1,0 +1,46 @@
+Given a list of N unique integers, 2 <= N <= 25000, produce a sequence of flips so that the end result is 
+the list sorted in ascending order.A k-flip takes the first k numbers and reverses their order in the list
+Given the list 2,6,4,1,9 a k-flip where k=4 would result in the list 1,4;6;2,9
+
+Task is to determine a list of k values which represent the sequence of flips that will result in the list being sorted
+
+How many flips does one require?
+
+L = [1,4,6,2,9]
+
+Take the first 2 elements
+L=[1,4] the list is already in ascending order, so append the next element 6
+L = [1,4,6] and again the list is already sorted
+ Consider if the next element is added to the list
+L=[1,4,6,2]
+So here k = 4 as these k elements have to be sorted first and appended to the list 
+[1,2,4,6] + [9] = [1,2,4,6,9] 
+
+So essentially one flip of k=4 is required to sort the entire list
+
+we need a counter to keep track of how many times the flipping has taken place
+
+have an empty list that collects items from the original list as long as particular condition holds good.
+if the incoming item is less than the previous item put it in the new list and stop
+
+Thats the first flip, increment the count by 1
+
+sort the new list and concatenate to the remaining list
+
+So the code can be written as:
+
+new = []
+
+L = [1,4,6,2,9]
+
+def flipped(L):
+    i = 0
+    while i < len(L):
+         count = 0
+         if L[i] > L[i-1]:
+             new.extend(L[:i])
+             count += 1
+          return sorted(new) + flipped(L[i:])
+    return count
+
+print(flipped(L))
