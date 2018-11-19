@@ -1,0 +1,132 @@
+Lets say you have 
+---------------------------------------------------------
+
+Read a txt file with numbers into a list and then sort using Python
+
+numbers = "10,45,69,85,21,7,32,11,71,20,30"
+data = []
+data.extend(map(int,numbers.split(',')))
+print (sorted(data))
+----------------------------------------------------------
+
+Using with method
+
+with open(data.txt,'r') as myfile:
+     for line in myfile:
+         print sorted(map(int,line.split(',')))
+
+# if all the numbers are in 1 line
+------------------------------------------
+
+If one has multiple lines with lots of numbers:
+
+data = []
+with open(data.txt,'r') as myfile:
+     for line in myfile:
+         data.extend(map(int,line.split(',')))
+print sorted(data)
+----------------------------------------
+
+To get a list of digits  from a number n = 32456778
+
+L = [int(x) for x in str(n)]  
+
+-------------------------------
+
+n = int(''.join(map(str,L)))
+getting number from list of digits
+__________________________________________________
+
+Lets say you have a function you run and want to collect the results in a list
+
+
+Lets nums indicate the size of the list
+results = [0]*nums
+[function(100) for x in results]
+---------------------------------------
+
+Lets say you have a txt file and one wants to store as a list of tuples
+
+import csv
+f = open('data.txt','r')
+c = csv.reader(f,delimiter='\t')
+l = []
+for row in c:
+    l.append(tuple(map(int,row)))
+
+l = list(tuple(l))
+l
+
+tuple(tuple(map(int, line.split())) for line in f)
+
+--------------------------------------
+
+d = {'x': 1, 'y': 2, 'z': 3} 
+for key in d:
+    print key, 'corresponds to', d[key]
+--------------------------------------------
+d = {'x': 1, 'y': 2, 'z': 3} 
+for the_key, the_value in d.iteritems():
+    print the_key, 'corresponds to', the_value
+----------------------------------------------------
+Extracting out the last digits num = 2345
+ int(repr(num)[-1])
+-----------------------------------
+def sumDigits(n): # assumption: n >= 0
+   if n / 10 == 0:return n
+   else:
+      s = 0
+      while n != 0:
+         s += n % 10
+         n = n / 10
+      return sumDigits(s)
+
+Notice that when you use this recursive function there is no need to include the list comp hack[int(d) for d in str(n)]
+---------------------------------------------------
+
+All the elements of a list are identical. One liner to identify this
+
+all(x==myList[0]for x in myList)
+
+------------------------------------------------
+
+def decToBin(num):
+    if num == 0:return ' '
+    else:
+        return decToBin(num/2) + str(num%2)
+
+A snippet for converting from decimal to binary
+-----------------------------------------------------
+
+Getting indices or ranks of elements of a list
+
+L = [4,7,9,10,6,11,3]
+seq = sorted(L)
+index = [seq.index(v) for v in L]
+
+------------------------------------------------------------
+
+Finding runner up score
+
+print(input()==0 or sorted(list(set(map(int,input().split()))))[-2])
+
+------------------------------------------------------------------------------
+
+Inserting a comma at a specified point in a number
+
+x = 3000000
+y = 30000000
+print("\nOriginal Number: ",x)
+print("Formatted Number with comma separator: "+"{:,}".format(x));
+print("Original Number: ",y)
+print("Formatted Number with comma separator: "+"{:,}".format(y));
+print()
+___________________________________________
+
+A small function that does the above where s is the list of numbers
+
+def splitthousands(s,sep=','):
+    if len(s) <= 3: return s
+    return splitthosands(s[:-3],sep) + sep + s[-3:])
+________________________________________________________________
+
