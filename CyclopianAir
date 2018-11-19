@@ -1,0 +1,60 @@
+Cyclopian Air
+
+The Oelfinn have placed some numbers on some cards arranged in a circle and will allow FurWear to pick one pair of adjacent cards.The Oelfinn are willing
+to give FurWear an amount of oxygen proportional to the product of the numbers on said cards.
+
+Clearly we need to select the pair that provides the max product
+However a key point is that since teh cards are arranged circularly, we need to represent that in an array so we need to calculate the product of the first and last elements of the array and select out the max
+
+Solution/Approach
+
+1]The idea is to have an empty list and keep appending the products one at a time as the loop proceeds towards termination.
+2]Select out the max from this new list
+
+Read the numbers from a text file
+Let this be called cardnumbers.txt
+
+
+f = open("cardnumbers.txt",'r+')
+L = f.readlines()
+f.close()
+L = map(str.strip,L)
+
+Products = []
+
+# As usual a small helper function 
+
+def givemaxProduct(L):
+    Prod = 1
+    Additional_element = L[0]*L[len(L)-1]
+    for i in range(0,len(L)):
+        Prod = Prod*L[i]*L[i+1]
+        Products.append(Prod)
+     Products.append(Additional_element)
+     return max(Products)
+
+print(givemaxProduct(L))
+
+However if the number of numbers in the text file is too huge, tehn append may not be a very useful method. Better go in for yield in that case.
+
+The alg can be summarised as follows:
+1) Create a variable outside the loop, call it maxSoFar and set it to the product of the first pair
+2) Loop through each element (except the final one)
+   2.1) Multiply each element by the one after it
+   2.2) Compare that value with maxSoFar
+   2.2.1) If larger, setmaxSoFar to the new product
+3) Continue with the loop
+4) After the loop, print maxSoFar
+
+def givemax(L):
+    maxsoFar = L[0]*L[1]
+    for i in range(1,len(L)-1):
+        Prod = L[i]*L[i+1]
+        if Prod > maxsoFar:
+           maxsoFar = Prod
+    print maxsoFar
+
+Additional_element = L[0] *L[len(L)-1]  # For accounting for circular permutation
+
+max(maxsofar,Additional_element)   # Gives the max value
+
