@@ -1,0 +1,29 @@
+Generating ascending compositions
+
+1 + 1 + 1 + 1 + 1
+1 + 1 + 1 + 2
+1 + 1 + 3
+1 + 4
+2 + 3
+5
+
+An integer partition is an expression of a positive integer n as an unordered collection of positive 
+integers. A composition, on the other hand, is an expresssion of n as an ordered collection of positive integers. For example, 1 + 1 + 2, 1 + 2 + 1 and 2 + 1 + 1 all represent the same partition of 4. Then, ascending compositions are the compositions of n where all the parts are in ascending (non decreasing) order.
+ For example, the ascending compositions of 5 are as above.
+
+def rule_asc(n):
+    a = [0 for i in range(n + 1)]
+    k = 1
+    a[1] = n
+    while k != 0:
+       x = a[k-1] + 1
+       y = a[k] - 1
+       k -= 1
+       while x <= y:
+           a[k] = x
+           y -= x
+           k += 1
+       a[k] = x + y
+       yield a[:k+1]
+
+The above is an iterative solution and is a generator
