@@ -1,0 +1,39 @@
+Target Pair
+
+Given a list of integers and a target value, determine which two values in the list sum to the target value.
+
+Goal is to develop an algorithm that wil use as few comparisons as possible when searching for a pair which sums to a specific target value.
+
+Lets first consider the case of only 1 target value.
+
+We consider 
+
+x = [1,4,5,7,9,6,2]
+target = int(raw_input("Enter the number: "))
+for i in x:
+    if i < target:
+        pair = int(target)-int(i)
+        if pair in x:
+           print "the first number= {} the second number {}".format(i,pair))
+           break
+
+Messy: O(n^2) since there are 2 loops
+
+def findpair_adding_to_target(target,values):
+    sorted_values = list(sorted(values))
+    lo_index = 0
+    hi_index = len(values)-1     # the last index
+    while lo_index < hi_index:
+        pair_sum = values[lo_index] + values[hi_index]
+        if pair_sum < target:
+           lo_index += 1
+        elif pair_sum > target:
+            hi_index -= 1
+        else:
+            return values[lo_index],values[hi_index]
+     raise ValueError('No pair adds to {}'.format(target))
+
+The algorithm searching for the pair in the sorted list is O(n) but the sorting is O(nlogn)
+which dominates the run time of the full algorithm
+
+
