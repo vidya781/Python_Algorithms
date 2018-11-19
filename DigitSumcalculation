@@ -1,0 +1,45 @@
+Efficient program to calculate the digit sums
+
+Digit Sum of 1234 = 1+2+3+4 = 10 and Digit sum of 1+0 = 1
+
+Thus finally we end up getting a single digit number
+
+Algorithm for generating a single digit ds (digitsum)
+
+1) Store the numbers in a list
+   for example if n = 1234
+       L = [int(d) for d in str(n)]  # Thus one gets [1,2,3,4]
+2) Defining a fundtion to calculate the digit sum
+   
+def sum_digits(n):
+    """Return the sum of digits of a number.
+       number: non-negative integer
+    """
+    # Base Case
+    if number == 0:
+       return 0
+    else:
+       # Mod(%) by 10 gives the rightmost digit (227%10==7),
+       # While doing integer division by 10 removes the rightmost digit
+       # (227//10 is 22)
+       return (number % 10) + sum_digits(number // 10)
+
+# Our goal is to perform 2 things
+1) check if length(L) is 1 or not since we need a single digit
+2) if length(L) > 1, apply the function sum_digits 
+
+So we start by conversion of n into digits
+
+L = [int(d) for d in str(n)]
+
+def sumDigits(n): # assumption: n >= 0
+   n1 = 0       # No of steps
+   if n / 10 == 0:return n
+   else:
+      s = 0
+      while n != 0:
+         s += n % 10
+         n = n / 10
+         n1 += 1
+      return (sumDigits(s),n1)
+    
