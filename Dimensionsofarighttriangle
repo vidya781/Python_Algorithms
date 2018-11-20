@@ -1,0 +1,42 @@
+Geometric algorithms----dimensions of a right angled triangle
+
+Given H and A of a right angled triangle, find the dimensions of right angled triangle such that the hyptenuse is of length H and its area is A. IF no such triangle exists, print " Not possible"
+
+H = 10, A = 24
+P = 6, B = 8
+
+Input: H = 13, A = 36
+
+Output : Not possible
+
+p^2 + B^2 = H^2
+P*B = 2*A
+(P+B)^2 = P^2 + B^2 + 2*P*B = H^2 + 4*A
+(P+B) = sqrt(H^2 + 4*A)---1
+(P-B)^2 = P^2 + B^2 -2*P*B = H^2-4*A
+mod(P-B) = sqrt(H^2-4*A)---2
+from equation(2) we can conclude that if H^2 < 4*A then no solution is possible
+
+From (1) + (2) and (1)-(2) we have the following:
+
+P = (sqrt(H^2 + 4*A) + sqrt(H^2-4*A))/2
+B = (sqrt(H^2 + 4*A)-sqrt(H^2-4*A))/2
+
+from math import sqrt
+
+def finddim(H,A):
+    if H * H < 4 * A:
+       print("Not possible")
+       return
+
+    apb = sqrt(H*H + 4*A)
+    asb = sqrt(H*H-4*A)
+
+    print("P = ","%.2f" %((apb - asb)/2.0))
+    print("B = ","%.2f" %((apb + asb)/2.0))
+
+ # driver code
+
+  H = 5  # assigning value to H
+  A = 6  # assigning value to A
+  finddim(H,A)
