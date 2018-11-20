@@ -1,0 +1,68 @@
+Unpack function arguments from sequences and dictionaries with * and ** operators
+
+def printvector(x,y,z):
+    print('<%s,%s,%s>'%(x,y,z))
+
+printvector(0,1,0)
+
+tuplevec = (1,0,1)
+listvec = [1,0,1]
+printvector(tuplevec[0],tuplevec[1],tuplevec[2])
+
+printvector(*tuplevec)
+
+printvector(*listvec)
+
+Important point
+
+Putting a * before an iterable in a function call will unpack it and pass its elements as separate positional arguments to the called function.
+
+This technique works for any iterable, including generator expressions. Using * operator on a generator consumes all elements from the generator and passes them to the function
+
+genexpr = (x*x for x in range(3))
+printvector(*genexpr)
+
+dictvec = { 'y': 0,'z':1,'x':1}
+
+printvector(**dictvec)
+
+As dictionaries are unordered, this matches up dictionary values and function arguments based on the dictioanry keys: the x argument receives the value associated with the 'x' key in the dictionary.
+
+printvector(*dictvec)
+
+<y,x,z> 
+
+# Try this out. Will get a random order every time.
+
+main points
+
+The * and ** operators can be used to unpack function arguments from sequences and dictionaries
+Using argument unpacking effectively can help one write more flexible interfaces for modules and functions
+
+-----------------------------------
+
+def foo1(value):
+    if value:
+        return value
+    else:
+        return None
+
+def foo2(value):
+    """ Bare return statement implies 'return None'"""
+    if value:
+       return value
+    else:
+        return
+
+def foo3(value):
+    """ Missing return statement implies 'return None'"""
+    if value:
+        return value
+
+type(foo1(0))
+
+type(foo2(0))
+
+type(foo3(0))
+
+If a function does not have a return value then leave out a return statement.
