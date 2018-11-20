@@ -1,0 +1,41 @@
+# Python code to find the sum of manhattan distance between all pairs of given points
+
+# return the sum of distance between all pairs of points
+
+def distancesum(x,y,n):
+    sum = 0
+    for i in range(n):
+       for j in range(i+1,n):
+           sum += (abs(x[i]-x[j]) + abs(y[i]-y[j]))
+    return sum
+
+x = [-1,1,3,2]
+y = [5,6,5,3]
+
+n = len(x)
+print(distancesum(x,y,n))
+
+TC : O(n^2)
+
+Efficient Approach:
+
+Greedy approach.
+
+def distancesum(arr,n):
+    arr.sort()         # sorting the array
+    res = 0
+    sum = 0             # for each point, finding the distance
+    for i in range(n):
+        res += (arr[i]*i - sum)
+        sum += arr[i]
+    return res
+
+def totaldistancesum(x,y,n):
+    return distancesum(x,n) + distancesum(y,n)
+
+x = [-1,1,3,2]
+y = [5,6,5,3]
+
+n = len(x)
+
+print(totaldistancesum(x,y,n))
