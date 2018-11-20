@@ -1,0 +1,29 @@
+Given two numbers a and b and the task is to check whether the concatenation of a and b is a perfect square or not.
+
+Input: a = 1, b = 21
+
+Output: 121 = 11 * 11 is a perfect square
+
+Input : a = 100, b = 100
+Output :No
+
+100100 is not a perfect square
+
+Pseudo code for the following:
+
+1) String or concatenate the two numbers
+2) get its factors 
+3) Loop through the list o factors and check if multiplication of any of its factors by itself leads to the concatenated number
+4) If the result is true then it is a perfect square else its not
+
+def perfectsquare(x,y)
+    z = int(str(x) + str(y))
+    # z = int(''.join(str(x) for x in (n1,n2)))
+    import math
+    d = math.sqrt(z)
+    if d*d == z:
+        print("Yes")
+    else:
+        print("No")
+
+print(perfectsquare(n1,n2))
