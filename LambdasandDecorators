@@ -1,0 +1,313 @@
+lambda keyword in python is shortcut for declaring anonymous functions
+
+used whenever function objects are required
+
+Very similar to functions using def
+
+add = lambda x, y : x + y
+add(5,3)
+8
+
+def add(x,y):
+    return x + y
+
+add(5,3)
+
+Consider the foll expression:
+
+(lambda x,y : x + y)(5,3)
+
+Conceptually the lambda expression lambda x,y : x + y is the same as declaring a function with def but just written inline.
+
+The main difference is that one  does not have to bind the function object to a name before it is used.
+
+Syntactic difference between lambdas and regular expressions
+
+1] Restricted to a single expression
+
+2] Lamdas cannot use statements or annotations--not evn the return statement
+
+Executing a lambda function evaluates its expression and then automatically returns the expressions result so there is always an implicit return statement. Hence they are single expression functions.
+
+When can one can use lambda?
+
+Anytime a function object is required, one can use a lamda expression and because lambdas are anonymous, one does not even have to assign them to a name first.
+
+tuples = [(1,'d'),(2,'b'),(4,'a'),(3,'c')]
+sorted(tuples,key=lambda x:x[1])
+
+Tuple sorting takes place by the 2 nd value in the tuple.
+
+Another interesting aspect of lambdas:
+
+Just like regular nested functiosn, lambdas also work as lexical closures.
+
+A lexical closure  is nothing but a function that remembers the values from the enclosing lexical scope even when the program flow is no longer in that scope.
+
+def make_adder(n):
+    return lambda x:x + n
+
+plus3 = make_adder(3)
+plus5 = make_adder(5)
+
+plus3(4)
+plus5(4)
+
+# returns 7 and 9 respectively
+
+In the above example, the x + n lambda can still access the value of n even though it was defined in the make_adder function ( the enclosing scope)
+
+However care must be exercised while using a lambda construct so as not to needlessly obfuscate one's code. Instead go in for simplicity and elegance.
+
+An example follows:
+
+list(filter(lambda x: x % 2 == 0, range(16)))
+
+[x for x in range(16) if x % 2 == 0]
+
+Both yield the following [0,2,4,6,8,10,12,14] but the latter is simpler and better.
+
+Decorators
+
+Imp concept --these allow one to extend and modify the behaviour of callable functions, methods and classes without permanently modifying the callable itself.
+
+1] logging
+2] enforcing access control and authentication
+3] instrumentation and timing functions
+4] rate limiting
+5] caching and more
+
+2 imp points for understanding decorators:
+
+Functions are objects --they can be assigned to variables and passed to and returned from other functions
+
+Functions can be defined inside other functions--and a child function can capture the parent functions local state ( lexical closures)
+
+Decorators 'decorate' or 'wrap' another function and lets one execute code before and after the wrapped function runs
+
+Decorators allows one to define the resusable blocks and can change or extend the behaviour of other functions and they let one do that without permanently modifying the wrapped function itself.
+
+The functions behavior changes only when it is decorated.
+
+Very simply put, a decorator is a callable that takes a callable as input and returns another callable.
+
+def nulldecorator(func):
+    return func
+
+def greet():
+    return 'Hello!'
+
+greet = nulldecorator(greet)
+greet()
+'Hello!'
+
+So here there is a definition, of the greet function and then immediately decorated it by running it through the nul decorator function
+
+@nulldecorator
+def greet():
+    return 'Hello!'
+
+greet()
+'Hello!'
+
+Both are equivalent
+
+def uppercase(func):
+    def wrapper():
+        original_result = func()
+        modified_result = original_result.upper()
+        return modified_result
+    return wrapper
+
+The uppercase decorator defines a new function on the fly ( a closure) and uses it to wrap the input function in order to modify its behaviour at call time.
+
+The wrapper closure has access to the undecorated input function and free to execute additional code before and after calling the input function.
+
+@uppercase
+def greet():
+    return 'Hello'
+
+greet()
+'HELLO!'
+
+greet
+nulldecorator
+uppercase(greet)
+
+Decorators modify the behaviour of a callable through a wrapper closure so that one doesnt have to permamently modify the original and the original callable is not permanently modified---its behavior  changes only when decorated.
+
+Tack on reusable building blocks like logging and other instrumentation to existing functions and classes. Makes decorators a very powerful feature in Python that it is frequently used in standard lib and in 3rd paty packages
+
+def strong(func):
+    def wrapper():
+        return '<strong>' + func() + <'/strong>'
+    return wrapper
+
+def emphasis(func):
+    def wrapper():
+        return '<em>' + func() + <'/em>'
+    return wrapper
+
+Now stack multiple functions:
+
+@strong
+@emphasis
+
+def greet():
+    return 'Hello!'
+
+greet()
+'<strong><em>Hello!</em></strong>'
+
+Decorator stacking takes place and and decorators are applied from bottom to top.Start building the stack at the bottom and then keep adding new blocks on top to work the way upward
+
+decorated_greet = strong(emphasis(greet))
+
+This also means that deep levels of decorator stacking will eventually have an effect on performance as they keep on adding nested function calls. 
+
+Decorating functions that accept arguments
+
+Consider the foll snippet below
+
+def proxy(func):
+    def wrapper(*args,**kwargs):
+        return func(*args,**kwargs)
+    return wrapper
+
+Two things happen here:
+
+Uses the * and ** operators in the wrapper closure definition to collect all the positional and keyword arguments and stores them in variables(args and kwargs)
+
+The wrapper closure then forwards the collected arguments to the original input function using the * and ** argument unpacking operators.
+
+Consider a proxy decorator: ( that logs function arguments and results during the execution time)
+
+def trace(func):
+    def wrapper(*args,**kwargs):
+        print(f'TRACE: calling {func.__name__}()'
+              f'with {args},{kwargs}')
+        original_result = func(*args,**kwargs)
+        print(f'TRACE: {func.__name__}()'
+              f'returned {original_result!r}')
+        return original_result
+    return wrapper
+
+@ trace
+def say(name,line):
+    return f'{name}:{line}'
+
+say('VV','Hello')
+
+Debuggable decorators:
+
+When one uses a decorator, what one is doing is replacing one function with another one. A flipside of this process is that it hides some of teh metadata attached to the original (undecorated) function
+
+def greet():
+    """ return friendly greeting"""
+    return 'Hello'
+
+decorated_greet = uppercase(greet)
+
+greet.__name__
+'greet'
+
+greet.__doc__
+'Return a friendly greeting'
+
+However note the foll:
+
+If one tries to access the functions metadata, one will see the wrapper's closure's metdata instead
+
+decorated_greet.__name__
+'wrapper'
+
+decorated_greet.__doc__
+
+A workaround this is the functools.wrap library
+
+import functools
+def uppercase(func):
+    @functools.wraps(func)
+    def wrapper():
+        return func().upper()
+     return wrapper
+
+@uppercase
+def greet():
+    """ Return a friendly greeting"""
+    return 'Hello'
+
+greet.__name__
+'greet'
+
+greet.__doc__
+'Return a friendly greeting'
+
+Consider the foll snippet
+
+def foo(req,*args,**kwargs):
+    print(required)
+    if args:
+       print(args)
+    if kwargs:
+       print(kwargs)
+
+Positional or keyword arguments *args and **kwargs respectively
+
+foo()
+
+# error gnerated here
+
+foo('hello')
+hello
+
+foo('hello',1,2,3)
+hello
+(1,2,3)
+{'key1':'value','key2':999}
+
+def foo(x,*args,**kwargs):
+    kwargs['name'] = 'Alice'
+    newargs = args + ('extra')
+    bar(x,*new_args, **kwargs)
+
+------------------------------------------------------------
+
+class Car:
+    def __init__(self,color,mileage):
+        self.color = color
+        self.mileage = mileage
+
+class AlwaysBlueCar(Car):
+      def __init__(self,*args, **kwargs):
+         super().__init__(*args,**kwargs)
+         self.color = 'blue'
+
+AlwaysBlueCar('green',56783).color
+'blue'
+
+AlwaysBlueCar constructor passes on all arguments to its parent class and then overrides an internal attribute. If the parent class constructor changes, there is a good chanve that AlwaysBlueCar would still function as intended.
+
+def trace(f):
+    @functools.wraps(f)
+    def decorated_function(*args,**kwargs):
+        print(f,args,kwargs)
+        result = f(*args,**kwargs)
+       print(result)
+    return decorated_function
+
+@trace
+def greet(greeting,name):
+    return '{},{}!'.format(greeting,name)
+
+Main points
+
+a] Decorators define reusable building blocks one can apply to a callable to modify its behaviour without permanently modifying the callable itself.
+b] The @ syntax is just a shorthand for calling teh decorator on an input function. Multiple decorators on a single function are applied bottom to top
+c] As debugging best practice, use the functools.wraps helper in ones own decorators to carry over metadata from undecorated callable to decorated one
+d] decorators should not be overused
+
+*args and **kwargs  lets one write functions with a variable number of arguments in Python
+*args collects extra positional arguments as a tuple and ** kwargs colects the extra keyword arguments as a dictioanary
+
+---------------------------------------
