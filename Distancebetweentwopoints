@@ -1,0 +1,33 @@
+Program for distance between two points on earth
+
+Given latitude and longitude in degrees find the distance between 2 points on the earth
+
+
+from math import radians,cos,sin,asin,sqrt
+def distance(lat1,lat2,lon1,lon2):
+
+    lon1 = radians(lon1)   # math module contains function named radians which converts fromdegrees to radians
+    lon2 = radians(lon2)
+    lat1 = radians(lat1)
+    lat2 = radians(lat2)
+
+    # Haversine formula
+   dlon = lon2 - lon1
+   dlat = lat2 - lat1
+
+    a = sin(dlat/2)**2 + cos(lat1)*cos(lat2)*sin(dlon/2)**2
+    c = 2 * asin(sqrt(a))
+    
+    r = 6371
+
+    return(c*r)
+
+lat1 = 53.3205555555556
+lat2 = 53.3186111111111
+lon1 = -1.7297222222222
+lon2 = -1.6997222222222
+print(distance(lat1, lat2,lon1,lon2),"K.M")
+
+
+
+
