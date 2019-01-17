@@ -1,0 +1,32 @@
+The objective of this program is to demonstrate the use of Selenium in order to demonstrate slider action. For this purpsoe we will be using jquery 
+
+The program structure begins by importing some essential libraries and invoking some methods that are vital for this task.
+
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver import ActionChains
+import time
+class Sliders():
+    def movesliders(self):
+        baseUrl = "https://jqueryui.com/slider/"
+        driver = webdriver.Firefox()     # as an example, Firefox is chosen but this can vary depending on one's requirements
+        driver.maximize_window()        # invoking some methods on the driver
+        driver.get(baseUrl)
+        driver.implicitly_wait(3)     # If elements are not immediately available, an implicit wait tells web driver to poll the DOM for 
+                                          a certain amount of time. Default setting is 0.
+        driver.switch_to.frame(0)
+        element = driver.find_element(By.XPATH, "/div[@id='slider']//span")
+        time.sleep(2)
+        try:
+            action = ActionChains.(driver)
+            actions.drag_and_drop_by_offset(element,100,0).perform()
+            print("Sliding Element Successful")
+            time.sleep(2)
+        except:
+            print("Sliding failed on the element")
+ 
+ cf = Sliders()
+ cf.movesliders()
+            
+                                          
+        
