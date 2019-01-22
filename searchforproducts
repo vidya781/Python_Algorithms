@@ -1,0 +1,36 @@
+The objective of this Python script is to open up a Firefox session ( or whatever browser one chooses) that uses the Selenium WebDriver client library and 
+does some operations after the website is hit and some search items are returned . The following shows how this entire process can be automated.
+
+from selenium import webdriver
+
+# create a new Firefox session
+
+driver = webdriver.Firefox()
+driver.implicitly_wait(15)
+driver.maximize_window()
+
+#navigate to the application home page--lets consider Google
+driver.get("http://google.com")
+
+# get the search textbox
+search_field.send_keys("headphones")
+search_field.clear()
+
+# Get all the anchor elements which have the product names displayed and currently on the result page using 
+# find_elements_by_xpath method
+
+products = driver.find_elements_by_xpath("//h2[@class='product-name']/a")
+
+# get the number of anchor elements found
+
+print "Found " + str(len(products)) + "products:"
+
+# iterate through each anchor element and then print the text that is the name of the product
+
+for product in products:
+    print product.text
+    
+# close the browser window
+
+driver.quit()
+    
