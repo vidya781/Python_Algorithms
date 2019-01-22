@@ -1,0 +1,19 @@
+The objective of this exercise is to demonstrate the Unittest library. One can use the unittest to create a comprehensive suite of tests for any project.
+The unittest module i sused within the Python projects to test various standard library modules.
+
+More documentation here: http://docs.python.org/2/library/unittest.html
+
+We get some basic definitions in order:
+
+Test Fxture: Define the preparation needed to perform one or more tests and any associated clean-up actions
+
+Test Case: A test case is the smallest unit of testing in unittest. It checks for a specific response to a particular set of actions and inputs using various assert
+methods provided by the unittest library. The unittest library has a base class called TestCase that may be used to create new test cases.
+
+Test Suite: Collection of multiple tests to create group of tests representing specific functionality or modules of the application under test, which will be executed together.
+
+Test Runner: The test runner orchestrates execution of the tests and provides the results to the user. The runner may use a GUI, a textual interface or return a special value to indicate teh results of executing 
+the tests
+
+Test Report: A test report displays a summary of test results showing the pass or fail status of executed test cases, expected versus actual results for the failed steps and
+a summary of overall run and timing information.
