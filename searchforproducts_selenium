@@ -34,3 +34,50 @@ for product in products:
 
 driver.quit()
     
+###########################################
+Modifying the script to accomodate IE
+
+import os
+from selenium import webdriver
+
+# get the path of IEDriverServer
+dir = os.path.dirname(__file__)
+ie_driver_path = dir + "\IEDriverServer.exe"
+
+# Create a new IE session
+
+driver = webdriver.Ie(ie_driver_path)
+driver.implicitly_wait(15)
+driver.maximize_window()
+
+# navigate to the application home page
+
+driver.get("http://google.com")
+
+# get the search textbox
+search_field = driver.find_element_by_name("q")
+search_field.clear()
+
+#enter search keyword and submit
+
+search_field.send_keys("Phones")
+search_field.submit()
+
+# obtain all the anchor elems which have the product names displayed currently on the result page using find_elements_by_xpath method
+
+products = driver.find_elements_by_xpath("//h2[@class='product-name']/a")
+
+# get the number of anchor elements found
+
+print "Found " + str(len(products)) + " products: "
+
+# iterate through each anchor element and print the text that is the name of the product
+
+for product in products:
+    print product.text
+    
+ # close the browser window
+ 
+ driver.quit()
+ 
+ 
