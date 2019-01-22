@@ -17,3 +17,39 @@ the tests
 
 Test Report: A test report displays a summary of test results showing the pass or fail status of executed test cases, expected versus actual results for the failed steps and
 a summary of overall run and timing information.
+
+-------------
+
+Applying SetUp() method and Teardown() methods---Use to perform some tasks at the start of each test or all the tests defined in the class. These 
+can be basic tasks like creating an instance of a browser driver, navigating to the base URL, loading test data, opening logfiles and so on.
+This method takes no arguments and doesn't return anything. 
+
+TearDown() method -- applied to clean up the values initialized by the setUp() method after a test is completed. After an instance of Firefox(0 is created, when we no longer need it, we will be closing it down using the teardown() method.
+
+import unittest
+from selenium import webdriver
+
+class SearchTests(unittest.TestCase):
+      def setUp(self):
+           # create a new FF session
+           self.driver = webdriver.Firefox()
+           self.driver. implicitly_wait(15)
+           self.driver.maximize_window()
+           
+           # navigate to application home page
+           self.driver.get("http://google.com/")
+           
+      def test_search_by_category(self):
+           # get the search textbox
+            self.search_field = self.driver.find_element_by_name("q")
+            self/search_field.submit()
+            
+            # get all the anchor elements which have product names
+            # displayed currently on the rsult page using the find_elements_by_xpath method
+            products = self.driver.find_elements_by_xpath
+             ("//h2[@class='product-name']/a")
+              self.assertEqual(2,len(products))
+              
+        def tearDown(self):
+            #close the browser window
+            self.driver.quit()
