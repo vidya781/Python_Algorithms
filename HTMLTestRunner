@@ -1,0 +1,36 @@
+As a rule of thumb, sending console logs to stakeholders might not be a very effective practice. One will need formatted reports with drill down 
+access to finer details.
+
+In this example, we will use HTMLTestRunner. More details at https://pypi.python.org/pypi/HTMLTestRunner
+
+import unittest
+import HTMLTestRunner
+import os
+from searchtests import SearchTests
+from homepagetests import HomePageTest
+
+# get the directory path to output report file
+
+dir = os.getcwd()
+
+# get all the tests from SearchProductTest and HomePageTest class
+
+search_tests = unittest.TestLoader().loadTestsFromTestCase(SearchTests)
+home_page_tests = unittest.TestLoader().loadTestsFromTestCase(HomePageTest)
+
+#create a test suite combining search_test and home_page_test
+smoke_tests = unittest.TestSuite([home_page_tests,search_tests])
+
+# Open the report file
+outfile = open(dir + "\SmokeTestReport.html","w")
+
+#configure HTMLTestRunner options
+runner = HTMLTestRunner.HTMLTestRunner(
+                 stream = outfile,
+                 title = 'Test Report',
+                 description = 'Smoke Tests'
+                 )
+                 
+ # run the suite using HTMLTestRunner
+ runner.run(smoke_tests)
+ 
