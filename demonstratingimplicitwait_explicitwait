@@ -1,0 +1,80 @@
+The webdriver class provides the implicitly_wait() method to configure the timeout. We will now show the use of the implicit_wait()
+with a timeout of 10 seconds in the setUp() method.When this test is executed, the WebDriver wil wait for up to 10 seconds if it does not find
+an element and when it reaches the timeout ( 10 seconds in this example), it will throw a NoSuchElementException.
+
+import unittest
+from selenium import webdriver
+
+class SearchProductTest(unittest.TestCase):
+    def setUp(self):
+        # create a new session
+        self.driver = webdriver.Firefox()
+        self.driver.implicitly_wait(10)
+        self.driver.maximize_window()
+        
+        #navigate to the application home page
+        self.driver.get("http://google.com/")
+        
+    def test_search_by_category(self):
+        #get search textbox
+        self.search_field = self.driver.find_element_by_name("q")
+        self.search_field.clear()
+        
+        # enter search keyword and submit
+        self.search_field.send_keys("phones")
+        self.search_field.submit()
+        
+        #get all teh anchor elements which have  aproduct name
+        # displayed currently on result page using
+        #find_elements_by_xpath method
+        
+        products = self.driver\
+            .find_elements_by_xpath("//h2[@class='product-name']/a")
+            
+        # check count of products shown in the results
+        self.assertEqual(2, len(products))
+        
+    def tearDown(self):
+        #close the browser window
+        self.driver.quit()
+        
+  if __name__ == '__main__':
+      unittest.main(verbosity=2)
+      
+ General commment: It is better to avoid using an implicit wait in tests and try to handle the synchronization issues with an explicit wait which provides more control when compared to an implicit wait.
+ 
+ Using the Explicit Wait:
+ 
+ We use a set of predefined or custom condituions for the script to wait before proceeding with further steps. This is how it differs from the implicit wait
+ 
+ Note that an explicit wait can only be implemented in specific cases where script synchronization is needed. WebDriver provides the WebDriverWait and expected_conditions classes to implement the Explicit Wait.
+ 
+ from selenium import webdriver
+ from selenium.webdriver.common,by import By
+ from selenium.webdriver.support.ui import WebDriverWait
+ from selenium.webdriver.support import expected_conditions
+ import unittest
+ 
+ class ExplicitWaitTests(unittest.TestCase):
+     def setUp(self):
+         self.driver = webdriver.Firefox()
+         self.driver.get("http://google.com/")
+         
+     def test_account_link(self):
+         WebDriverWait(self.driver,10)\
+             .until(lambda a: s.find_element_by_id("select-language").get_attribute("length")== "3")
+         account = WebDriverWait(self.driver,10)\
+             .until(expected_conditions.visibility_of_element_located((By.LINK_TEXT,"ACCOUNT"))))
+         account.click()
+         
+     def tearDown(self):
+         self.driver.quit()
+         
+   if __name__ == "__main__":
+       unittest.main(verbosity=2)
+       
+  Notes: explicit_wait is used to wait until he LogIn link is visible in the DOM, using the expected visibility_of_element_located condition. This condition 
+  requires the locator strategy and locator details for the element that we want to wait for. The script will wait for a a maximum of 10 seconds looking for the element to be visible. Once the element is visible 
+  with the specified locator, the expected condition will return the located element back to the script.
+  
+  If the element is not visible with the specified locator in the given timeout, a TimeOutException will be raised.
