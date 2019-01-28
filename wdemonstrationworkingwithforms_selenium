@@ -1,0 +1,96 @@
+We use the WebElement class to automate the interaction on various HTML controls such as entering text in a textbox, cliking on a button, selecting an option
+in a checkbox or radio button, getting text and attribute values from the element.
+
+We now proceed to create a test that validates the creation of a new user account in the sample application. 
+
+There are a series of steps that we must follow in order to effect this:
+1) Open the LogIn button
+2) Checking whether the element is displayed and enabled
+3) Finding the element attribute value
+4) Using the is_selected() method
+5) Using the clear() and send_keys() methods
+
+So the complete test is as follows:
+
+from selenium import webdriver
+from time import gmtime, strfttime
+import unittest
+
+class RegisterNewUser(unittest.TestCase):
+    def setUp(self):
+        self.driver = webdriver.Firefox()
+        self.driver.implicitly_wait(15)
+        self.driver.maximize_window()
+        
+        # navigation to the application home page
+        self.driver.get("http://amazon.com/")   ## or can be any website which requires account creation and form field validation
+        
+    def test_register_new_user(self):
+        driver = self.driver
+        
+        # click on Logn In link to oepn Login page
+        driver.find_element_by_link_text("ACCOUNT").click()
+        driver.find_element_by_link_text("My Account").click()
+        
+        # Get the Create Account button
+        create_account_button = \
+            driver.find_element_by_link_text("CREATE AN ACCOUNT")
+            
+        # check that the Create Account button is displayed and enabled
+        self.assertTrue(create_acccount_button.is_displayed() and create_account_button.is_enabled())
+        
+        #click on Create Account Button and this will display new account
+        create_account_button.click()
+        
+        # check title
+        self.assertEquals("Create New Customer Account",driver.title)
+        
+        #get all the fields from Create an account form
+        first_name = driver.find_element_by_id("firstname")
+        last_name = driver.find_element_by_id("lastname")
+        email_address = driver.find_element_by_id("password")
+        confirm_password = driver.find_element_by_id("is_subscribed")
+        sub,it_button = driver.find_element_by_xpath("//button[@title='Register']")
+        
+        #check maxlength of first name and last name textbox
+        self.assertEqual("255",first_name.get_attribute("maxlength"))
+        self.assertEqual("255",last_name.get_attribute("maxlength"))
+        
+        # check all the fields are enabled
+        self.assertTrue(first_name.is_enabled()
+          and last_name.is_enabled()
+          and email_address.is_enabled() and
+          news_letter_subscription.is_enabled() and
+          password.is_enabled() and
+          confirm_password.is_enabled()
+          and submit_button.is_enabled())
+          
+        # check sign up for newsletter is unchecked
+        self.assertFalse(news_letter_subscription.
+          is_selected())
+          
+        user_name = "user_" + strftime
+          ("%Y%m%d%H%M%S",gmtime())
+          
+        #fill out all the fields
+        first_name.send_keys("Test")
+        last_name.send_keys(user_name)
+        news_letter_subscription.click()
+        email_address.send_keys(user_name + "@example.com")
+        password.send_keys("tester")
+        confirm_password.send_keys("tester')
+        
+        # click submit button to submit the form
+        submit_button.click()
+        
+        # check new user is registered
+        self.assertEqual("Hello, Test" + user_name + "!",
+          driver.find_element_by_css_selector("p.hello > strong").text)
+        driver.find_element_by_link_text("ACCOUNT").click()
+        self.assertTrue(driver.find_element_by_link_text("Log Out").is_displayed())
+        
+    def tearDown(self):
+        self.driver.quit()
+        
+  if __name__ == "__main__":
+      unittest.main(verbosity=2)
