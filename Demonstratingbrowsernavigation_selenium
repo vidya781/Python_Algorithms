@@ -1,0 +1,57 @@
+Browser's provide various navigation methods to access teh web pages from the browser history or by refreshing the current page
+and so on with the back, forward, refresh/reload buttons on the browser window's toolbar.
+
+The Selenium Webdriver API provides access to these buttons with various navigation methods.
+
+The following are the methods:
+ back()  ---> Goes one step backward in the browser history of the current session    driver.back()
+ forward() ----> Goes one step forward in the browser history of the current session    driver.forward()
+ refresh() -----> Refreshes the current page displayed in the browser                   driver.refresh()
+ 
+ Following is code that uses the browser navigation API to navigate the history and then validate the state of the application.
+ 
+ import unittest
+ from selenium import webdriver
+ from selenium.webdriver.support.ui import WebDriverWait
+ from selenium.webdriver.support import expected_conditions
+ 
+ class Navigationtest(unittest.TestCase):
+     def setUp(self):
+         # Create a new session
+         self.driver = webdriver.Chrome()
+         self.driver. implicitly_wait(15)
+         self.driver.maximize_window()
+         
+         # navigate to the application home page
+         self.driver.get("http:/www.google.com")
+         
+      def testBrowserNavigation(self):
+          driver = self.driver
+          # get the search textbox
+          search_field = driver.find_element_by_name("q")
+          search_field.clear()
+          
+          # enter the search keyword and submit
+          search_field.send_keys("selenium webdriver")
+          search_field.submit()
+          
+          se_wd_link = driver.find_element_by_link_text
+              ("Selenium Webdriver")
+          se_wd_link.click()
+          self.assertEqual("Selenium Webdriver",driver.title)
+          
+          driver.back()
+          self.assertTrue(WebDriverWait(self.driver,10).until(expected_conditions.title_is("Selenium webdriver - Google Search")))
+          
+          driver.forward()
+          self.assertTrue(WebDriverWait(self.driver,10).until(expected_conditions.title_is("Selenium WebDriver")))
+          
+          driver.refresh()
+          self.assertTrue(WebDriverWait(self.driver,10).until(expected_condiions.title_is("Selenium Webdriver")))
+          
+      def tearDown(self):
+          #close the browser window
+          self.driver.quit()
+          
+  if __name__ == '__main__':
+      unittest.main()
