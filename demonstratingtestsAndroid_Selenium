@@ -1,0 +1,62 @@
+For Android, we need to test apps and proceed for a device like Samsung galaxy S III. For this, one needs to install the Chrome browser on the device. One can get Google Chrome on the Play Store. 
+One needs to connect the device to the machine where the Appium server is running.
+
+Appium drives the automation of Android applications using the UI Automator bundled with Android SDK. Appium works as an HTTP server and receives the commands from test scripts over the JSON wire protocol.
+Appium sends the commands to the UI Automator so that they can be executed on the app launched in an emulator or real device.
+
+In the process, Appium translates the JSON commands into the UI Automator Java commands that are understood by Android SDK.
+
+The flow diagram is as follows:
+
+Test script  -------------> Appium(HTTP Server --------------> UI Automator -----------> App / Chrome in Emulator
+(Webdriver API in   <------ running on Node JS)<------------               <-----------
+a supported language)
+
+When a command is executed against the app on the emulator or the device, the target app sends the response back to the UI Automator, 
+which sends it back to the Appium. It translates the UI Automator responses into Selenium Webdriver JSON wire protocol responses and 
+sends them back to the test script.
+
+import unittest
+from appium import webdriver
+
+class SearchProductsOnAndroid(unittest.TestCase):
+    def setUp(self):
+        desired_caps = {}
+        # platform
+        desired_caps['device'] = 'Android'
+        #platform version
+        desired_caps['version'] = '4.3'
+        #mobile browser
+        desired_caps['app'] = 'Chrome'
+        
+        #to connect to Appium server use the RemoteWebdriver
+        # and pass in the desired capabilities
+        self.driver = \
+            webdriver.Remote("http://127.0.0.1:4723/wd/hub",desired_caps)
+        self.driver.get("http://google.com")
+        self.driver.implicitly_wait(15)
+        
+     def test_search_by_category(self):
+         #click on the search icon
+         self.driver.find_element_by_xpath("//a[@href='#header-search']").click()
+         # get the search textbox
+         self.search_field = self.driver.find_element_by_name("q")
+         self.search_field.clear()
+         
+         # enter search keyword and submit
+         self.search_field.send_keys("phones")
+         self.search_field.submit()
+         
+         # get all the anchor elements which have product names
+         # displayed currently on the result page using find_elements_by_xpath method
+         products = self.driver.find_elements_by_xpath("//div[@class='category-products']/u1/li")
+         
+         # check count of products shown in results
+         self.assertEqual(2,len(products))
+         
+      def tearDown(self):
+          #close the browser window
+          self.driver.quit()
+          
+      if __name__ == '__main__':
+          unittest.main(verbosity=2)
