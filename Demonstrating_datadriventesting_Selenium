@@ -1,0 +1,150 @@
+Here we demonstrate the data-driven testing approach wherein we use a single test to verify different sets of test cases or test data by driving the test with input
+and expected values from an external data source insead of using the hardcoded values every time a test is run.
+
+Consider some permutations and combinations when a user logs into some website that requires credentials.
+
+Description           Test Data            Expected Output
+
+Valid username      A pair of valid           Success message
+and password         creds
+
+Invalid username    An invalid username       Login error
+and password         and password
+
+Valid username      A valid username and      Login error
+and invalid pwd       invalid password
+
+The idea is to create a single script that can handle the test data and emulate the above scenario.By using this approach, we separate the test data
+from the test logic by replacing the hardcoded test data with variables using the data from external sources as CSV or a spreadsheet file. This now helps in creating reusable tests that can run with different sets of data
+which can be separated from the test.
+
+Data driven tetsing also has another advantage. It helps in increasing the test coverage as we can handle multiple test conditions while
+minimizing the amount of test code we need to write and maintain.
+
+we will be using the ddt library for this purpose which can be found at https://pypi.python.org/pypi/ddt
+
+import unittest
+from ddt import ddt,data,unpack
+from selenium import webdriver
+
+@ddt
+class SearchDDT(uniitest.TestCase):
+    def setUp(self):
+        #create a new Firefox session
+        self.driver = webdriver.Firefox()
+        self.driver.implicitly_wait(15)
+        self.driver.maximize_window()
+        
+        # navigate to the application home page
+        self.driver.get("http://amazon.com/")
+        
+   # specify test data using @data decorator
+   @data(("phones",2),("music",5))
+   @unpack
+   def test_search(self,search_value,expected_count):
+       # get the search textbox
+       self.search_field = self.driver.find_element_by_name("q")
+       self.search_field.clear()
+       
+       # enter search keyword and submit
+       # use search_value argument to pass data
+       self.search_field.send_keys(search_value)
+       self.search_field.submit()
+       
+       # get all the anchor elements which have
+       # product names displayed
+       # currently on the result page using
+       # find_elements_by_xpath method
+       
+       products = self.driver.find_elements_by_xpath("//h2[@class='product-name']/a")
+       
+       # check count of products shown in results
+       self.assertEqual(expected_count,len(products))
+       
+    def tearDown(self):
+        # close the browser window
+        self.driver.quit()
+        
+   if __name__ == '__main__':
+       unittest.main(verbosity=2)
+       
+   # specify data using @data decorator
+     @data(("phones",2),("music",5))
+     @unpack
+     def test_search(self,search_value,expected_count):
+     
+ Now we use external data sources for data-driven tests---CSV,Excel
+ 
+ Code Modifications
+ 
+ All remains the same except that the following code needs to be added.
+ 
+ import csv
+ 
+ def get_data(file_name):
+     # create an empty list to store rows
+     rows = []
+     # open the CSV file
+     data_file = open(file_name, "rb")
+     # create a CSV Reader from CSV file
+     reader = csv.reader(data_file)
+     # skip the headers
+     next(reader,None)
+     # add rows from reader to list
+     for row in reader:
+         rows.append(row)
+     return rows
+     
+  # also add the following line:
+     @data(*get_data("testdata.csv")
+     
+    For xls
+    we need to add the following:
+    import xlrd
+    
+    def get_data(file_name):
+        # create an empty list to store rows
+        rows = []
+        # open the specified Excel spreadsheet as workbook
+        book = xlrd.open_workbook(file_name)
+        #get the first sheet
+        sheet = book.sheet_by_index(0)
+        # iterate through the sheet and get the data from rows in list
+        for row_idx in range(1,sheet.nrows):
+            rows.append(list(sheet.row_values(row_idx,0,sheet.ncols)))
+        return rows
+        
+       @data(*get_data("TestData.xlsx"))
+       
+   For Database
+   
+    We need to add the following:
+    
+    import pymysql
+
+# Create the database connection.
+# The connection parameters are host, port, user, password, and database.
+# These parameters in this code are held in the app.config().
+dump_conn = pymysql.connect(
+    host=app.config[ 'DUMP_SQLALCHEMY_HOST' ],
+    port=int( app.config[ 'DUMP_SQLALCHEMY_PORT' ] ),
+    user=vault[ 'data' ][ 'username' ],
+    passwd=vault[ 'data' ][ 'password' ],
+    db=app.config[ 'DUMP_SQLALCHEMY_DB' ]
+)
+
+# Grab the query from a sql_queries helper file.
+sql_query = query_transactions_for_csv()
+
+# From the connection get a cursor.
+dump_cursor = dump_conn.cursor()
+
+# Handle the cursor.close() with a 'with' statement.
+with dump_cursor as cursor:
+
+    # Execute the query.
+    cursor.execute( sql_query )
+
+    # Use list( cursor ) to get a Python list.
+    rows = list( cursor )
+       
