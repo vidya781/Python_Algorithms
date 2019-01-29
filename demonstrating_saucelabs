@@ -1,0 +1,54 @@
+Sauce labs is used for cross browser testing and it also used for providing support for tsting mobile applications using Appium.
+
+https://saucelabs.com/
+
+import unittest
+from appium import webdriver
+
+class SearchProductOnIphone(unittest.TestCase):
+    SAUCE_USERNAME = 'vidya781'
+    SAUCE_KEY = 'bd0a0f88-efec-4073-9f60-71111f7ccd5'
+    
+    def setUp(self):
+        desired_caps = {}
+        desired_caps['browserName'] = "Safari"
+        desired_caps['platformVersion'] = "7.1"
+        desired_caps['platformName'] = "iOS"
+        desired_caps['deviceName'] = "iPhone Simulator"
+        
+        sauce_string = self.SAUCE_USERNAME + ':' + self.SAUCE_KEY
+        
+        self.driver = \
+            webdriver.Remote('http://' + sauce_string + 
+             '@ondemand.saucelabs.com:80/wd/hub',desired_caps)
+         self.driver.get('http://google.com')
+         self.driver.implicitly_wait(15)
+         self.driver.maximize_window()
+         
+     def test_search_by_category(self):
+         # click on search icon
+         self.driver.find_element_by_xpath("//a[@href='#header-search']").click()
+         # get the search textbox
+         self.search_field = self.driver.find_element_by_name("q")
+         self.search_field.clear()
+         
+         # enter search keyword and submit
+         self.search_field.send_keys("phones")
+         self.search_field.submit()
+         
+         # get all the anchor elemenst which have
+         # product names displayed
+         # currently on the result page using
+         # find_elements_by_xpath method
+         products = self.driver\
+             .find_elements_by_xpath method("//div[@class='category-products']/u1/li")
+             
+         # check count of products shown in results
+         self.assertEqual(2,len(products))
+         
+     def tearDown(self):
+         # close the browser window
+         self.driver.quit()
+         
+   if __name__ == '__main__':
+       unittest.main(verbosity=2)
