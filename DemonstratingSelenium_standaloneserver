@@ -1,0 +1,57 @@
+In order to run a test on the Selenium Server, we need to use RemoteWebDriver. The Remote class in the Selenium Python binding acts like
+a client and communicates with the Selenium Server to run all the testss on a remote machine.
+
+One uses this class to instruct the Selenium Server as to what configurations are needed to run a test on the remote machine and commands to run on the selected browsers.
+
+We also need to set the desired_capabilities, the browser and the OS and any other configuration that we wish to communicate to the Selenium standalone server 
+in order to run the tests. 
+
+Consider the following:
+
+desired_caps = {}
+desired_caps['platform'] = 'WINDOWS'
+desired_caps['browserName'] = 'Firefox'
+
+# Now create an instance of the Remote class and pass the desired_capabilities. When the script is executed, it will connect to the Selenium server and requests te server 
+to set up a Firefox browser running on Windows to run the test:
+
+self.driver = webdriver.Remote('http://192.168.1.103:4444/wd/hub',desired_caps)
+
+# Now starting the actual script
+
+import unittest
+from selenium import webdriver
+
+class SearchProducts(unittest.TestCase):
+    def setUp(self):
+        desired_caps = {}
+        desired_caps['platform'] = 'WINDOWS'
+        desired_caps['browserName'] = 'Firefox'
+        self.driver = webdriver.Remote('http://192.168.1.103:4444/wd/hub',desired_caps)
+        self.driver.get('http://google.com/')
+        self.driver.implicitly_wait(15)
+        self.driver.maximize_window()
+        
+    def testSearchByCategory(self):
+        # get the search textbox
+        self.search_field = self.driver.find_element_by_name('q')
+        self.search_field.clear()
+        
+        # enter search keyword and submit
+        self.search_field.send_keys('phones')
+        self.search_field.submit()
+        
+        # get all the anchor elements which have the product names
+        # dispalyed currently on the result page using
+        @ find_elements_by_xpath method
+        products = self.driver\
+            .find_elements_by_xpath('//h2[@class=\'product-name\']/a']
+        # check the count of products shown in the results
+        self.assertEqual(2,len(products))
+        
+    def tearDown(self):
+        # close the browser window
+        self.driver.quit()
+        
+    if __name__=='__main__':
+        unittest.main()
