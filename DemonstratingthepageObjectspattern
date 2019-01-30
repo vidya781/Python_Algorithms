@@ -81,7 +81,139 @@ class BaseTestCase(unittest.TestCase):
   Now implementing the SearchRegion class which handles the search feature of the application. Provides the searchFor() method. Creates a new search.py and 
   implement the following code.
   
-  from base 
+  from base import BasePage
+  from base import InvalidPageException
+  from product import ProductPage
+  
+  class SearchRegion(BasePage):
+      _search_box_locator = 'q'
+      
+      def __init__(self,driver):
+          super(SearchRegion,self).__init__(driver)
+          
+      def searchFor(self,term):
+          self.search_field = self.driver.find_element_by_name(self.__search_box_locator)
+          self.search_field.clear()
+          self.search_field.send_keys(term)
+          self.search_field.submit()
+          return SearchResults(self.driver)
+          
+    class SearchResults(BasePage):
+        _product_list_locator = 'u1.products-grid > li'
+        _product_name_locator = 'h2.product-name a'
+        _product_image_link = 'a.product-image'
+        _page_title_locator = 'div.page-title'
+        
+        _products_count = 0
+        _products = {}
+        
+        def __init__(self,driver):
+            super(SearchResults,self).__init__(driver)
+            results = self.driver.find_elements_by_css_selector
+                (self.__product_list_locator)
+            for product in results:
+                name = product.find_element_by_css_selector
+                   (self.__product_name_locator).text
+                self._products[name] = 
+                    product.find_element_by_css_selector
+                    (self._product_image_link)
+                    
+        def _validate_page(self,driver):
+            if 'Search results fo' not in driver.title:
+                raise InvalidPageException
+                   ('Search results not loaded')
+                   
+        @property
+        def product_count(self):
+            return len(self._products)
+            
+        def get_products(self):
+            return self._products
+            
+        def open_product_page(self,product_name):
+            self._products[product_name].click()
+            return ProductPage(self.driver)
+            
+      Implementing the ProductPage class which has some attributes related to a product. We can access a product from the SearchResultys class,
+      which has a method to open the product details page for a given product.
+      Create a product.py file and implement the ProductPage class as shown below:
+      
+      from base import BasePage
+      from base import InvalidPageException
+      
+      class ProductPage(BasePage):
+         _product_view_locator = 'div.product-view'
+         _product_name_locator = 'div.product-name span'
+         _product_description_locator = 'div.tab-content div.std'
+         _product_stock_status_locator = 'p.availability span.value'
+         _product_price_locator = 'span.price'
+         
+         def __init__(self,driver):
+             super(ProductPage,self).__init__(driver)
+             
+             @property
+             def name(self):\
+                 return self.driver.\
+                     find_element_by_css_selector
+                       (self._product_name_locator)\
+                       .text.strip()
+                       
+             @property
+             def description(self):
+                 return self.driver.\
+                     find_element_by_css_selector
+                       (self._product_description_locator)\
+                     .text.strip()
+                     
+             @property
+             def stock_status(self):
+                 return self.driver.\
+                     find_element_by_css_selector
+                       (self._product_stock_status_locator)\
+                     .text.strip()
+                     
+             @property
+             def price(self):
+                 return self.driver.\
+                     find_element_by_css_selector
+                        (self._product_price_locator)\
+                     .text.strip()
+                     
+             def validate_page(self,driver):
+                 try:
+                     driver.find_element_by_css_selector
+                      (self._product_view_locator)
+                 except:
+                     raise InvalidPageException
+                      ('Product page not loaded')
+   
+   Creating a test with page objects
+   
+   We need to create a test that uses baseTestCase and calls the page objects that we created to test the search feature of the application.
+   
+   
+   import unittest
+   from homepage import HomePage
+   from BaseTestCase import BaseTestCase
+   
+   class SearchProductTest(BaseTestCase):
+       def testSearchForProduct(self):
+           homepage = HomePage(self.driver)
+           search_results = homepage.search.searchFor('earphones')
+           self.assertEqual(2,search_results.product_count)
+           product = search_results.open_product_page('Johnson earbuds')
+           self.assertEqual('Madison Earbuds','product.name)
+           self.assertEqual('$35.00',product.price)
+           self.assertEqual('IN STOCK',product.stock_status)
+           
+    if __name__ == '__main__':
+       unittest.main(verbosity=2)
+       
+       We did not write the setUp() and the tearDown() methods in this test. We inherited this test class from baseTestCase which implements these methods.
+       We could overload these methods if we want to do test specific setup or clean up.
+            
+            
+          
            
            
        
