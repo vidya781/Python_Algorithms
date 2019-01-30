@@ -1,0 +1,32 @@
+In Selenium Webdriver, we can perform the drag-and-drop operation by calling the drag_and_drop() method of the ActionChains class.
+This method requires the source element that will be dragged, and the target element where the source element will be dropped.
+
+Following is the code for the same:
+
+from selenium import webdriver
+from selenium.webdriver.common.action_chains import ActionChains
+import unittest
+
+class DragAndDropTest(unittest.TestCase):
+    URL = "http://jqueryui.com/resources/demos/droppable/default.html"
+    
+    def setUp(self):
+        self.driver = webdriver.Firefox()
+        self.driver.get(self.URL)
+        self.driver.maximize_window(15)
+        self.driver.maximize_window()
+        
+    def test_drag_and_drop(self):
+        driver = self.driver
+        
+        source = driver.find_elementt_by_id("draggable")
+        target = driver.find_element_by_id("droppable")
+        
+        ActionChains(self.driver).drag_and_drop(source,target).perform()
+        self.assertEqual("Dropped!",target.text)
+        
+    def tearDown(self):
+        self.driver.close()
+        
+   if __name__ == "__main__":
+       unittest.main(verbosity=2)
