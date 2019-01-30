@@ -1,0 +1,87 @@
+Consider the page objects pattern which is a hihly used pattern amongst th Selenium User Community to structure the tests making them separate from low level actions
+and providing a higher level of abstraction. This pattern is oftn compared to the facade pattern which enables creating a simplified interface for complex code.
+
+The POP offers creating an object representing each web page from the application under test.We can define classes for each page, modelling all attributes and actions for that page. 
+This creates a layer of separation between the test code and technical implementation of pages and application functionality that we will be testing, by hiding the locators and other
+low level methods dealing with the elements, and business functionality. Instead, the page objects will provide a high level API for tests to deal with the page functionality.
+
+Tests shoud use these page objects at a high level, where any change in attributes or actions in the underlying page should not really break the test.
+
+Following are the benefits:
+
+1) Create a high-level abstraction that helps to minimize changes when the underlying page is modified by developers. Only the page object need be changed in this case and the calling tests will be unaffected.
+2) Create reusable code that can be shared across multiple test cases
+3) Tests are more readable,flexible and maintainable.
+
+We implement a BaseTestCase class which will provide us with SetUp() and tearDown() methods so that we do not need to write these for each test class we  create.
+Creating a basetestcase.py
+
+import unittest
+from selenium import webdriver
+
+class BaseTestCase(unittest.TestCase):
+    def setUp(self):
+        #create a new FF session
+        self.driver = webdriver.Firefox()
+        self.driver. implicitly_wait(15)
+        self.driver.maximize_window()
+        
+        # navigae to application homepage
+        self.driver.get('http://demo.magentocommerce.com/')
+        
+    def tearDown(self):
+        #close the browser window
+        self.driver.quit()
+        
+    The BasePage object
+    
+    The BasePage object will act as a parent object for all the page objects that one creates in the test suite. The base page provide 
+    common code that the page object can use. 
+    
+    from abc import abstractmethod
+    class BasePage(object):
+        """ All page objects inherit from this"""
+        
+        def __init__(self,driver):
+            self._validate_page(driver)
+            self.driver = driver
+            
+        @abstractmethod
+        def _validate_page(self,driver): # will be implemented by the page objects inheriting from BasePage to validate that the page they represent is loaded in the browser
+                                           before the test can use attributes or actions.
+            return
+            
+        """Regions define functionality available through all page objects"""
+        @property
+        def search(self):
+            from search import SearchRegion
+            return SearchRegion(self.driver)
+            
+     class InvalidPageException(Exception):
+         """Throw this exception when you do not find the correct page """
+         pass
+         
+   Implementing page objects:
+   
+   from base import BasePage
+   from base import InvalidPageException
+   
+   class HomePage(BasePage):
+       _home_page_slideshow_locaotor = 'div.slideshow-container'
+       def __init__(self,driver):
+           super(HomePage,self).__init__(driver)
+       def _validate_page(self,driver):
+           try:
+               driver.find_element_by_class_name
+                 (self.__home_page_slideshow_locator)
+           except:
+               raise InvalidPageException
+                   ("Home Page Not Loaded")
+                   
+  Now implementing the SearchRegion class which handles the search feature of the application. Provides the searchFor() method. Creates a new search.py and 
+  implement the following code.
+  
+  from base 
+           
+           
+       
