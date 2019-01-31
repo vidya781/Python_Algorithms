@@ -1,0 +1,277 @@
+This was an interview question of a Python interview for a banking client.
+
+1.	Provide working source code that will:-
+    a.	For a given ticker, 
+    i.	calculate the dividend yield
+   ii.	calculate the P/E Ratio
+  iii.	record a trade, with timestamp, quantity of shares, buy or sell indicator and price
+   iv.	Calculate Volume Weighted Average Price based on trades recorded in past 15 minutes
+    b.	Calculate the GBCE All Share Index using the geometric mean of prices for all stocks\
+    
+    Table1. Sample data from the Global Beverage Corporation Exchange
+
+Ticker	Type	Price	Last Dividend	Fixed Dividend	Par Value	
+TEA	Common	101	0		100	
+POP	Common	93	8		100	
+ALE	Common	281	23		60	
+GIN	Preferred	78	8	2%	100	
+JOE	Common	167	13		250	
+All number values in pennies
+Table 2. Formula
+	Common	Preferred
+Dividend Yield	(Last Dividend)/Price	(Fixed Dividend .Par Value)/Price
+P/E Ratio	Price/Dividend
+Geometric Mean	√(n&p_1 p_2 p_3…p_n )
+Volume Weighted Average Price	(∑_i▒〖〖Price〗_i×〖Quantity〗_i 〗)/(∑_i▒〖Quantity〗_i )
+
+
+
+last_dividend_CS = {'ALE':23,'JOE':13,'TEA':0,'POP':8}                        # a dictionary to hold the values of dividend of common stocks
+DIVCS = list(last_dividend_CS.values())                                       # storing the values of the dictionary in a list
+
+last_dividend_PS = {'GIN':8}                                                  # a dictionary to hold the value of dividend of preferred stock
+DIVPS = list(last_dividend_PS.values())                                       # storing the values in a list -Preferred stock
+
+price_common_stocks = {'ALE':281,'JOE':167,'TEA':101,'POP':93}                # a dictionary to hold the values of the price
+PRICE_CS = list(price_common_stocks.values())                                 # a list to hold the price of common stocks
+
+price_preferred_stock = {'GIN':78}                                            # dictionary to hold the value of preferred stock, can be appended if required
+PRICE_PS = list(price_preferred_stock.values())                               # a list to hold price of preferred stock       
+
+
+div_values_CS = last_dividend_CS.values()                                     # obtain the values of the last dividends from dict for further calculations
+div_values_PS = last_dividend_PS.values()                                     # obtain the value of last dividend of preferred stock from dict for further calculation 
+
+price_CS = price_common_stocks.values()                                       # obtain the prices of common stocks from the dictionary for further calculation
+price_PS = price_preferred_stock.values()                                     # obtain the values of preferred stock from the dictionary for further calculation
+
+par_value_CS = {'ALE':100,'JOE':250,'TEA':100,'POP':100}                      # storing par values in a dictionary
+PV_CS = par_value_CS.values()                                                 # obtain the values from par value common stock dictionary
+
+par_value_PS = {'GIN':100}                                                    # only 1 preferred stock whose value is stored
+PV_PS = par_value_PS.values()                                                 # obtain the value for par value stock
+
+
+fixed_dividend_PS = 2                                                         # storing the fixed dividend value in a variable
+PVPS = 100                                                                    # storing the par value (preferred stock) in a variable
+pricePS = 78                                                                  # storing the price of preferred stock in a variable, it eases the simplicity of calculation
+divPS = 8                                                                     # storing the dividend value of preferred stock
+
+PRICES = PRICE_CS + PRICE_PS                                                  # creating a concatenated list that contains all the prices
+
+
+                                                                             # Assumed number of shares for each type, defined as Transaction 1,2,3,4,5
+                                                                             # the share numbers can be altered as per the transaction time frame
+
+Ale_shares = 15
+Joe_shares = 25
+Tea_shares = 5
+Pop_shares = 5
+
+Gin_shares = 20                                                             # preferred stock shares listed separately
+
+
+TotalShares = Ale_shares + Joe_shares + Tea_shares + Pop_shares + Gin_shares                    # a variable to hold the total number of shares
+
+TotalValue = Ale_shares*PRICE_CS[0] + Joe_shares*PRICE_CS[1] + Tea_shares*PRICE_CS[2] + Pop_shares*PRICE_CS[3] + Gin_shares*PRICE_PS[0]   # a variable to hold the TotalValue
+
+
+# Functions defined below in order of the questions asked
+
+def dividendyieldPS(PVPS,fixed_dividend_PS,pricePS):
+    divyieldPS = float(PVPS*fixed_dividend_PS)/pricePS
+    return divyieldPS                                                        # defining a function for calculating dividend yield-preferred stock
+
+def PEratioPS(pricePS,divPS): return float(pricePS)/(divPS)                  # defining a function for calculating the P/E ratio of preferred stock
+
+def dividendyieldCS(div_values_CS,price_CS):                                 # defining a function for calculating dividend yield values of common stock
+    divyield = [float(div_CS)/(price_CS) for div_CS,price_CS in zip(div_values_CS,price_CS)]
+    return divyield
+
+def PEratioCS(PRICE_CS,DIVCS):
+    ratio = [float(PriceCS)/(divCS) if divCS != 0 else 0 for PriceCS,divCS in zip(PRICE_CS,DIVCS)]   # defining a function for calculating P/E ratio with allowance for
+    return ratio                                                                                     # division by 0 , replacing the error by 0
+
+def GBSEindex(PRICES):                                                       # defining a function for calculating the Geometric Mean 
+    product = 1
+    for item in PRICES:
+        product *= item
+    return product ** (1.0/len(PRICES))
+
+def VWAP(TotalShares,TotalValue): return float(TotalValue/TotalShares)      # a function for calculating VWAP
+    
+    
+
+import time
+from datetime import datetime
+from time import mktime
+ 
+def Sell():
+    
+    #Trade Rules:
+    #Buy every time you are not invested and stock price drops.
+    #sell every time the stock price is more than .2% higher than when you bought. (.002)
+    investmentAmount = 50000                              # assumption of initial investment amount        
+    tradeComm = 7                                         # arbitrary value
+    stance = 'none'
+    buyPrice = 0
+    sellPrice = 0
+    previousPrice = 0
+    totalProfit = 0
+    tradeCount = 0
+    startingPrice = 0
+    startingTime = 0
+    endingTime = 0
+    totalInvestedTime = 0
+    overallStartingTime = 0
+    overallEndingTime = 0
+    bigDataFile = open(‘DATA.txt’,‘r’)                      # assuming the stock data is stored in a file called DATA.txt
+    readFile = bigDataFile.read()
+    lineSplit = readFile.split(‘\n’)
+    for everyLine in lineSplit:
+        
+        dividedLine = everyLine.split(‘,’)
+        stockName = dividedLine[0].split(‘.’)[1] initialDate = dividedLine[2]+dividedLine[3] unixStamp = mktime(datetime.strptime(initialDate, ‘%Y%m%d%H%M%S’).timetuple())
+        dateStamp = time.strftime(‘%m/%d/%Y %H:%M:%S’,time.localtime(unixStamp))
+        stockPrice = float(dividedLine[4])
+        reformatted = unixStamp,dateStamp,stockName,stockPrice
+
+        
+        if stance == ‘none’:
+             if stockPrice < previousPrice:
+                 
+                print ‘buy triggered!’
+                buyPrice = stockPrice
+                print ‘bought stock for’,buyPrice
+                stance = ‘holding’
+
+                
+                startingTime = unixStamp
+                if tradeCount == 0:
+                    startingPrice = buyPrice
+                                     
+                    overallStartingTime = unixStamp
+                    
+                tradeCount += 1
+         elif stance == ‘holding’:
+             
+              if stockPrice > buyPrice * .002 + buyPrice:
+              print ‘sell triggered!’
+              sellPrice = stockPrice
+              print ‘finished trade, sold for:’,sellPrice
+              stance = ‘none’
+              tradeProfit = sellPrice – buyPrice
+              totalProfit += tradeProfit
+              print totalProfit
+              endingTime = unixStamp
+              timeInvested = endingTime – startingTime
+              totalInvestedTime += timeInvested
+              overallEndingTime = endingTime
+              tradeCount += 1
+              
+    previousPrice = stockPrice
+    
+    print ‘Trading Complete.’
+    
+    print ‘Profit Per Stock:’, totalProfit
+    
+    print ‘Trade Count:’, tradeCount
+    
+    grossPercProf = totalProfit/startingPrice * 100
+    
+    print ‘Gross % Profit:’, grossPercProf
+    print ‘How much gross profit did we make off of our’,investmentAmount,‘investment:’
+    
+    grossProf = investmentAmount/startingPrice*totalProfit
+    
+    print ‘we made:’, grossProf
+    
+    tradeCommsTotal = tradeComm * tradeCount
+    
+    print ‘amount paid in commissions:’,tradeCommsTotal
+    
+    netProf = grossProf-tradeCommsTotal
+    
+    print ‘profit after commissions:’,netProf
+    
+    netPercentProf = netProf/investmentAmount * 100
+    
+    print ‘net percent profit after comms:’,netPercentProf
+    
+    averageInvestedTimeHours = totalInvestedTime/tradeCount/3600
+    
+    print ‘average holding length in hours:’, averageInvestedTimeHours
+    
+    overallTime = overallEndingTime – overallStartingTime
+    
+    percentageInvested = totalInvestedTime/overallTime * 100
+    
+    print ‘cumulative amount of time holding in days: ‘,overallTime/86400
+    
+    print ‘Percentage of the time invested:’,percentageInvested
+ 
+sell()
+ 
+
+import time
+from datetime import datetime
+from time import mktime
+
+TickDataFile = open(‘DATA.txt’,‘r’)            # Assumes there is a DATA.txt file which is present on the user's system
+                                               #opens the file, reads it into memory
+
+readFile = bigDataFile.read()
+
+#step 1:
+#The first thing to do, is split the file. If we read it now, the file
+#will read line 1\nline2\nline3 …and so on.
+#This will now split lines into a similar format that we see in the file
+#and also gives us a way to reference each line as its own entity
+
+lineSplit = readFile.split(‘\n’)
+
+#now we need to begin formatting. Since we’ve split
+#line by line, we now need to begin by referencing each line
+#to do this, we use a ‘for’ loop.
+
+#this creates an array of data
+#This makes stock name [0], date [2],[3], and price is [4]
+
+dividedLine = everyLine.split(‘,’)
+
+#with the array made assign the values to variables
+
+stockName = dividedLine[0].split(‘.’)[1]
+
+ #this pulls the date information
+
+initialDate = dividedLine[2]+dividedLine[3] unixStamp = mktime(datetime.strptime(initialDate, ‘%Y%m%d%H%M%S’).timetuple())
+dateStamp = time.strftime(‘%m/%d/%Y %H:%M:%S’,time.localtime(unixStamp))
+
+#assigns the price data to a variable.
+
+stockPrice = dividedLine[4]
+
+#original printout:
+#reformatted = stockName,initialDate,stockPrice
+
+reformatted = unixStamp,dateStamp,stockName,stockPrice
+saveFormat = str(reformatted).replace(‘\”,”).replace(‘(‘,”).replace(‘)’,”)
+
+#print saveFormat
+#print reformatted
+
+appendFile = open(‘exampleprint.txt’,‘a’)              # opens a file called exampleprint.txt and appends it to the data
+appendFile.write(saveFormat)
+appendFile.write(‘\n’)
+
+#appendFile.write(reformatted)
+
+appendFile.close()
+
+ 
+
+
+
+
+
