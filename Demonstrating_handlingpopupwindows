@@ -1,0 +1,40 @@
+The objective of this program is to test pop up windows , identifying a pop-up window by its name attribute or a window handle, switching 
+the driver context to the desired pop-up window and then executing teh steps on the pop up window and finally switching back to the parent window.
+
+When one creates an instance of the browser from our tests, it is a parent window and any subsequent windows that are created from the parent window are called
+child windows or pop-up windows.
+
+We can work with any child window as long as it belongs to the current web driver context.
+
+The following code demonstrates how:
+
+from selenium import webdriver
+import unittest
+
+class PopupWindowTest(unittest.TestCase):
+
+    URL = "https://google.com"  # dummy URL only. You should pick up with amy tabs so that you see this in action
+    
+    def setUp(self):
+        self.driver = webdriver.Firefox()
+        self.driver.get(self.URL)
+        self.driver.maximize_window()
+        
+    def test_window_popup(self):
+        driver = self.driver
+        
+        # save the WindowHandle of Parent Browser Window
+        parent_window_id = driver.current_window_handle
+        
+        # clicking Help button will open the Help page in a new Popup Browser Window
+        help_button = drivr.find_element_by_id("helpbutton")
+        help_button.click()
+        driver.swtch_to.window("HelpWindow")
+        driver.close()
+        driver.switch_to.window(parent_window_id)
+        
+    def tearDown(self):
+        self.driver.close()
+        
+  if __name__ == "__main__":
+      unittest.main(verbosity=2)
