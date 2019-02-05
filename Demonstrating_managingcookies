@@ -1,0 +1,54 @@
+What are cookies?
+
+Cookies are important for any web applications to store information on the user's computer for a better user experience. Cookies are used
+to store user preferences, login information, and various other details of the client.
+
+The Selenium Web driver API provides various methods to manage these cookies during testing. One can read cookie values, add cookies and delete cookies during the test. This can be used to test how the application reacts when the cookies are manipulated.
+
+The following are the methods to manage cookies:
+
+1) add_cookie(cookie_dict)--- method adds a cookie to the current session
+2) delete_all_cookies()----method deletes all the cookies from the current session
+3) delete_cookie(name)----method deletes a single cookie with the specified name
+4) get_cookie(name)---method gets a single cookie by the name and returns the dictionary for the cookie if found, none, if not found
+5) get_cookies()---This method gets a set of dictionaries corresponding to cookies from the current session
+
+import unittest
+from selenium import webdriver
+from selenium.webdriver.support.ui import Select
+
+class CookiesTestTest(unittest.TestCase):
+    def setUp(self):
+        # create a new Firefox session
+        self.driver = webdriver.Firefox()
+        self.driver.implicitly_wait(15)
+        self.driver.maximize_window()
+        
+        # navigate to the application home page
+        self.driver.get("http://demo.magentocommerce.com/")
+        
+    def test_store_cookie(self):
+        driver = self.driver
+        # get the Your languafge dropdown as instance of Select class
+        select_language = Select(self.driver.find_element_by_id("select-language"))
+        # check default selected option is English
+        self.assertEqual("English",select_language.first_selected_option.text)
+        # store cookies should be none
+        store_cookie = driver.get_cookie("store")
+        self.assertEqual(None, store_cookie)
+        
+        # select an option using select_by_visible text
+        select_langauge.select_by_visible_text("French")
+        
+        # store cookie should be populated with selected country
+        store_cookie = driver.get_cookie("store")['value']
+        self.assertEqual("freench",store_cookie)
+        
+    def tearDown(self):
+        #close the browser window
+        self.driver.quit()
+        
+    if __name__ == '__main__':
+        unittest.main(verbosity=2)
+        
+        
