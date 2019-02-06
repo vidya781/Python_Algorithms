@@ -1,4 +1,4 @@
-When we need to go in for statistical properties like correlation or covariance it is obvious that these are computer from pairs of arguments.
+When we need to go in for statistical properties like correlation or covariance it is obvious that these are computed from pairs of arguments.
 
 Consider some DataFrames of stock prices and volumes obtained from Yahoo! finance using the add-on pandas-datareader package.
 
