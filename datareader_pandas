@@ -27,3 +27,14 @@ returns['MSFT'].cov(returns['IBM'])
 DataFrame's corr and cov methods return a full correlation or covariance matrix as a DataFrame 
 
 returns.corr()
+
+returns.cov()
+
+Using DataFrame's corrwith method, one can compute pairwise correlations between a DataFrame's columns or rows with another Series or DataFrame. Passing a Series returns
+a Series with the correlation value computed for each column
+
+returns.corrwith(returns.IBM)
+
+returns.corrwith(volume)
+
+Passing axis = 'columns' does things ro-by-row instead. In all cases, data points are aligned by label before the correlation is computed.
