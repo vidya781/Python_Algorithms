@@ -1,0 +1,36 @@
+It is not uncommon to find many websites that have public APIs providing data feeds via JSON or some other format.
+There are a couple of methods to access these API's from Python.
+
+To find the last 30 Github issues for pandas on GitHub, one can make a GET HTTP request using the add-on requests library
+
+import requests
+
+url = 'https://api.github.com/repos/pandas-dev/pandas/issues'
+
+resp = requests.get(url)
+data = resp.json()
+data[0]['title']
+issues = pd.DataFrame(data,columns=['number','title','labels','state'])
+issues
+
+Reading MS Excel files
+----------------------
+----------------------
+
+Pandas supports reading tabular data stored in Excel 2003 ( and higher) files using either the ExcelFile class or pandas.read_excel function.
+Internally these tools use the add-on packages xlrd and openpyxl to read XLS and XLSX files respectively. Its possible to instakll these using pip or conda.
+
+xlsx = pd.ExcelFile('examples/ex1.slsx')
+pd.read_excel(xlsx,'Sheet1')
+frame = pd.read_excel('examples/ex1.xlsx','Sheet1')
+frame
+
+In order to write pandas data to Excel format, one must first create an ExcelWriter, then write data to it using pandas objects to_excel method
+
+writer = pd.ExcelWriter('examples/ex2.xlsx')
+frame.to_excel(writer,'Sheet1')
+writer.save()
+
+Bypass the Excelwriter thus:
+
+frame.to_excel('examples/ex2.xlsx')
