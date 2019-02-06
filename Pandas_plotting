@@ -1,0 +1,16 @@
+The objective of this script is to show some select methods of the Pandas library and exploring the potential of this library.
+We do a visualization of 2014 World Power consumption data.
+
+import plotly.graph_obs as go
+from plotly.offline import init_notebook
+init_notebook_mode(connected = True)
+
+import pandas as pd
+df = pd.read_csv('2014_World_power_consumption')
+data = dict(type = 'chloropath',locations = df['Country'],locations = df['Country'],locationmode = 'country names')
+z = df['Power Consumption KWH']
+text = df['Country'],colorbar = {'title':'Power consumption KWH'}
+layout = dict(title = '2014 Power Consumption',geo = dict(showFrame = False)
+projection = {'type: 'Mercator'})
+chloromap = go.Figure(data = [data],layout = layout)
+iplot(chlormap,validate=False)
