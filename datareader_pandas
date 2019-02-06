@@ -1,0 +1,29 @@
+When we need to go in for statistical properties like correlation or covariance it is obvious that these are computer from pairs of arguments.
+
+Consider some DataFrames of stock prices and volumes obtained from Yahoo! finance using the add-on pandas-datareader package.
+
+Install the datareader by conda or pip:
+pip install pandas-datareader
+
+We use the pandas_datareader module to download some data for a few stock tickers:
+
+import pandas_datareader.data as web
+all_data = {ticker: web.get_data_yahoo(ticker) for ticker in ['AAPL','IBM','MSFT','GOOG']}
+price = pd.DataFrame({ticker:data['Adj Close'] for ticker,data in all_data.items()}))
+volume = pd.DataFrame({ticker:data['Volume'] for ticker,data in all_data.items()})
+
+Now one can compute percent changes of the prices, a time series operation
+
+returns = price.pct_change()
+returns.tail()
+
+The corr method of Series computes the correlation of the overlapping, non-NA ( meaning having a definite value) , aligned-by-index values in two Series.
+Relatedly,cov computes the covariance.
+
+returns['MSFT'].corr(returns['IBM'])  # returns.MSFT.corr(returns.IBM)
+
+returns['MSFT'].cov(returns['IBM'])
+
+DataFrame's corr and cov methods return a full correlation or covariance matrix as a DataFrame 
+
+returns.corr()
