@@ -1,0 +1,40 @@
+The purpose of this script is to demonstrate how one can implement the built in range function via methods. It also introduces
+the reader to sound programming practices by incorporating doc strings.
+
+
+class Range:
+    """A class that mimic's the built-in rangle class."""
+    
+    def __init__(self,start,stop=None,step=1):
+        """Initialize a Range instance.
+        
+        Semantics is similar to the built-in range class.
+        """
+        if step == 0:                        
+            raise ValueError("step cannot be 0')
+            
+        if stop is None:                      # special case of range(n), should be trated as if range(0,n)
+            start,stop = 0,start
+            
+        # calculate the effective length once
+        self._length = max(0,(stop-start + step-1)//step)
+        
+        #need knowledge of start and step ( but not stop) to support __getitem__
+        self.__start = start
+        self.__step = step
+        
+     def __len__(self):
+        """return number of entries in the range."""
+        return self.__length
+        
+     def __getitem__(self,k):
+         """return entry at index k (using standard interpretation if negative).""""
+         if k < 0:
+            k += len(self)    # attempt to convert negative index
+            
+         if not 0 <=k < self._length:
+             raise IndexError('Index out of range')
+             
+          return self._start + k * self._step
+          
+          
