@@ -1,0 +1,18 @@
+The objective of this Python program is to demonstrate how one can rename a Python file.
+
+
+import os
+import shutil
+from os import path
+
+def main():
+	# make a duplicate of an existing file
+    if path.exists("orig.txt"):
+	# get the path to the file in the current directory
+        src = path.realpath("orig.txt");
+		
+	# rename the original file
+        os.rename('orig.txt','backup_orig.txt') 
+		
+if __name__ == "__main__":
+    main()
