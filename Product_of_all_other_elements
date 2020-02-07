@@ -1,0 +1,50 @@
+Given an array of integers, return a new array such that each element at index i of the new array is the product of all the 
+numbers in the origina array except the one at i
+
+For example : if the input was [1,2,3,4,5] then the expected output would be [120,60,40,30,24] 
+
+Approach / Idea :
+
+Lets impose the constraint that we cant use division. If that was the case then we simply take the product and divide the product 
+by the number at the index.
+
+So in order to take the alternative route of finding the number at each of the index position , we rely on the technique of
+precomputing results from subarrays and building up a solution from the results.
+
+Compute the product of all numbers before i and the product of all numbers after i.
+Efficiently calculate tehse two and then multiply them to get the desired product.
+
+Prefix and Postfix products.
+
+def products(num_list):
+    pp = []   # pp standing for prefix products
+    
+    for num in num_list:
+        if pp:
+            pp.append(pp[-1] * num )
+        else:
+            pp.append(num_list)
+    
+    sp = [] # standing for suffix products
+    for num in reversed(num_list):
+        if sp:
+            sp.append(sp[-1] * num)
+        else:
+            sp.append(num)
+     sp = list(reversed(sp))
+     
+     # Generate result from products of pp and sp
+     result = []
+     for i in range(len(num_list)):
+         if i == 0:
+             result.append(sp[-1] + 1)
+         elif i == len(nums_list) - 1:
+             result.append(pp[i-1])
+         else:
+             result.append(pp[i-1] * sp[i + 1])
+     return result
+     
+     
+ O(n) time and space, since iterating over the input takes O(n) time and the prefix and suffix arrays take O(n) space.
+ 
+ 
