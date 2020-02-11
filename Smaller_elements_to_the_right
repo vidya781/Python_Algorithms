@@ -28,7 +28,7 @@ One possible approach is this:
 2) Maintain a sorted list seen of the elements we have seen so far
 3) Look at seen to see where the current element would fit in
 
-The indiex will be how many elements on teh right are smaller
+The index will be how many elements on the right are smaller
 
 import bisect
 
@@ -39,7 +39,7 @@ def smaller_counts(orig_list):
     for num in reversed(orig_list):
         i = bisect.bisect_left(seen,num)
         result.append(i)
-        bisect.insort(seem, num)
+        bisect.insort(seen, num)
         
     return list(reversed(result))
     
