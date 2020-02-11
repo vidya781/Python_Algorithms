@@ -1,0 +1,46 @@
+Given an array of integers, return a new array where each element in the new array is the number of smaller elements to the right
+of that element in the original input array.
+
+For example, given array [3,4,9,6,1] return [1,1,2,1,0] since:
+
+There is 1 smaller element to the right of 3
+There is 1 smaller element to the right of 4
+There are 2 smaller elements to the right of 9
+There is 1 smaller element to the right of 6
+There are no smaller elements to the right of 1
+
+Solution:
+
+A naive solution - Create a new array and for each element count all the smaller elements to the right of it.
+
+def smaller_counts_naive(orig_list):
+    result = []
+    for i, num in enumerate(orig_list):
+        count = sum(val < num for val in orig_list[i + 1:])
+        result.append(count)
+    return result
+
+This takes O(n^2) time. Can we attempt doing this any faster?
+
+One possible approach is this:
+
+1) Iterate backwards over the input list
+2) Maintain a sorted list seen of the elements we have seen so far
+3) Look at seen to see where the current element would fit in
+
+The indiex will be how many elements on teh right are smaller
+
+import bisect
+
+def smaller_counts(orig_list):
+    result = []
+    seen = []
+    
+    for num in reversed(orig_list):
+        i = bisect.bisect_left(seen,num)
+        result.append(i)
+        bisect.insort(seem, num)
+        
+    return list(reversed(result))
+    
+ O(nlogn) time and O(n) space
