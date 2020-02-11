@@ -1,0 +1,69 @@
+Given a list of words find all pairs of unique indices such that the concatenation of the two words is a palindrome.
+
+Given the list ["code","edoc","da","d"] , return [(0,1),(1,0),(2,3)]
+
+Solution:
+
+We take a closer look at substrings that yield a significant improvement in efficiency.
+
+An algorithm we can try is to check each possible word pair for palindromicity and add the indices to the result.
+
+def is_palindrome(word):
+    return word == word[::-1]
+    
+def palindrome_pairs(words):
+    result = [ ]
+    
+    for i, word1 in enumerate(words):
+        for j, word2 in enumerate(words):
+            if i == j:
+                continue
+            if is_palindrome(word1 + word2):
+               result.append((i,j))
+     return result
+     
+O(n^2xc) time, where n is the number of words and c is the length of the longest word.
+
+To speed up the process, we can insert all words into a dictionary and then check the dictionary for each word's prefixes
+and suffixes.
+
+Our dictionary will map each word to its index in the list. If the reverse if a word's prefix/suffix is in the dictionary and its corresponding
+suffix/prefix is palindromic we add to list of results.
+
+For example, lets say we  are looking at the word aabc and we check the following prefixes:
+
+1) Since "" is a palindrome, we look for cbaa in the dictionary. If we want to find it, then we make cbaaaabc
+
+2) Since a is a palindrome, we look for cba in the dictionary and if we find it, then we make it cbaaabc
+
+3) Since aa is a palindrome we look for cb in the dictionary and if we find it we can make it cbaabc
+
+4) Since aab and aabc are not plaindromes, we leave it as it is.
+
+def is_palindrome(word):
+    return word == word[::-1]
+    
+def palindrome_pairs(words):
+    d = { }
+    for i, word in enumerate(words):
+        d[word] = i
+        
+    result = []
+    
+    for i,word in enumerate(words):
+        for char_i in range(len(word)):
+            prefix,suffix = word[:char_i],word[char_i:]
+            reversed_prefix = prefix[::-1]
+            reversed_suffix = suffix[::-1]
+            
+            if(is_palindrome(suffix) and reversed_prefix in d):
+                if i != d[reversed_prefix]:
+                    result.append((i,d[reversed_prefix]))
+            if(is_palindrome(prefix) and reversed_suffix in d):
+                 if i != d[reversed_suffix]:
+                    result.append((d[reversed_suffix],i))
+     return result
+     
+ O(n x c^2) . Sine we will likely be constrained more by the number of words than the number of characters this seems like a significant
+ improvement.
+            
