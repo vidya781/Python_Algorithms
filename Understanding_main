@@ -1,0 +1,52 @@
+One concept that might elude some is 'main' keyword in Python programs. When is it needed and why?
+
+Defining the main function is a necessity to start the execution of the program as it gets executed only when the program is 
+run directly and not executed when imported as a module.
+
+Now lets dig deeper into the main function:
+
+In Python, it is not necessary to define or write a main function every time we write a program. The Python functions execute 
+from the top down unless a specific function is defined.
+
+We write something called a basic Python main():
+
+def main():
+    print("Hello, World!")
+    if __name__== "__main__" :
+main()
+
+It is simple to understand the dynamics of the program. There is a function called main().A conditional 'if' follows that checks 
+the value of __main__ , and compares it to the string "__main__" . On evaluation to True, it executes main().Now, on execution, it 
+prints "Hello,World!"
+
+Execution Modes
+
+There are two main ways by which one can tell the Python interpreter to execute the code:
+a) Execute the Python code directly as a script ( most common way)
+b) By importing the necessary code from one Python file to another ( from X import Y_function )
+
+Whatever the mode of execution, Python defines a special variable called __name__ that contains a string.The value of the string
+depends on how the code is being executed.
+
+Sometimes we may need access to functions defined in some other file ( while importing ) and this differs from the function defined
+in the original module itself which for example could be called original.py
+
+To aid in this distinction, Python has a special built in variable called __name__.This variable gets assigned the string "__main__"
+depending on how one runs or executes the script.
+
+If one is running the script directly, Python assigns "__main__" to __name__, ie __name__= "__main__"  ( This will not be exposed 
+to the user as it happens in the background)
+
+As a result, one ends up writing the conditional statements as follows:
+
+if __name__ == "__main__":
+    Logic statements
+    
+Hence if the conditional statement evaluates to True, it means the .py (Python file) is being run or executed directly.
+
+It is important to understand that if one runs something on the Python shell or terminal, this conditional statement, by default,
+happens to be true.
+
+As a result, Python Programmers normally write all their code and add this main line towards the end to better organize their code.
+
+So the __name__ variable helps to check if the file is being run directly or if it has been imported.
