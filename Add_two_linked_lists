@@ -1,0 +1,44 @@
+Consider a linked list 
+
+1--->2--->3---->4--->5
+
+ This number is 54321
+ 
+ What the above illustration represents is this:
+ 
+ We can represent an integer in a linked list format by having each node represent a digit in the number. The nodes are connected
+ in reverse order, such that the number formed is 54321.
+ 
+ The goal is to develop a program that returns the sum.
+ 
+  9--->9
+  5--->2
+  
+  One should return 124 (99 + 25) as 4--->2-->1
+  
+  Solution:
+  
+  Iterating through the linked list is vital in this. However there is a caveat-add the least significant digits with a carry.
+  Start at the head of the two nodes, and compute the sum of both values modulo 10. We note this and move two nodes up and add a carry
+  if the sum was greater than 10. 
+  
+  The key is to find the terminating condition. We can see that this happens when there is no more cary and the two linked lists have
+  reached the very end. Once this happens, what we can do is to extend the nodes one more until they are both None and carry is 0
+  and then return None.
+  
+  def add(node0,node1,carry = 0):
+      if not node0 and not node1 and not carry:
+          return None
+      
+      node0_val = node0.data if node0 else 0
+      node1_val = node1.data if node1 else 0
+      total = node0_val + node1_val + carry
+      
+      node0_next = node0.next if node0 else None
+      node1_next = node1.next if node1 else None
+      carry_next = 1 if total >= 10 else 0
+      
+      return None(total % 10, add(node0_next, node1_next, carry_next))
+      
+    Thus we now have a generic method wherein we can tackle such problems and we run this in O(m+n) time where m and n
+    are the lengths of the two linked lists.
