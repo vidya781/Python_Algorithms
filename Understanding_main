@@ -50,3 +50,43 @@ happens to be true.
 As a result, Python Programmers normally write all their code and add this main line towards the end to better organize their code.
 
 So the __name__ variable helps to check if the file is being run directly or if it has been imported.
+
+It is instructive to consider the following example:
+
+# File1.py 
+	
+print("File1 __name__ = %s" %__name__) 
+	
+if __name__ == "__main__": 
+	print("File1 is being run directly") 
+else: 
+	print("File1 is being imported") 
+
+The output of this is :
+
+File1 __name__ = __main__
+File1 is being run directly
+
+Now, when the File1.py is imported into File2.py, the value of __name__ changes.
+
+# File2.py 
+	
+import File1 
+	
+print("File2 __name__ = %s" %__name__) 
+	
+if __name__ == "__main__": 
+	print("File2 is being run directly") 
+else: 
+	print("File2 is being imported") 
+
+Now the output of this program is :
+
+File1 __name__ = File1
+File1 is being imported
+File2 __name__ = __main__
+File2 is being run directly
+
+When File1.py is run directly, the interpreter sets the __name__ variable as __main__ and when it is run through File2.py 
+by importing, the __name__ variable is set as the name of the Python script ie File1.Thus it can be said that if __name__ == "__main__" 
+is the part of the program that runs when the script is run from the command line like Python File1.py
