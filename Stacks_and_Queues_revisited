@@ -1,0 +1,56 @@
+When there is a need to frequently add and remove items from a list, stacks and queues are two data structures that we 
+immediately consider.
+
+To really understand how a stack works, one can think of a stack of trays. Adding a new one to the top, and removing the top one can be done 
+quickly.However, difficult to change trays from the middle. Concept LIFO ( last in first out )
+
+class Stack:
+    def __init__(self):
+        self.stack = []
+        
+    def push(self,x):
+        self.stack.append(x) # add an item to the stack
+        
+    def pop(self):
+        return self.stack.pop()  # Remove and return the top element
+        
+    def peek(self):
+        return self.stack[-1]
+        
+ A pop operation on an empty stack will result in an exception, unless there is a proper error handling.
+ 
+ Here the Python list as the underlying data structure will dynamically resize as necessary. 
+ 
+ Queue on the other hand, can be thought as a group of people standing in a line. Each person enters the line from the back and
+ leaves in exactly the order they entered it, a property which is called "FIFO" ( First In First Out)
+ 
+ Queues are commonly implemented as linked lists, where we enqueue and item by adding a tail node and dequeue an item by
+ removing the head node and moving our head pointer forward.
+ 
+ In a double ended queue, one can efficiently append and remove the items to either side of the list. Python provides the built in collections.deque 
+ library for this process which uses the following API.
+ 
+ from collections import deque
+ 
+ queue = deque()
+ 
+ queue.append(4)
+ queue.append(5)
+ queue.appendleft(6)
+ 
+ print(queue) # deque([6,4,5])
+ 
+ queue.popleft()  # 6
+ queue.pop  # 5
+ print(queue) # deque([4])
+ 
+ The append and popleft operations above are traditionally called enqueue and dequeue (also pop and appendleft) these operations
+ will run in O(1) time.
+ 
+ When would one use a stack?
+ 
+ When the most recent item examined is the most important, a stack is frequently a good choice. For this reason stacks 
+ often feature in depth-first search, backtracking, and syntax parsing applications.
+ 
+ When the order of the items one is dealing with needs to be preserved, a queue is preferable. Queues can be found, for example,
+ in breadth-first search, buffers and scheduling applications.
