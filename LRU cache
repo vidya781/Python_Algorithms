@@ -1,0 +1,103 @@
+Implement an LRU ( Least Recently Used ) Cache. The cache should be able to be initialized with cache with size n and provide
+the following methods.
+
+a) set(key,value) : set key to value. If there are already n items in the cache and we are adding a new item, also 
+remove the least recently used item.
+
+b) get(key): get the value at key. If no such key exists, return null.
+
+Each operation should run in O(1) time.
+
+Adapted from Miller et al
+
+Solution:
+
+Hash tables are commonly used as the underlying data structure for a cache. To implement both the methods in constant time,
+we will need to combine our hash table with a linked list.
+
+The hash table will map keys to nodes in the linked list and the linked list will be ordered from the least recently used to most 
+recently used.
+
+The logic behind each function will be as follows:
+
+1) First look at our current capacity. If it is less than n, create a node with the given value, set it as the head, and add
+it as an entry in the dictionary
+
+2) If it's equal to n, add the node as usual, but also evict the least frequently used node. We achieve this by deleting the head of
+our linked list and removing the entry from our dictionary.
+
+Keep track of the key in each node so that we know which entry to evict.
+
+1) If the key doesnt exist in the dictionary, return null
+2) Otherwise, look up the relevant node in the dictionary, and before returning it, update the linked list by moving the node
+to the tail of the list.
+
+We begin by defining Node, and defining a class LinkedList that allows us to reuse methods when adding and removing nodes.
+In particular, we use the add and remove methods of the class when bumping a node to the back of the list after fetching it.
+
+class Node:
+    def __init__(self, key, val):
+        self.key = key
+        self.val = val
+        self.prev = None
+        self.next = None
+        
+class LinkedList:
+    def __init__(self):
+        # Create dummy nodes and set up head <--> tail
+        self.head = Node(None,'head')
+        self.tail = Node(None,'tail')
+        
+        self.head.next = self.tail
+        self.tail.prev = self.head
+        
+     def get_head(self):
+         return self.head.next
+         
+     def get_tail(self):
+         return self.tail.prev
+         
+     def add(self,node):
+         prev = self.tail.prev
+         prev.next = node
+         node.prev = prev
+         node.next = self.tail
+         self.tail.prev = node
+         
+     def remove(self,node):
+         prev = node.prev
+         nxt = node.next
+         prev.next = nxt
+         nxt.prev = prev
+         
+  class LRUCache:
+      def __init__(self,n):
+         self.n = n
+         self.dict = {}
+         self.list = LinkedList()
+         
+      def set(self,key,val):
+          if key in self.dict:
+             self.dict[key].delete()
+             
+          n = Node(key,val)
+          self.list.add(n)
+          self.dict[key] = n
+          
+          if len(self.dict) > self.n:
+             head = self.list.get_head()
+             self.list.remove(head)
+             del self.dict[head.key]
+             
+      def get(self,key):
+          if key in self.dict:
+              n = self.dict[key]
+              
+              # Bump to the back of the list by removing and adding the node
+              self.list.remove(n)
+              self.list.add(n)
+              return n.val
+              
+     All operations in O(1) time.
+        
+        
