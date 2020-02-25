@@ -1,0 +1,39 @@
+Hash tables are a crucial data structure to have in one's arsenal. Hash tables associate keys with values using a hash function,
+allowing for O(1) lookup, insert and delete times.
+
+However not everything can be hashed. It is necessary that keys be immutable, so Python lists cannot be used as keys.
+Additionally there may be a lot of work under the hood needed to implement a hash function in a rigorous way.
+
+Consider the following piece of code:
+
+d = {}
+d['key'] = 'value'
+print(d['key']) # 'value'
+
+del d['key'] 
+print(d['key'])  # Keyerror : 'key'
+
+if 'key' in d:
+    print(d['key'])
+else:
+    print("key does not exist")
+    
+A common motivating example for using a hash table is the two-sum problem, stated as follows:
+
+Given a list of numbers and a number k, return whether any two numbers from the list add up to k. For example, given [10,15,3,7]
+and k = 17 return True since 10 + 7 = 17
+
+Instead of a brute force solution which checks all pairs of integers to search for this total, we use the following strategy:
+
+1) For each value we come across, we store it in a hash table with the value True.
+2) We then check if the key k - value exists in the table and if so we can return True
+
+def two_sum(lst,k):
+    seen = {}
+    for num in lst::
+        if k - num in seen:
+            return True
+        seen[num] = True
+    return False
+    
+This implementation cuts the time complexity down from O(n^2) to O(n) since each look up is O(1)
