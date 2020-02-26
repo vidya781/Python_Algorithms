@@ -1,0 +1,53 @@
+Given a binary tree, return the level of the tree with the minimum sum. The level of a node is defined as the number of 
+connections required to get to the root, with the root having the level zero.
+
+       1
+      /  \
+     2    3
+         / \
+        4   5
+        
+        In this particular tree, level 0 has sum 1, level 1 has sum 5, and level 2 has sum 9, so the level with the minimum
+  sum is 0.
+  
+  Solution:
+  
+  In order for one to calculate the sum at each level ( 1, 5, 9 ) respectively for levels ( 0,1,2) respectively we must traverse 
+  it. An in-order traversal might work for the example described above but would fail if Node(2) had a child. (Why ? -- As in order
+  traversal is : Traverse Left Node, then current Node and then Right, in case 2 had a child we could have Left Node, 2 and then 
+  there is no child to traverse further, also if the child were present only at the right node, we would be faced with the same 
+  situation, only no child at the left node) 
+  
+  Use a queue to ensure that each node is processed in the correct order. Items in the queue will be tuples containing the value
+  and level for a given node. Each time we pop an element from the queue, we add to the total for the corresponding level and add
+  any child nodes to the end of the queue with an incremented level.
+  
+  from collections import defaultdict, deque
+  
+  class Node:
+      def __init__(self, data, left=None, right=None):
+          self.data = data
+          self.left = left
+          self.right = right
+          
+      def smallest_level(root):
+          queue = deque([])
+          queue.append((root,0))  # root is at level 0
+          
+          # Create a map to accumulate the sum for each level
+          level_to_sum = defaultdict(int)
+          
+          while queue:
+              node, level = queue.popleft()
+              level_to_sum[level] += node.data
+              
+              if node.right:
+                  queue.append((node.right, level + 1))
+              
+              if node.left:
+                  queue.append((node.left, level + 1))
+                  
+          return min(level_to_sum, key=level_to_sum.get)
+          
+      TC : O(n)
+  
