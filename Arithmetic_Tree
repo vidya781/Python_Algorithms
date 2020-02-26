@@ -1,0 +1,48 @@
+Suppose that an arithmetic expression is given as a binary Tree. Each leaf is an integer and each internal node is one of +,
+-,*,or /.
+
+Given the root to such a tree, write a function to evaluate it.
+
+                     *
+                   /   \
+                   +    -
+                  / \   / \
+                 3  2   4  5
+One should return (3+2)*(4+5) = 45
+
+Solution
+
+Going by the structure of the expression Tree, a post order traversal can easily be applied.Check the value of the root node.
+Our goal is to recursively apply the node's left and right children and apply the operator on them.
+
+When we reach a stage that the root is no longer an opertaor but a number, then we return the number as is.
+
+class Node:
+    def __init__(self, data, left=None, right=None):
+        self.data = data
+        self.left = left
+        self.right = right
+
+PLUS = "+"
+MINUS = "-"
+TIMES = "*"
+DIVIDE = "/"
+
+def evaluate(root):
+    if root.data == PLUS:
+        return evaluate(root.left) + evaluate(root.right)
+    elif root.data == MINUS:
+        return evaluate(root.left) - evaluate(root.right)
+    elif root.data == TIMES:
+        return evaluate(root.left) * evaluate(root.right)
+    elif root.data == DIVIDE:
+        return evaluate(root.left) / evaluate(root.right)
+    else:
+        return root.val
+        
+ O(n) time and O(h) space 
+ 
+ Why? Because we must traverse all nodes and our stack will hold at most a number of elements equal to the tree's height.
+    
+                   
+                     
