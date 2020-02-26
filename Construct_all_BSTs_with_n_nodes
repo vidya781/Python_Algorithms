@@ -1,0 +1,71 @@
+Given an integer n, construct all possible Binary Search Trees with n nodes where all values from [1,2....m] are used.
+
+For example, given n = 3 what are all the possible trees /
+
+1             1             2           3             3
+ \             \           / \         /             /
+  2             3         1   3       1             2
+   \           /                        \          /
+    3         2                          2         1
+    
+    
+    Adapted from Miller et al
+    
+Solution:
+
+Formulate this recursively. Let the range of values that nodes in a tree can take be bounded by low and high. If the root of the
+tree is i, the left subtree will hold data between low and i-1 and the right subtree will hold data between i + 1 and high.
+
+For each possible value in the left subtree, choose one, say j, to be the root and which will again determine what data its
+left and right children can hold. This process continues till there are no more values to hold.
+
+An analogous process can be acrried out to find out all possible sub trees.
+
+For every possible root value, and every possible left and right subtree,create a node with this value and the corresponding left and 
+right children and add thisnode to all the list of possible trees.
+
+class Node:
+    def __init__(self, data, left=None, right=None):
+        self.data = data
+        self.left = left
+        self.right = right
+        
+    def make_trees(low,high):
+        trees = []
+        
+        if low > high:
+           trees.append(None)
+           return trees
+           
+        for i in range(low,high + 1):
+            left = make_trees(low,i-1)
+            right = make_trees(i+1,high)
+            
+            for l in left:
+                for r in right:
+                    node = Node(i,left=l,right=r)
+                    trees.append(node)
+        return trees
+               
+   To print out the tree, perform a preorder traversal
+   
+  def preorder(root):
+      result = []
+      
+      if root:
+          result.append(root.data)
+          result += preorder(root.left)
+          result += preorder(root.right)
+      return result
+      
+  So suppose we are given input n, we first construct all trees that use the values between 1 and n , iterate over each tree to
+  print out the nodes.
+  
+  def construct_trees(N):
+      trees = make_trees(1,N)
+      for tree in trees:
+          print(preorder(tree))
+   
+   make_trees takes O(n) time to build each possible tree so with an exponential number of trees, the algorithm will run in 
+   O(n x 2^n) time. Since each tree takes O(n) space to store its nodes, the space complexity is O(n x 2^n) as well.
+     
