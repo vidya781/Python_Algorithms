@@ -1,0 +1,54 @@
+What is 'self' in Python and why is it needed?
+
+Explanation:
+
+self represents the instance of the class. A class will have methods as well as attributes. By using the 'self' keyword, one 
+can access these methods and class attributes. There is a binding of attributes with the given arguments.
+
+The reason why one needs to use self is because Python does not use the @ syntax to refer to its instance attributes. Python 
+decided to do methods in a way that makes the instance to which the method belongs be passed automatically but not received 
+automatically.
+
+class Dog():
+   
+     # init method or constructor
+     def __init__(self,breed,color):
+         self.breed = breed
+         self.color = color
+         
+     def display(self):
+         print("Breed is",self.breed)
+         print("Color is",self.color)
+         
+     # Both objects have different self which contain their attributes
+     afghan_hound = dog(" Tiger afghan hound ", "black")
+     pashmi_hound = dog(" Pisuri pashmi hound ", "slate grey")
+     
+     afghan_hound.display()  # same output as Dog.display(afghan_hound)
+     pashmi_hound.display()  # same output as Dog.display(pashmi_hound)
+     
+ Under the hood, in every instance method call, python sends the instances also with that method call like Dog.display(afghan_hound)
+ 
+ Self is a parameter in function and not a real keyword
+ 
+ User can use another word in the place of self and the code would be ok but the usage of self is a convention.
+ 
+ class this_is_a_class():
+      def show(in_lieu_of_self):
+          print("Usage of another parameter in place of self")
+ object = this_is_a_class()
+ object.show()
+ 
+ class Dog:
+ 
+    def __init__(self, breed):
+        self.breed = breed
+ 
+    def bark(self):
+        print(f'{self.breed} is barking.')
+ 
+ 
+d = Dog('MC Doberman')
+d.bark()
+
+Output: MC Doberman is barking
