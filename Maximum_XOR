@@ -49,7 +49,7 @@ def max_xor( arr , n):
 		for prefix in se_en: 
 			
 			# find two pair in set  such that a^b = newMaxx which is the highest possible bit can be obtained 
-			if (newMaxx ^ prefix) in se: 
+			if (newMaxx ^ prefix) in se_en: 
 				maxx = newMaxx 
 				break
 				
