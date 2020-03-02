@@ -1,0 +1,42 @@
+A heap is a tree that satisfied the heap property and has two main points :
+
+1] In a max-heap, the parent node's value is always greater than or equal to its child node(s)
+2] In a min-heap, the parent node's value is always smaller than or equal to its child node(s)
+
+So as seen above, there are two possibilities.
+
+It is possible for a left child to have a greater value ( in case of a min heap) or for a right child to have a smaller value
+( in the case of a max heap) 
+
+       10
+      /  \
+     /    \
+    14     19
+   / \    /
+  /   \   42
+26     31 
+
+Represent a heap in a more space efficient way by using an array. The two child nodes of a parent node located at index i
+can be found at indices 2i + 1 and 2i + 2, like the following:
+
+   10   14   19  26  31   42
+   
+When using an array to represent a heap, the heap must be filled in level by level , left to right.
+
+When asked to find the top k or minimum k values, a heap should be the first thing that comes to mind. Heaps are closely tied
+to the heapsort sorting algorithm,priority queue implementtaions and graph algorithms such as Djiktra's algorithm.
+
+The following are the heap operations:
+
+1) insert(heap,x) : add an element x to the heap, O(logn)
+2) delete-min(heap): remove lowest node , O(logn)
+3) heapify(array): convert an array into a heap by repeated insertions, O(nlogn)
+
+What are the methods?
+
+Use the Python's heapq module to implement the methods.
+
+heapq.heappush(heap,x)
+heapq.heappop(heap)
+heapq.heapify(array)
+
