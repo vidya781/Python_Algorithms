@@ -1,0 +1,25 @@
+The following program will give a count of A, T, G and C in a DNA Sequence. Part of an ongoing effort for developing sound,
+robust algorithms in Bioinformatics.
+
+
+dna = 'ATTGCATTGCCAAAAATTTTGCC'
+
+
+def count_of_each(dna):
+    list_dna = list(dna)
+    count_A = 0
+    count_T = 0
+    count_G = 0
+    count_C = 0
+    for item in list_dna:
+        if item == 'A':
+            count_A += 1
+        if item == 'T':
+            count_T += 1
+        if item == 'G':
+            count_G += 1
+        else :
+            count_C = len(list_dna)-(count_A + count_T + count_G)
+    return count_A,count_T,count_G,count_C
+
+print(count_of_each(dna))
