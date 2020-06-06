@@ -1,0 +1,63 @@
+This problem appeared in LeetCode as well as Coding Puzzles. We outline Bruteforce approaches as well as elegant approaches
+
+Given an array of integers, find two numbers such that they add up to a specific target number
+The function twoSum should return indices of the two numbers such that they add up to the target, where Index1 must be less than 
+index2.Please note that the returned answers(both index1 and index2) are not zero based
+Input: numbers = {2,7,11,15}, target = 9
+Output: Index1 = 1, Index2 = 2
+
+Lets take the naive BF approach which will likely involve two loops
+
+listofnum = [2,7,11,15]
+target = 9
+def twosum(listofnum, target):
+    l = len(listofnum)
+    for i in range(0,l):
+       for j in range(1,l):
+           if listofnum[i] + listofnum[j] == target:
+              return i+1,j+1
+    return
+    
+Complexity Analysis:
+
+Time complexity : O(n^2)  and Space Complexity : O(1)
+For each element , we try to find its complement by looping through the rest of the array which takes O(n) time 
+Time Complexity : O(n^2)
+
+Two pass Hash Table 
+
+To improve our time complexity, we need a more efficient way to check if the complement exists in the array. If the 
+complement exists, we need to look up its index. What is the best way to maintain a mapping of each element in the 
+array to its index? A hash table
+We reduce the lookup time from O(n) to O(1) by trading space for speed. A hash table is built exactly for this purpose
+supporting fast lookup in constant time. Words are carefully chosen, "near" because if a collission occurred, a look up
+could degenerate to O(n) time, but look up in hash table should be amortized to O(1) time as the hash function was chosen
+carefully
+
+Python 3 solution:
+
+class Solution:
+     def twoSum(self,nums,target):
+         """
+          : type nums: List[int]
+          : type target:int
+          : rtype : List[int]
+          """
+          h = { }
+          for i,num in enumerate(nums):
+             n = target - nums
+             if n not in h:
+                h[num] = i
+             else:
+                return [h[n],i]
+                
+ One pass solution:
+ 
+ def twoSum(self,nums,target):
+     seen = { }
+     for i,v in enumerate(nums):
+         remaining = target - v
+         if remaining in seen:
+             return [seen[remaining],i]
+         seen[v] = i
+      return [ ]
