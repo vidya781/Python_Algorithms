@@ -1,0 +1,28 @@
+This programming problem was asked by LinkedIn
+
+You are given a string consisting of the letters x and y, such as xyxxxyxyy. 
+In addition, you have an operation called flip, which changes a single x to y or vice versa.
+
+Determine how many times you would need to apply this operation to ensure that all x's come before all y's.
+In the preceding example, it suffices to flip the second and sixth characters, so you should return 2.
+
+Solution:
+
+def split(string): 
+	return [char for char in string]    # return a list of individual characters in a string
+	
+# Driver code 
+string = 'yxxyxyxyy'
+print(split(string))      # return the list
+
+splitlist = split(string)
+
+def flip(string):
+    count = 0
+    for i in range(1,len(string)):
+        if splitlist[i-1] == 'y' and splitlist[i]=='x':     # Notice the criteria : only if the char left to its neighbor is y is the flipping taking place and the count being increased
+            splitlist[i] == 'x'                             # flip y to x 
+            count += 1                                    # increment the count
+    return count
+print(flip(string))
+
