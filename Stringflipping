@@ -26,3 +26,48 @@ def flip(string):
     return count
 print(flip(string))
 
+In this particular problem, the approach to developing the algorithm can be done as follows:
+
+1] Firstly get the splitlist of the string
+2] Obtain the modified list as well where we generate the newlist ( NOT in place) first by counting the x's and y's in the 
+   splitlist and in this newlist align all the x's before the y's as per the condition mentioned in the problem
+3] Do an index wise comparison of elements in both these lists and generate a list where the indices are mismatched
+4] The length of the above generated list is the requisite number of flips.
+
+def countxy(splitlist):
+    count_x = 0
+    count_y = 0
+    for item in splitlist:
+        if item == 'x':
+            count_x += 1
+        else:
+            count_y += 1    # assume the string only has x and y
+    return (count_x,count_y)
+print(countxy(splitlist))
+
+countsxy = countxy(splitlist)
+
+modlist = ['x'] * countsxy[0] + ['y'] * countsxy[1]
+print(modlist)
+    
+splitlist
+modlist
+
+def getflips(modlist,splitlist):
+    idx = 0
+    res = []   # resulting list
+    for item in modlist:
+        if item != splitlist[idx]:
+            res.append(idx)
+        idx = idx + 1
+    return len(res)
+
+print(getflips(modlist,splitlist))
+
+# alternate more pythonic way of getting the number of flips
+
+result = [idx for idx, elem in enumerate(splitlist) if elem != modlist[idx]]
+print("The index positions with mismatched values:\n",result)
+print(len(result))
+
+        
